@@ -239,9 +239,43 @@ services:
 
 **Production**: Each service runs as separate ECS tasks with auto-scaling policies.
 
+## Development Timeline & Assumptions
+
+### Coding Approach: AI-Assisted Development (Cursor, GitHub Copilot)
+
+**Timeline Assumptions:**
+- **Approach**: Full AI-assisted coding using Cursor, GitHub Copilot, or similar tools
+- **AI Tools Used For**:
+  - Component scaffolding and boilerplate generation
+  - API route and endpoint creation
+  - Database queries and Prisma operations
+  - Test file generation (unit, integration, E2E)
+  - Documentation and code comments
+  - TypeScript type definitions
+  - Error handling patterns
+  - Authentication and authorization logic
+  - Business logic implementation
+  - Performance optimizations
+- **Quality Assurance Strategy**:
+  - **Code Review**: All AI-generated code reviewed by developers before merging
+  - **Automated Testing**: Comprehensive test coverage (unit, integration, E2E) to catch bugs early
+  - **Linting & Formatting**: ESLint, Prettier, TypeScript strict mode enforced
+  - **Architecture Reviews**: Regular architecture decision reviews to ensure consistency
+  - **Security Audits**: Security-focused code reviews for sensitive operations
+  - **Performance Testing**: Load testing and performance profiling
+- **Expected Efficiency Gain**: ~40-50% faster than pure manual coding
+- **Timeline Reduction**: 20-30% faster than hybrid approach, with increased focus on review and testing cycles
+
+**Timeline Notes:**
+- Phases assume 1-2 developers working full-time with AI assistance
+- Timeline includes mandatory code review, comprehensive testing, and iteration cycles
+- Buffer time included for AI code refinement and bug fixes
+- Quality gates at each phase: code review → testing → security check → deployment
+- Emphasis on test-driven development to catch AI-generated bugs early
+
 ## Development Phases
 
-### Phase 1: Foundation & Database (Weeks 1-2)
+### Phase 1: Foundation & Database (Weeks 1-1.5)
 
 **Deliverables:**
 
@@ -270,7 +304,7 @@ services:
 - `apps/api/Dockerfile` - API container
 - `apps/web/Dockerfile` - Next.js container
 
-### Phase 2: Authentication & Registration (Weeks 3-4)
+### Phase 2: Authentication & Registration (Weeks 1.5-2.5)
 
 **Deliverables:**
 
@@ -302,7 +336,7 @@ services:
 - `server/modules/auth/auth.service.ts`
 - `server/modules/auth/auth.middleware.ts`
 
-### Phase 3: Provider Portal (Weeks 5-8)
+### Phase 3: Provider Portal (Weeks 2.5-5)
 
 **Deliverables:**
 
@@ -342,7 +376,7 @@ services:
 - `server/modules/notifications/magic-link.service.ts`
 - `server/workers/magic-links/scheduler.ts`
 
-### Phase 4: Clinician Portal (Weeks 9-12)
+### Phase 4: Clinician Portal (Weeks 5-8)
 
 **Deliverables:**
 
@@ -391,7 +425,7 @@ services:
 - `server/modules/clinician/contact-log.service.ts`
 - `server/modules/reviews/review.service.ts`
 
-### Phase 5: Admin Portal (Weeks 13-14)
+### Phase 5: Admin Portal (Weeks 8-9)
 
 **Deliverables:**
 
@@ -419,7 +453,7 @@ services:
 - `server/modules/admin/verification.service.ts`
 - `server/modules/admin/analytics.service.ts`
 
-### Phase 6: Testing, Optimization & Deployment (Weeks 15-16)
+### Phase 6: Testing, Optimization & Deployment (Weeks 9-11)
 
 **Deliverables:**
 
@@ -656,9 +690,17 @@ From schema.prisma, ensure these indexes exist:
 
 ### Test Coverage Target
 
-- Unit tests: >80% coverage
-- Integration tests: All API endpoints
-- E2E tests: Critical user journeys
+- Unit tests: >80% coverage (AI-generated tests, manually reviewed and refined)
+- Integration tests: All API endpoints (AI generates test cases, developers ensure edge cases)
+- E2E tests: Critical user journeys (AI generates scenarios, developers validate completeness)
+
+### AI-Assisted Testing Strategy
+
+- **Test Generation**: AI generates test cases based on code and requirements
+- **Test Review**: Developers review AI-generated tests for completeness and correctness
+- **Test Refinement**: Manual refinement of edge cases and complex scenarios
+- **Continuous Testing**: Automated test runs on every commit
+- **Bug Detection**: Tests catch AI-generated bugs before production
 
 ## Monitoring & Observability
 

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Schema - BHC Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #06b6d4;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 2rem;
+        }
+
+        .nav a:hover {
+            color: var(--primary);
+        }
+
+        .content {
+            background: white;
+            margin: 2rem auto;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin: 2rem 0 0.75rem 0;
+        }
+
+        pre {
+            background: var(--gray-900);
+            color: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Monaco', 'Courier New', monospace;
+        }
+
+        .card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .download-link {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+
+        .download-link:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Database Schema</h1>
+        <p>Prisma Schema - BehavioralHealth Connect</p>
+    </div>
+
+    <nav class="nav">
+        <a href="index.html">← Back to Hub</a>
+        <a href="schema.prisma" download>Download .prisma file</a>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <div class="card">
+                <div class="card-title">About This Schema</div>
+                <p>This is the complete Prisma database schema for BehavioralHealth Connect. It includes all models, relationships, enums, and indexes required for the platform.</p>
+                <p><strong>Database:</strong> PostgreSQL 15+ with PostGIS extension</p>
+                <p><strong>ORM:</strong> Prisma</p>
+                <a href="schema.prisma" class="download-link" download>Download schema.prisma</a>
+            </div>
+
+            <h2>Schema Preview</h2>
+            <p>The complete schema file is available for download. Key components include:</p>
+            <ul>
+                <li><strong>User & Authentication:</strong> User, Organization models</li>
+                <li><strong>Provider:</strong> Provider, BedAvailability, BedUpdateToken models</li>
+                <li><strong>Clinician Features:</strong> SavedProvider, ContactLog models</li>
+                <li><strong>Reviews:</strong> Review model with moderation</li>
+                <li><strong>Subscriptions:</strong> Subscription model with Stripe integration</li>
+                <li><strong>Analytics:</strong> SearchLog, ActivityLog models</li>
+                <li><strong>Notifications:</strong> Notification model</li>
+            </ul>
+
+            <h3>View Full Schema</h3>
+            <p>Click the download link above to get the complete <code>schema.prisma</code> file, or view it directly in your code editor.</p>
+        </div>
+    </div>
+
+    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p><strong>BehavioralHealth Connect</strong> - Database Schema</p>
+    </footer>
+</body>
+</html>

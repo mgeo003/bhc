@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC Connect - Project Assumptions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 2rem;
+        }
+
+        .nav a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .content {
+            background: white;
+            margin: 2rem 0;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .assumption-card {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-left: 6px solid var(--primary);
+        }
+
+        .assumption-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .assumption-card h3::before {
+            content: "📋";
+            font-size: 1.5rem;
+        }
+
+        .assumption-card.out-of-scope h3::before {
+            content: "🚫";
+        }
+
+        .assumption-card.discussion h3::before {
+            content: "💬";
+        }
+
+        .assumption-card.required h3::before {
+            content: "✅";
+        }
+
+        .assumption-card.out-of-scope {
+            border-left-color: var(--warning);
+            background: #fef3c7;
+        }
+
+        .assumption-card.discussion {
+            border-left-color: var(--secondary);
+            background: #e0f2fe;
+        }
+
+        .assumption-card.required {
+            border-left-color: var(--success);
+            background: #d1fae5;
+        }
+
+        .assumption-card p {
+            color: var(--gray-700);
+            margin: 0.75rem 0;
+            font-size: 1.1rem;
+        }
+
+        .assumption-card ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .assumption-card li {
+            margin: 0.5rem 0;
+            color: var(--gray-700);
+        }
+
+        .alert {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: var(--primary);
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning);
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        .icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+    </style>
+    <script>
+        // Password protection check (with Safari compatibility)
+        (function() {
+            try {
+                if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bhc_authenticated') !== 'true') {
+                    setTimeout(function() {
+                        try {
+                            window.location.href = '../login.html';
+                        } catch(e) {
+                            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h1>Authentication Required</h1><p>Please <a href="../login.html">login here</a> to access this page.</p></div>';
+                        }
+                    }, 100);
+                }
+            } catch(e) {
+                console.log('SessionStorage not available, allowing local access');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Project Assumptions</h1>
+        <p>BHC Connect - Key Assumptions & Scope Definitions</p>
+    </div>
+
+    <nav class="nav">
+        <a href="../index.html">🏠 Hub</a>
+        <a href="ARCHITECTURE_PLAN.html">Architecture Plan</a>
+        <a href="ARCHITECTURE_COMPARISON.html">Comparison</a>
+        <a href="JAVA_QUARKUS_PLAN.html">Java/Quarkus Plan</a>
+        <a href="NODEJS_PLAN.html">Node.js Plan</a>
+        <a href="tasklist/TASK_LIST.html">Task List</a>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <section>
+                <h1>Overview</h1>
+                <p>This document outlines the key assumptions, scope definitions, and decisions made for the BehavioralHealth Connect project. These assumptions guide the development approach and help set clear expectations.</p>
+
+                <div class="alert alert-info">
+                    <p><strong>Purpose:</strong> These assumptions help clarify what is included in the MVP scope, what requires further discussion, and what is explicitly out of scope for the initial release.</p>
+                </div>
+            </section>
+
+            <!-- Required Assumptions -->
+            <section>
+                <h2>Required Assumptions</h2>
+
+                <div class="assumption-card required">
+                    <h3>Domain Name Should Be Created</h3>
+                    <p><strong>Assumption:</strong> A custom domain name will be created and configured for the production deployment.</p>
+                    <ul>
+                        <li>Domain registration is the responsibility of the client/stakeholder</li>
+                        <li>Domain DNS configuration will be set up to point to AWS Amplify (or chosen hosting provider)</li>
+                        <li>SSL certificate will be automatically provisioned by the hosting provider</li>
+                        <li>Domain setup should be completed before production deployment</li>
+                    </ul>
+                    <p><strong>Impact:</strong> This is required for production launch. Development and staging environments can use default provider URLs.</p>
+                </div>
+            </section>
+
+            <!-- Out of Scope -->
+            <section>
+                <h2>Out of Scope for MVP</h2>
+
+                <div class="assumption-card out-of-scope">
+                    <h3>No External Integrations</h3>
+                    <p><strong>Assumption:</strong> The MVP will not include integrations with external third-party systems beyond essential services.</p>
+                    <ul>
+                        <li><strong>EHR Systems:</strong> Epic, Cerner, and other EHR integrations are out of scope for MVP</li>
+                        <li><strong>External Verification Services:</strong> Recovery.com or LegitScript integration details need clarification - may be deferred</li>
+                        <li><strong>Partner APIs:</strong> Public API for health systems is out of scope</li>
+                        <li><strong>Third-party Analytics:</strong> Advanced analytics integrations are out of scope</li>
+                    </ul>
+                    <p><strong>What IS Included:</strong></p>
+                    <ul>
+                        <li>Essential services: Email (Resend), SMS (Twilio), Search (Algolia)</li>
+                        <li>Payment processing: Stripe (if subscription model is confirmed)</li>
+                        <li>Authentication: Clerk or custom JWT implementation</li>
+                    </ul>
+                    <p><strong>Impact:</strong> System architecture should be designed to support future integrations, but implementation is deferred.</p>
+                </div>
+
+                <div class="assumption-card out-of-scope">
+                    <h3>Payment and Plans Are Out of Scope</h3>
+                    <p><strong>Assumption:</strong> Subscription management, billing, and payment processing are not included in the MVP scope.</p>
+                    <ul>
+                        <li>Subscription tiers (Basic, Pro, Enterprise) are defined in schema but not implemented</li>
+                        <li>Stripe integration for payments is out of scope</li>
+                        <li>Billing management features are out of scope</li>
+                        <li>Payment processing workflows are out of scope</li>
+                        <li>Invoice generation is out of scope</li>
+                    </ul>
+                    <p><strong>Note:</strong> The database schema includes subscription models for future implementation, but the MVP will not include subscription functionality.</p>
+                    <p><strong>Impact:</strong> Provider and Organization models include subscription fields, but these will not be functional in MVP. All providers will have equal access initially.</p>
+                </div>
+            </section>
+
+            <!-- Discussion Required -->
+            <section>
+                <h2>Requires Discussion</h2>
+
+                <div class="assumption-card discussion">
+                    <h3>Notifications Detailed Screen to Be Discussed</h3>
+                    <p><strong>Assumption:</strong> The detailed design and functionality of the notifications system requires further discussion and clarification.</p>
+                    <ul>
+                        <li><strong>Notification Types:</strong> What types of notifications are needed? (Email, SMS, In-app, Push)</li>
+                        <li><strong>Notification Triggers:</strong> What events should trigger notifications?</li>
+                        <li><strong>Notification Preferences:</strong> How granular should user notification preferences be?</li>
+                        <li><strong>Notification UI:</strong> What should the notifications screen/modal look like?</li>
+                        <li><strong>Real-time Updates:</strong> Should notifications be real-time (WebSockets) or polling-based?</li>
+                        <li><strong>Notification History:</strong> Should there be a notification history/log?</li>
+                        <li><strong>Notification Settings:</strong> Where should notification settings be managed?</li>
+                    </ul>
+                    <p><strong>Current Implementation:</strong></p>
+                    <ul>
+                        <li>Basic notification API endpoints are included in the task list</li>
+                        <li>Notification model exists in the database schema</li>
+                        <li>Detailed UI/UX design needs to be finalized</li>
+                    </ul>
+                    <p><strong>Impact:</strong> This affects both backend API design and frontend implementation. Discussion should happen early in the development process, ideally during Phase 1 or Phase 2.</p>
+                </div>
+            </section>
+
+            <!-- Additional Assumptions -->
+            <section>
+                <h2>Additional Assumptions</h2>
+
+                <div class="assumption-card">
+                    <h3>Development Environment</h3>
+                    <ul>
+                        <li>Development will use Docker Compose for local environment</li>
+                        <li>Production deployment will use containerized services (ECS Fargate, Railway, or DigitalOcean)</li>
+                        <li>Database will be managed PostgreSQL (RDS, Railway, or DigitalOcean managed database)</li>
+                        <li>Redis will be used for caching and session management</li>
+                    </ul>
+                </div>
+
+                <div class="assumption-card">
+                    <h3>Authentication Approach</h3>
+                    <ul>
+                        <li>Clerk is recommended but can be replaced with custom JWT implementation</li>
+                        <li>Google Sign-In will be supported</li>
+                        <li>Email verification is required for all user types</li>
+                        <li>Provider accounts require admin approval before activation</li>
+                    </ul>
+                </div>
+
+                <div class="assumption-card">
+                    <h3>Search Functionality</h3>
+                    <ul>
+                        <li>Hybrid search approach: PostGIS for geospatial, Algolia for full-text</li>
+                        <li>Search results must meet &lt;500ms response time requirement</li>
+                        <li>Algolia will be used for faceting and advanced filtering</li>
+                        <li>PostGIS will handle radius-based location searches</li>
+                    </ul>
+                </div>
+
+                <div class="assumption-card">
+                    <h3>Magic Link System</h3>
+                    <ul>
+                        <li>Magic links will be sent via email and/or SMS</li>
+                        <li>Magic links expire after 48 hours or on first use (whichever comes first)</li>
+                        <li>Magic links are generated via scheduled cron job</li>
+                        <li>Magic links allow passwordless bed availability updates</li>
+                    </ul>
+                </div>
+
+                <div class="assumption-card">
+                    <h3>Review System</h3>
+                    <ul>
+                        <li>Reviews require moderation before publication</li>
+                        <li>Multi-criteria rating system (not just overall rating)</li>
+                        <li>Only verified clinicians can submit reviews</li>
+                        <li>Providers can respond to reviews</li>
+                    </ul>
+                </div>
+
+                <div class="assumption-card">
+                    <h3>Performance Requirements</h3>
+                    <ul>
+                        <li>Search API response time: &lt;500ms</li>
+                        <li>Page load time: &lt;2 seconds</li>
+                        <li>Lighthouse score: &gt;90</li>
+                        <li>WCAG 2.1 AA compliance required</li>
+                        <li>Mobile responsiveness required</li>
+                    </ul>
+                </div>
+
+                <div class="assumption-card">
+                    <h3>Testing & Quality</h3>
+                    <ul>
+                        <li>Comprehensive test coverage required (unit, integration, E2E)</li>
+                        <li>Code review mandatory for all changes</li>
+                        <li>Security audits before production deployment</li>
+                        <li>Performance testing required</li>
+                        <li>Load testing to validate auto-scaling</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Scope Summary -->
+            <section>
+                <h2>MVP Scope Summary</h2>
+
+                <div class="alert alert-success">
+                    <h3 style="margin-top: 0;">✅ Included in MVP</h3>
+                    <ul>
+                        <li>Complete authentication and registration flows (Clinician & Provider)</li>
+                        <li>Provider Portal: Dashboard, Profile Management, Bed Availability, Settings</li>
+                        <li>Clinician Portal: Search, Saved Facilities, Contact Logs, Reviews</li>
+                        <li>Admin Portal: User Management, Provider Verification, Analytics</li>
+                        <li>Magic Link system for bed updates</li>
+                        <li>Hybrid search (PostGIS + Algolia)</li>
+                        <li>Review and rating system</li>
+                        <li>Email and SMS notifications (basic)</li>
+                        <li>Domain name setup (required)</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-warning">
+                    <h3 style="margin-top: 0;">⚠️ Out of Scope for MVP</h3>
+                    <ul>
+                        <li>Payment processing and subscription management</li>
+                        <li>EHR system integrations (Epic, Cerner, etc.)</li>
+                        <li>External verification services (details TBD)</li>
+                        <li>Partner/public API</li>
+                        <li>Advanced notification UI/UX (requires discussion)</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-info">
+                    <h3 style="margin-top: 0;">💬 Requires Discussion</h3>
+                    <ul>
+                        <li>Detailed notifications screen design and functionality</li>
+                        <li>External verification integration approach (Recovery.com/LegitScript)</li>
+                        <li>History log maintenance requirements</li>
+                        <li>Billing section implementation timeline</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p><strong>BehavioralHealth Connect</strong> - Project Assumptions</p>
+        <p style="opacity: 0.8; margin-top: 0.5rem;">Key assumptions and scope definitions</p>
+    </footer>
+</body>
+</html>

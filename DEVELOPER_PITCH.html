@@ -394,6 +394,24 @@
         }
 
     </style>
+    <script>
+        // Password protection check (with Safari compatibility)
+        (function() {
+            try {
+                if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bhc_authenticated') !== 'true') {
+                    setTimeout(function() {
+                        try {
+                            window.location.href = 'login.html';
+                        } catch(e) {
+                            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h1>Authentication Required</h1><p>Please <a href="login.html">login here</a> to access this page.</p></div>';
+                        }
+                    }, 100);
+                }
+            } catch(e) {
+                console.log('SessionStorage not available, allowing local access');
+            }
+        })();
+    </script>
 </head>
 <body>
     <div class="header">
@@ -403,6 +421,7 @@
 
     <nav class="nav">
         <ul class="nav-links">
+            <li><a href="index.html">🏠 Hub</a></li>
             <li><a href="#overview">Overview</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#mockups">Design Mockups</a></li>

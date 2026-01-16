@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC Connect - Complete Documentation Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            margin: 2rem 0;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .section-description {
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .doc-card {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .doc-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .doc-card.featured {
+            background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
+            border-color: var(--primary);
+        }
+
+        .doc-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-card p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+        }
+
+        .doc-card .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+
+        .badge-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: var(--primary);
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1.25rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .doc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script>
+        // Password protection check (with Safari compatibility)
+        (function() {
+            try {
+                if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bhc_authenticated') !== 'true') {
+                    setTimeout(function() {
+                        try {
+                            window.location.href = 'login.html';
+                        } catch(e) {
+                            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h1>Authentication Required</h1><p>Please <a href="login.html">login here</a> to access this page.</p></div>';
+                        }
+                    }, 100);
+                }
+            } catch(e) {
+                console.log('SessionStorage not available, allowing local access');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>BehavioralHealth Connect</h1>
+        <p>Complete Documentation & Design Hub</p>
+        <p class="subtitle">All project documentation, architecture plans, and design mockups in one place</p>
+    </div>
+
+    <div class="container">
+        <!-- Quick Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Total Documents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">18</div>
+                <div class="stat-label">Design Mockups</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Architecture Docs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">User Portals</div>
+            </div>
+        </div>
+
+        <!-- Main Documentation -->
+        <div class="section">
+            <h2 class="section-title">📋 Main Documentation</h2>
+            <p class="section-description">Core project documentation and specifications</p>
+            <div class="doc-grid">
+                <a href="DEVELOPER_PITCH.html" class="doc-card featured">
+                    <div class="icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3>Developer Pitch</h3>
+                    <p>Complete project overview, features, technical requirements, and scope</p>
+                    <span class="badge badge-primary">⭐ Start Here</span>
+                </a>
+
+                <a href="design-mockups/ARCHITECTURE_PLAN.html" class="doc-card featured">
+                    <div class="icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                        </svg>
+                    </div>
+                    <h3>Architecture Plan</h3>
+                    <p>Enterprise architecture, tech stack, development phases, and timeline</p>
+                    <span class="badge badge-success">Technical</span>
+                </a>
+
+                <a href="design-mockups/ARCHITECTURE_COMPARISON.html" class="doc-card featured">
+                    <div class="icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3>Architecture Comparison</h3>
+                    <p>Node.js vs Java/Quarkus, containers vs Lambda, cost analysis, and recommendations</p>
+                    <span class="badge badge-warning">Comparison</span>
+                </a>
+
+                <a href="design-mockups/tasklist/TASK_LIST_V2.html" class="doc-card featured">
+                    <div class="icon" style="background: var(--success);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3>Development Task List (Enhanced)</h3>
+                    <p>Beautiful card-based visual roadmap with timeline view, filtering, and duration tracking</p>
+                    <span class="badge badge-success">✨ Enhanced</span>
+                </a>
+
+                <a href="design-mockups/tasklist/TASK_LIST.html" class="doc-card">
+                    <div class="icon" style="background: var(--gray-600);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3>Task List (Table View)</h3>
+                    <p>Traditional table view with all task details</p>
+                    <span class="badge badge-primary">Table</span>
+                </a>
+
+                <a href="design-mockups/JAVA_QUARKUS_PLAN.html" class="doc-card featured">
+                    <div class="icon" style="background: var(--warning);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                        </svg>
+                    </div>
+                    <h3>Java + Quarkus Detailed Plan</h3>
+                    <p>Comprehensive 4-phase development plan with Java/Quarkus backend, all tasks detailed</p>
+                    <span class="badge badge-warning">Java/Quarkus</span>
+                </a>
+
+                <a href="design-mockups/NODEJS_PLAN.html" class="doc-card featured">
+                    <div class="icon" style="background: var(--success);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3>Node.js Detailed Plan</h3>
+                    <p>Comprehensive 4-phase development plan with Node.js/Express backend, fastest timeline</p>
+                    <span class="badge badge-success">Node.js</span>
+                </a>
+
+                <a href="design-mockups/ASSUMPTIONS.html" class="doc-card">
+                    <div class="icon" style="background: var(--secondary);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3>Project Assumptions</h3>
+                    <p>Key assumptions, scope definitions, and out-of-scope items for MVP</p>
+                    <span class="badge badge-primary">Scope</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Design Mockups Hub -->
+        <div class="section">
+            <h2 class="section-title">🎨 Design Mockups</h2>
+            <p class="section-description">Interactive HTML prototypes for all user interfaces</p>
+            <div class="doc-grid">
+                <a href="design-mockups/index.html" class="doc-card featured">
+                    <div class="icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"></path>
+                        </svg>
+                    </div>
+                    <h3>Mockups Navigation Hub</h3>
+                    <p>Central hub for all 18 design mockups with organized navigation</p>
+                    <span class="badge badge-primary">Hub</span>
+                </a>
+
+                <a href="design-mockups/design-system.html" class="doc-card">
+                    <div class="icon" style="background: var(--success);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                        </svg>
+                    </div>
+                    <h3>Design System</h3>
+                    <p>Complete component library, colors, typography, and UI patterns</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Authentication Mockups -->
+        <div class="section">
+            <h2 class="section-title">🔐 Authentication Flows</h2>
+            <p class="section-description">Login and registration interfaces for all user types</p>
+            <div class="doc-grid">
+                <a href="design-mockups/auth/login.html" class="doc-card">
+                    <h3>Login Page</h3>
+                    <p>Universal login for clinicians, providers, and admins</p>
+                </a>
+
+                <a href="design-mockups/auth/register-clinician.html" class="doc-card">
+                    <h3>Clinician Registration</h3>
+                    <p>Multi-step registration flow for referring clinicians</p>
+                </a>
+
+                <a href="design-mockups/auth/register-provider.html" class="doc-card">
+                    <h3>Provider Registration</h3>
+                    <p>Facility registration with verification workflow</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Clinician Portal -->
+        <div class="section">
+            <h2 class="section-title">👨‍⚕️ Clinician Portal</h2>
+            <p class="section-description">Complete clinician experience - search, discovery, and provider management</p>
+            <div class="doc-grid">
+                <a href="design-mockups/clinician/dashboard.html" class="doc-card">
+                    <h3>Clinician Dashboard</h3>
+                    <p>Home page with quick search and recently viewed providers</p>
+                </a>
+
+                <a href="design-mockups/clinician/search-results.html" class="doc-card">
+                    <h3>Search Results</h3>
+                    <p>Advanced filtering, provider cards, map view, and sorting</p>
+                </a>
+
+                <a href="design-mockups/clinician/provider-detail.html" class="doc-card">
+                    <h3>Provider Detail</h3>
+                    <p>Comprehensive facility profile with tabs, reviews, and contact info</p>
+                </a>
+
+                <a href="design-mockups/clinician/saved-list.html" class="doc-card">
+                    <h3>Saved Facilities</h3>
+                    <p>Manage saved providers with tags, notes, and quick actions</p>
+                </a>
+
+                <a href="design-mockups/clinician/contact-log.html" class="doc-card">
+                    <h3>Contact Log</h3>
+                    <p>Track facility contacts with timeline and follow-up reminders</p>
+                </a>
+
+                <a href="design-mockups/clinician/submit-review.html" class="doc-card">
+                    <h3>Submit Review</h3>
+                    <p>Multi-criteria rating form with moderation guidelines</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Provider Portal -->
+        <div class="section">
+            <h2 class="section-title">🏥 Provider Portal</h2>
+            <p class="section-description">Provider dashboard and profile management</p>
+            <div class="doc-grid">
+                <a href="design-mockups/provider/dashboard.html" class="doc-card">
+                    <h3>Provider Dashboard</h3>
+                    <p>Bed availability widget, stats, and recent activity</p>
+                </a>
+
+                <a href="design-mockups/provider/edit-profile.html" class="doc-card">
+                    <h3>Edit Profile</h3>
+                    <p>Comprehensive facility profile editor with all fields</p>
+                </a>
+
+                <a href="design-mockups/provider/settings.html" class="doc-card">
+                    <h3>Provider Settings</h3>
+                    <p>Account settings, billing, and notification preferences</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Admin Portal -->
+        <div class="section">
+            <h2 class="section-title">⚙️ Admin Portal</h2>
+            <p class="section-description">Platform management and administration tools</p>
+            <div class="doc-grid">
+                <a href="design-mockups/admin/dashboard.html" class="doc-card">
+                    <h3>Admin Dashboard</h3>
+                    <p>Platform overview, metrics, and system health</p>
+                </a>
+
+                <a href="design-mockups/admin/providers.html" class="doc-card">
+                    <h3>Provider Management</h3>
+                    <p>Verification queue and provider administration</p>
+                </a>
+
+                <a href="design-mockups/admin/users.html" class="doc-card">
+                    <h3>User Management</h3>
+                    <p>Manage clinician accounts and permissions</p>
+                </a>
+
+                <a href="design-mockups/admin/analytics.html" class="doc-card">
+                    <h3>Analytics Dashboard</h3>
+                    <p>Platform insights, charts, and key metrics</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Technical Documentation -->
+        <div class="section">
+            <h2 class="section-title">🔧 Technical Documentation</h2>
+            <p class="section-description">Database schema and technical specifications</p>
+            <div class="doc-grid">
+                <a href="schema.html" class="doc-card">
+                    <div class="icon" style="background: var(--warning);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                        </svg>
+                    </div>
+                    <h3>Database Schema</h3>
+                    <p>Complete Prisma schema with all models, relationships, and enums</p>
+                    <span class="badge badge-warning">Prisma</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="section">
+            <div class="alert alert-info">
+                <h3 style="margin-top: 0; margin-bottom: 1rem;">Quick Navigation</h3>
+                <p><strong>New to the project?</strong> Start with the <a href="DEVELOPER_PITCH.html" style="color: var(--primary); font-weight: 600;">Developer Pitch</a> to understand the complete scope.</p>
+                <p style="margin-top: 0.5rem;"><strong>Reviewing architecture?</strong> Check the <a href="design-mockups/ARCHITECTURE_PLAN.html" style="color: var(--primary); font-weight: 600;">Architecture Plan</a> and <a href="design-mockups/ARCHITECTURE_COMPARISON.html" style="color: var(--primary); font-weight: 600;">Architecture Comparison</a>.</p>
+                <p style="margin-top: 0.5rem;"><strong>Exploring designs?</strong> Visit the <a href="design-mockups/index.html" style="color: var(--primary); font-weight: 600;">Design Mockups Hub</a> to see all 18 interactive prototypes.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p><strong>BehavioralHealth Connect</strong> - Complete Documentation Hub</p>
+        <p style="opacity: 0.8; margin-top: 0.5rem;">All project documentation, architecture plans, and design mockups</p>
+        <p style="opacity: 0.6; margin-top: 0.5rem; font-size: 0.9rem;">Version 1.0 • January 2025</p>
+    </footer>
+</body>
+</html>

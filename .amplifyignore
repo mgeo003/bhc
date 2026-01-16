@@ -1,0 +1,25 @@
+# Files to ignore in Amplify deployment
+.git/
+.gitignore
+node_modules/
+.DS_Store
+*.md
+!README.md
+*.pdf
+*.log
+.env
+.env.local
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Keep these
+*.html
+*.prisma
+*.css
+*.js
+*.json
+assets/
+design-mockups/

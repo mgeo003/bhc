@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC Connect - Development Task List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 2rem;
+        }
+
+        .nav a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            margin: 2rem 0;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        tr:hover {
+            background: var(--gray-50);
+        }
+
+        .phase-header {
+            background: var(--gray-100) !important;
+            font-weight: 700;
+            color: var(--gray-900);
+            font-size: 1.1rem;
+        }
+
+        .status-open {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .team-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .team-backend {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .team-ui {
+            background: #fce7f3;
+            color: #9f1239;
+        }
+
+        .date-cell {
+            white-space: nowrap;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .detail-cell {
+            max-width: 400px;
+            word-wrap: break-word;
+        }
+
+        .notes-cell {
+            font-style: italic;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .queries-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .queries-list li {
+            background: var(--gray-50);
+            padding: 1rem 1.5rem;
+            margin: 0.75rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .queries-list li strong {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        .data-diagram {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--gray-200);
+        }
+
+        .comparison-table {
+            margin: 1.5rem 0;
+        }
+
+        .comparison-table th {
+            background: var(--primary-dark);
+        }
+
+        .winner-cell {
+            background: #d1fae5;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+        }
+    </style>
+    <script>
+        // Password protection check (with Safari compatibility)
+        (function() {
+            try {
+                if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bhc_authenticated') !== 'true') {
+                    // Use setTimeout to avoid Safari sandbox issues
+                    setTimeout(function() {
+                        try {
+                            window.location.href = '../../login.html';
+                        } catch(e) {
+                            // If redirect fails, show message
+                            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h1>Authentication Required</h1><p>Please <a href="../../login.html">login here</a> to access this page.</p></div>';
+                        }
+                    }, 100);
+                }
+            } catch(e) {
+                // If sessionStorage is not available, allow access (for local file viewing)
+                console.log('SessionStorage not available, allowing local access');
+            }
+        })();
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Development Task List</h1>
+        <p>BHC Connect - Complete Development Roadmap</p>
+    </div>
+
+    <nav class="nav">
+        <a href="../../index.html">🏠 Hub</a>
+        <a href="../ARCHITECTURE_PLAN.html">Architecture Plan</a>
+        <a href="../ARCHITECTURE_COMPARISON.html">Comparison</a>
+        <a href="../JAVA_QUARKUS_PLAN.html">Java/Quarkus</a>
+        <a href="../NODEJS_PLAN.html">Node.js</a>
+        <a href="../ASSUMPTIONS.html">Assumptions</a>
+        <a href="TASK_LIST_V2.html" style="color: var(--primary); font-weight: 600;">✨ Enhanced View</a>
+    </nav>
+
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalTasks">0</div>
+                <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="openTasks">0</div>
+                <div class="stat-label">Open Tasks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="phases">0</div>
+                <div class="stat-label">Phases</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="queries">0</div>
+                <div class="stat-label">Open Queries</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="section">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('task-list')">Task List</button>
+                <button class="tab" onclick="switchTab('queries')">Queries</button>
+                <button class="tab" onclick="switchTab('data')">Data & Architecture</button>
+            </div>
+
+            <!-- Task List Tab -->
+            <div id="task-list" class="tab-content active">
+                <h2 class="section-title">Development Tasks</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Date</th>
+                            <th>Task</th>
+                            <th>Subtask</th>
+                            <th>Detail</th>
+                            <th>Team</th>
+                            <th>Status</th>
+                            <th>Owner</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTableBody">
+                        <!-- Tasks will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Queries Tab -->
+            <div id="queries" class="tab-content">
+                <h2 class="section-title">Open Queries</h2>
+                <ul class="queries-list" id="queriesList">
+                    <!-- Queries will be inserted here by JavaScript -->
+                </ul>
+            </div>
+
+            <!-- Data Tab -->
+            <div id="data" class="tab-content">
+                <h2 class="section-title">Architecture & Data Structure</h2>
+                <div class="data-diagram" id="architectureDiagram">
+                    <!-- Diagram will be inserted here by JavaScript -->
+                </div>
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Technology Comparison</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Node.js</th>
+                            <th>Java + Quarkus</th>
+                            <th>Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparisonTableBody">
+                        <!-- Comparison data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Task List Data
+        const tasks = [
+            {"PHASE": "Authentication & User Management", "DATE": "2026-01-19", "TASK": "Authentication", "SUBTASK": "Universal Login API", "DETAIL": "JWT issuance & refresh, Password hashing and policy,Session expiration rules, Logout & token revocation, Google sign in, Forgot password", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-01-20", "TASK": "", "SUBTASK": "Sign Up API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Login page", "DETAIL": "Design login page ", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-01-21", "TASK": "Clinician Registration Flow", "SUBTASK": "Account creation API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Account creation Page", "DETAIL": "Include 3 steps", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Email Verification Service", "DETAIL": "", "TEAM": "", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-01-23", "TASK": "Provider Registration Flow", "SUBTASK": "Facility account creation API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Facility account creation Page", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "External verification integration (Recovery.com or LegitScript)", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": "Need more detail on it"},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Pending verification state", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Admin approval workflow", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": "Manually approving initially"},
+            {"PHASE": "Clinician Experience", "DATE": "2026-01-28", "TASK": "Clinician Dashboard", "SUBTASK": "Recently viewed providers API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Saved searches API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Notifications API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-02", "TASK": "Search Results", "SUBTASK": "Search API ", "DETAIL": "Filter handling \nSorting logic\nSearch validation\nSearch Entry (Dashboard)\nLocation input (geo / autocomplete), Pagination", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Save Search API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Save facilities API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Get Saved Search API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-05", "TASK": "", "SUBTASK": "Search Page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-09", "TASK": "Provider Detail", "SUBTASK": "View Search Result API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Search Result Page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-11", "TASK": "Submit Review", "SUBTASK": "Submit Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Submit Review page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-16", "TASK": "Saved Facilities", "SUBTASK": "Get Saved Facilities API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Saved Facilities page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-19", "TASK": "Contact Log", "SUBTASK": "Get contact Log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Create new contact log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Update contact log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Contact Log page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "Provider Experience", "DATE": "2026-02-24", "TASK": "Provider Dashboard", "SUBTASK": "Analytic Data API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Get Bed Availability API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Update Bed Availability API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Update/Edit Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Get Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Update Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-27", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-03", "TASK": "Edit Profile", "SUBTASK": "Save Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-05", "TASK": "", "SUBTASK": "Profile page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-10", "TASK": "Provider Setting", "SUBTASK": "Get Account Setting API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Update Account Setting API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Subscription and Billing ", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": "Subscription and Billing are we planning this too now"},
+            {"PHASE": "", "DATE": "2026-03-13", "TASK": "", "SUBTASK": "Account Setting page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-18", "TASK": "", "SUBTASK": "Magic Link Provider API(for Scheduled delivery- cron job)", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-23", "TASK": "", "SUBTASK": "UI Page to update beds ", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-25", "TASK": "", "SUBTASK": "Testing ", "DETAIL": "", "TEAM": "", "STATUS": "", "OWNER": "", "NOTES": ""},
+            {"PHASE": "Admin Experience", "DATE": "2026-03-26", "TASK": "Admin Dashboard", "SUBTASK": "Recent Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Pending Action API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Summary Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-31", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-06", "TASK": "Provider Management", "SUBTASK": "Summary Report for Provider API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Get All Provider API - Pagination", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Search with Filter for Provider API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-10", "TASK": "", "SUBTASK": "Provider Management page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-15", "TASK": "User Management", "SUBTASK": "Summary Report for User API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Get All user detail API - Pagination", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "User Data Export API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Add New user API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "User Management page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-20", "TASK": "Analytics", "SUBTASK": "Summary Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Search Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "User Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Analytic Data API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "TASK": "", "SUBTASK": "Analytics page and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-27", "TASK": "", "SUBTASK": "LIVE", "DETAIL": "", "TEAM": "", "STATUS": "Open", "OWNER": "", "NOTES": ""}
+        ];
+
+        // Queries Data
+        const queries = [
+            "Billing section is missing",
+            "Subscription and Billing detail",
+            "External verification integration (recovery.com or LegitScript)",
+            "History Log has to be maintain?"
+        ];
+
+        // Architecture Diagram
+        const architectureDiagram = `Web / Mobile Frontend
+        |
+        v
+Quarkus API (Monolith-first, modular)
+        |
+        ├── Auth & Users
+        ├── Clinician Search (PostGIS)
+        ├── Provider Management
+        ├── Reviews & Ratings
+        ├── Admin & Moderation
+        |
+PostgreSQL + PostGIS`;
+
+        // Comparison Data
+        const comparisonData = [
+            ["PostGIS integration", "✅", "✅ (JDBC, Hibernate, Panache)", "Tie"],
+            ["Radius search only", "✅", "✅", "Tie"],
+            ["High concurrency", "⚠️", "✅", "Quarkus"],
+            ["CPU headroom", "❌", "✅", "Quarkus"],
+            ["Type safety", "⚠️", "✅", "Quarkus"],
+            ["Enterprise readiness", "⚠️", "✅", "Quarkus"],
+            ["Kubernetes / EKS", "⚠️", "✅", "Quarkus"],
+            ["Native startup", "❌", "✅", "Quarkus"],
+            ["Long-term maintainability", "⚠️", "✅", "Quarkus"]
+        ];
+
+        // Render Tasks
+        function renderTasks() {
+            const tbody = document.getElementById('taskTableBody');
+            let currentPhase = '';
+            let html = '';
+
+            tasks.forEach((task, index) => {
+                // Check if this is a new phase
+                if (task.PHASE && task.PHASE !== currentPhase) {
+                    currentPhase = task.PHASE;
+                    html += `<tr class="phase-header">
+                        <td colspan="9"><strong>${currentPhase}</strong></td>
+                    </tr>`;
+                }
+
+                const phase = task.PHASE || '';
+                const date = task.DATE || '';
+                const taskName = task.TASK || '';
+                const subtask = task.SUBTASK || '';
+                const detail = task.DETAIL || '';
+                const team = task.TEAM || '';
+                const status = task.STATUS || '';
+                const owner = task.OWNER || '';
+                const notes = task.NOTES || '';
+
+                const teamClass = team === 'Backend' ? 'team-backend' : team === 'UI' ? 'team-ui' : '';
+                const statusBadge = status === 'Open' ? '<span class="status-open">Open</span>' : status;
+
+                html += `<tr>
+                    <td>${phase}</td>
+                    <td class="date-cell">${date}</td>
+                    <td>${taskName}</td>
+                    <td>${subtask}</td>
+                    <td class="detail-cell">${detail.replace(/\n/g, '<br>')}</td>
+                    <td><span class="team-badge ${teamClass}">${team}</span></td>
+                    <td>${statusBadge}</td>
+                    <td>${owner}</td>
+                    <td class="notes-cell">${notes}</td>
+                </tr>`;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // Render Queries
+        function renderQueries() {
+            const ul = document.getElementById('queriesList');
+            let html = '';
+            queries.forEach((query, index) => {
+                if (query.trim()) {
+                    html += `<li><strong>Q${index + 1}:</strong> ${query}</li>`;
+                }
+            });
+            ul.innerHTML = html;
+        }
+
+        // Render Architecture
+        function renderArchitecture() {
+            document.getElementById('architectureDiagram').textContent = architectureDiagram;
+        }
+
+        // Render Comparison
+        function renderComparison() {
+            const tbody = document.getElementById('comparisonTableBody');
+            let html = '';
+            comparisonData.forEach(row => {
+                const winnerClass = row[3] === 'Quarkus' ? 'winner-cell' : '';
+                html += `<tr>
+                    <td><strong>${row[0]}</strong></td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td class="${winnerClass}">${row[3]}</td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // Calculate Stats
+        function calculateStats() {
+            const totalTasks = tasks.length;
+            const openTasks = tasks.filter(t => t.STATUS === 'Open').length;
+            const phases = [...new Set(tasks.filter(t => t.PHASE).map(t => t.PHASE))].length;
+            const queriesCount = queries.filter(q => q.trim()).length;
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('openTasks').textContent = openTasks;
+            document.getElementById('phases').textContent = phases;
+            document.getElementById('queries').textContent = queriesCount;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTasks();
+            renderQueries();
+            renderArchitecture();
+            renderComparison();
+            calculateStats();
+        });
+    </script>
+
+    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p><strong>BehavioralHealth Connect</strong> - Development Task List</p>
+        <p style="opacity: 0.8; margin-top: 0.5rem;">Complete development roadmap and task tracking</p>
+    </footer>
+</body>
+</html>

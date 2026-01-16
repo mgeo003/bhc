@@ -1,0 +1,4 @@
+# Amplify redirects
+# Redirect root to login page if not authenticated
+/login.html    /login.html    200
+/*             /login.html    200

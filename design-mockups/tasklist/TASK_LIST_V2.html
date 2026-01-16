@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC Connect - Enhanced Development Task List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: drift 20s linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 2rem;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--gray-200);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+        }
+
+        /* Phase Sections */
+        .phase-section {
+            margin: 3rem 0;
+        }
+
+        .phase-header-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-header-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .phase-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .phase-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .phase-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Task Cards Grid */
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .task-card:hover::before {
+            width: 6px;
+        }
+
+        .task-card.backend {
+            border-left-color: #3b82f6;
+        }
+
+        .task-card.ui {
+            border-left-color: #ec4899;
+        }
+
+        .task-card.both {
+            border-left-color: var(--success);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .task-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            flex: 1;
+        }
+
+        .task-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-team-backend {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-team-ui {
+            background: #fce7f3;
+            color: #9f1239;
+        }
+
+        .badge-status-open {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-duration {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .task-subtask {
+            font-size: 0.95rem;
+            color: var(--gray-700);
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+
+        .task-detail {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin: 0.75rem 0;
+            line-height: 1.6;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .task-date {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .task-notes {
+            font-size: 0.85rem;
+            color: var(--warning);
+            font-style: italic;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #fef3c7;
+            border-radius: 6px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray-600);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
+
+        /* Timeline View Toggle */
+        .view-toggle {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            gap: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--gray-200);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Timeline View */
+        .timeline-view {
+            display: none;
+        }
+
+        .timeline-view.active {
+            display: block;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 2rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 5rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 1.25rem;
+            top: 0.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--primary);
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .timeline-content {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--gray-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s;
+        }
+    </style>
+    <script>
+        // Password protection check (with Safari compatibility)
+        (function() {
+            try {
+                if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bhc_authenticated') !== 'true') {
+                    setTimeout(function() {
+                        try {
+                            window.location.href = '../../login.html';
+                        } catch(e) {
+                            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h1>Authentication Required</h1><p>Please <a href="../../login.html">login here</a> to access this page.</p></div>';
+                        }
+                    }, 100);
+                }
+            } catch(e) {
+                console.log('SessionStorage not available, allowing local access');
+            }
+        })();
+
+        // Task Data
+        const tasks = [
+            {"PHASE": "Authentication & User Management", "DATE": "2026-01-19", "DURATION": "5", "TASK": "Initial Setup", "SUBTASK": "Setup", "DETAIL": "Frontend setup, backend setup, database setup, docker setup", "TEAM": "", "STATUS": "", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-01-27", "DURATION": "1", "TASK": "Authentication", "SUBTASK": "Universal Login API", "DETAIL": "JWT issuance & refresh, Password hashing and policy,Session expiration rules, Logout & token revocation, Google sign in, Forgot password", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-01-28", "DURATION": "1", "TASK": "", "SUBTASK": "Sign Up API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Login page", "DETAIL": "Design login page ", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-01-29", "DURATION": "2", "TASK": "Clinician Registration Flow", "SUBTASK": "Account creation API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Account creation Page", "DETAIL": "Include 3 steps", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Email Verification Service", "DETAIL": "", "TEAM": "", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-02", "DURATION": "2", "TASK": "Provider Registration Flow", "SUBTASK": "Facility account creation API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Facility account creation Page", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "External verification integration (Recovery.com or LegitScript)", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": "Need more detail on it"},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Pending verification state", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Admin approval workflow", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": "Manually approving initially"},
+            {"PHASE": "Provider Experience", "DATE": "2026-02-04", "DURATION": "3", "TASK": "Provider Dashboard", "SUBTASK": "Analytic Data API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get Bed Availability API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update Bed Availability API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update/Edit Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-09", "DURATION": "3", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-12", "DURATION": "2", "TASK": "Edit Profile", "SUBTASK": "Save Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-16", "DURATION": "3", "TASK": "", "SUBTASK": "Profile page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-19", "DURATION": "3", "TASK": "Provider Setting", "SUBTASK": "Get Account Setting API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update Account Setting API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Subscription and Billing ", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-02-24", "DURATION": "4", "TASK": "", "SUBTASK": "Account Setting page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-02", "DURATION": "3", "TASK": "", "SUBTASK": "Magic Link Provider API(for Scheduled delivery- cron job)", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-05", "DURATION": "2", "TASK": "", "SUBTASK": "UI Page to update beds ", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "Clinician Experience", "DATE": "2026-03-09", "DURATION": "3", "TASK": "Clinician Dashboard", "SUBTASK": "Recently viewed providers API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Saved searches API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Notifications API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-12", "DURATION": "3", "TASK": "Search Results", "SUBTASK": "Search API ", "DETAIL": "Filter handling \nSorting logic\nSearch validation\nSearch Entry (Dashboard)\nLocation input (geo / autocomplete), Pagination", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Save Search API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Save facilities API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get Saved Search API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-17", "DURATION": "2", "TASK": "", "SUBTASK": "Search Page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-19", "DURATION": "2", "TASK": "Provider Detail", "SUBTASK": "View Search Result API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Search Result Page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-23", "DURATION": "3", "TASK": "Submit Review", "SUBTASK": "Submit Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Submit Review page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-26", "DURATION": "3", "TASK": "Saved Facilities", "SUBTASK": "Get Saved Facilities API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Saved Facilities page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-03-31", "DURATION": "3", "TASK": "Contact Log", "SUBTASK": "Get contact Log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Create new contact log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update contact log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Contact Log page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "Admin Experience", "DATE": "2026-04-06", "DURATION": "3", "TASK": "Admin Dashboard", "SUBTASK": "Recent Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Pending Action API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Summary Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-09", "DURATION": "3", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-14", "DURATION": "4", "TASK": "Provider Management", "SUBTASK": "Summary Report for Provider API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get All Provider API - Pagination", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Search with Filter for Provider API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-20", "DURATION": "3", "TASK": "", "SUBTASK": "Provider Management page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-23", "DURATION": "3", "TASK": "User Management", "SUBTASK": "Summary Report for User API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get All user detail API - Pagination", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "User Data Export API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Add New user API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "User Management page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-04-28", "DURATION": "4", "TASK": "Analytics", "SUBTASK": "Summary Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Search Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "User Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Analytic Data API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Analytics page and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
+            {"PHASE": "", "DATE": "2026-05-04", "DURATION": "", "TASK": "", "SUBTASK": "LIVE", "DETAIL": "", "TEAM": "", "STATUS": "Open", "OWNER": "", "NOTES": ""}
+        ];
+
+        let filteredTasks = [...tasks];
+        let currentView = 'cards';
+        let currentFilter = 'all';
+
+        // Calculate Stats
+        function calculateStats() {
+            const totalTasks = tasks.length;
+            const openTasks = tasks.filter(t => t.STATUS === 'Open').length;
+            const phases = [...new Set(tasks.filter(t => t.PHASE).map(t => t.PHASE))].length;
+            const totalDuration = tasks.filter(t => t.DURATION && t.DURATION !== '').reduce((sum, t) => sum + parseInt(t.DURATION || 0), 0);
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('openTasks').textContent = openTasks;
+            document.getElementById('phases').textContent = phases;
+            document.getElementById('totalDuration').textContent = totalDuration + ' days';
+        }
+
+        // Get Team Class
+        function getTeamClass(team) {
+            if (team === 'Backend') return 'backend';
+            if (team === 'UI') return 'ui';
+            if (team === 'Both' || (team && team.includes('Backend') && team.includes('UI'))) return 'both';
+            return '';
+        }
+
+        // Render Task Cards
+        function renderCards() {
+            const container = document.getElementById('tasksContainer');
+            if (!container) return;
+
+            if (filteredTasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <h3>No tasks found</h3>
+                        <p>Try adjusting your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group tasks by phase first
+            const phaseGroups = {};
+            let currentPhaseKey = '';
+            
+            filteredTasks.forEach((task) => {
+                if (task.PHASE && task.PHASE !== '') {
+                    currentPhaseKey = task.PHASE;
+                }
+                
+                if (!phaseGroups[currentPhaseKey]) {
+                    phaseGroups[currentPhaseKey] = [];
+                }
+                phaseGroups[currentPhaseKey].push(task);
+            });
+
+            let html = '';
+
+            // Render each phase
+            Object.keys(phaseGroups).forEach((phaseKey) => {
+                const phaseTasks = phaseGroups[phaseKey];
+                const phaseDuration = phaseTasks.filter(t => t.DURATION && t.DURATION !== '').reduce((sum, t) => sum + parseInt(t.DURATION || 0), 0);
+                const phaseName = phaseKey || 'General Tasks';
+                
+                html += `
+                    <div class="phase-section">
+                        <div class="phase-header-card">
+                            <div class="phase-title">${phaseName}</div>
+                            <div class="phase-meta">
+                                <div class="phase-meta-item">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>${phaseTasks.length} tasks</span>
+                                </div>
+                                <div class="phase-meta-item">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>${phaseDuration} days</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tasks-grid" id="phase-${phaseName.replace(/\s+/g, '-').toLowerCase()}">
+                `;
+
+                // Render tasks in this phase
+                phaseTasks.forEach((task) => {
+                    const taskName = task.TASK || task.SUBTASK || 'Untitled Task';
+                    const subtask = task.SUBTASK && task.TASK ? task.SUBTASK : '';
+                    const detail = task.DETAIL || '';
+                    const team = task.TEAM || '';
+                    const status = task.STATUS || '';
+                    const date = task.DATE || '';
+                    const duration = task.DURATION || '';
+                    const notes = task.NOTES || '';
+
+                    const teamClass = getTeamClass(team);
+                    const teamBadge = team ? `<span class="badge badge-team-${team.toLowerCase()}">${team}</span>` : '';
+                    const statusBadge = status === 'Open' ? '<span class="badge badge-status-open">Open</span>' : '';
+                    const durationBadge = duration ? `<span class="badge badge-duration">${duration} day${duration !== '1' ? 's' : ''}</span>` : '';
+
+                    html += `
+                        <div class="task-card ${teamClass}" data-phase="${task.PHASE || phaseName}" data-team="${team.toLowerCase()}" data-status="${status.toLowerCase()}">
+                            <div class="task-header">
+                                <div class="task-title">${taskName}</div>
+                                <div class="task-badges">
+                                    ${teamBadge}
+                                    ${statusBadge}
+                                    ${durationBadge}
+                                </div>
+                            </div>
+                            ${subtask && task.TASK ? `<div class="task-subtask">${subtask}</div>` : ''}
+                            ${detail ? `<div class="task-detail">${detail.replace(/\n/g, '<br>')}</div>` : ''}
+                            ${notes ? `<div class="task-notes">📝 ${notes}</div>` : ''}
+                            <div class="task-footer">
+                                ${date ? `<div class="task-date">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    ${date}
+                                </div>` : '<div></div>'}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Render Timeline View
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            if (!container) return;
+
+            if (filteredTasks.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No tasks found</h3></div>';
+                return;
+            }
+
+            let html = '<div class="timeline">';
+            let currentPhase = '';
+
+            filteredTasks.forEach((task) => {
+                if (task.PHASE && task.PHASE !== currentPhase) {
+                    currentPhase = task.PHASE;
+                }
+
+                const taskName = task.TASK || task.SUBTASK || 'Untitled Task';
+                const subtask = task.SUBTASK && task.TASK ? task.SUBTASK : '';
+                const detail = task.DETAIL || '';
+                const team = task.TEAM || '';
+                const date = task.DATE || '';
+                const duration = task.DURATION || '';
+
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="task-header">
+                                <div class="task-title">${taskName}</div>
+                                <div class="task-badges">
+                                    ${team ? `<span class="badge badge-team-${team.toLowerCase()}">${team}</span>` : ''}
+                                    ${duration ? `<span class="badge badge-duration">${duration} day${duration !== '1' ? 's' : ''}</span>` : ''}
+                                </div>
+                            </div>
+                            ${subtask && task.TASK ? `<div class="task-subtask">${subtask}</div>` : ''}
+                            ${detail ? `<div class="task-detail">${detail.replace(/\n/g, '<br>')}</div>` : ''}
+                            ${date ? `<div class="task-date">📅 ${date}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Filter Tasks
+        function filterTasks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const teamFilter = currentFilter;
+
+            filteredTasks = tasks.filter(task => {
+                const matchesSearch = !searchTerm || 
+                    (task.TASK && task.TASK.toLowerCase().includes(searchTerm)) ||
+                    (task.SUBTASK && task.SUBTASK.toLowerCase().includes(searchTerm)) ||
+                    (task.DETAIL && task.DETAIL.toLowerCase().includes(searchTerm)) ||
+                    (task.PHASE && task.PHASE.toLowerCase().includes(searchTerm));
+
+                const matchesTeam = teamFilter === 'all' || 
+                    (teamFilter === 'backend' && task.TEAM === 'Backend') ||
+                    (teamFilter === 'ui' && task.TEAM === 'UI') ||
+                    (teamFilter === 'both' && (task.TEAM === 'Backend' || task.TEAM === 'UI'));
+
+                return matchesSearch && matchesTeam;
+            });
+
+            if (currentView === 'cards') {
+                renderCards();
+            } else {
+                renderTimeline();
+            }
+
+            // Update stats
+            document.getElementById('filteredCount').textContent = filteredTasks.length;
+        }
+
+        // Switch View
+        function switchView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('cardsView').classList.toggle('active', view === 'cards');
+            document.getElementById('timelineView').classList.toggle('active', view === 'timeline');
+
+            if (view === 'cards') {
+                renderCards();
+            } else {
+                renderTimeline();
+            }
+        }
+
+        // Set Filter
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            filterTasks();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateStats();
+            renderCards();
+            
+            // Search input
+            document.getElementById('searchInput').addEventListener('input', filterTasks);
+        });
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Development Task List</h1>
+        <p>BHC Connect - Enhanced Visual Roadmap</p>
+    </div>
+
+    <nav class="nav">
+        <a href="../../index.html">🏠 Hub</a>
+        <a href="../ARCHITECTURE_PLAN.html">Architecture Plan</a>
+        <a href="../ARCHITECTURE_COMPARISON.html">Comparison</a>
+        <a href="../JAVA_QUARKUS_PLAN.html">Java/Quarkus</a>
+        <a href="../NODEJS_PLAN.html">Node.js</a>
+        <a href="../ASSUMPTIONS.html">Assumptions</a>
+        <a href="TASK_LIST.html">📊 Table View</a>
+    </nav>
+
+    <div class="container">
+        <!-- Stats Dashboard -->
+        <div class="stats-dashboard">
+            <div class="stat-card">
+                <div class="stat-number" id="totalTasks">0</div>
+                <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="openTasks">0</div>
+                <div class="stat-label">Open Tasks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="phases">0</div>
+                <div class="stat-label">Development Phases</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalDuration">0</div>
+                <div class="stat-label">Total Duration</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="filteredCount">0</div>
+                <div class="stat-label">Filtered Results</div>
+            </div>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="filters">
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search tasks, subtasks, or details...">
+            
+            <div class="filter-group">
+                <span style="font-weight: 600; color: var(--gray-700);">Filter:</span>
+                <button class="filter-btn active" onclick="setFilter('all')">All</button>
+                <button class="filter-btn" onclick="setFilter('backend')">Backend</button>
+                <button class="filter-btn" onclick="setFilter('ui')">UI</button>
+            </div>
+
+            <div class="filter-group">
+                <span style="font-weight: 600; color: var(--gray-700);">View:</span>
+                <button class="view-btn active" onclick="switchView('cards')">📋 Cards</button>
+                <button class="view-btn" onclick="switchView('timeline')">📅 Timeline</button>
+            </div>
+        </div>
+
+        <!-- Cards View -->
+        <div id="cardsView" class="active">
+            <div id="tasksContainer">
+                <!-- Tasks will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Timeline View -->
+        <div id="timelineView" class="timeline-view">
+            <div id="timelineContainer">
+                <!-- Timeline will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p><strong>BehavioralHealth Connect</strong> - Enhanced Development Task List</p>
+        <p style="opacity: 0.8; margin-top: 0.5rem;">Visual roadmap with interactive filtering and timeline view</p>
+    </footer>
+</body>
+</html>

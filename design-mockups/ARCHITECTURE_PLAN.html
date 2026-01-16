@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC Connect - Enterprise Architecture Plan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .content {
+            background: white;
+            margin: 2rem auto;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin: 2rem 0 0.75rem 0;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        p {
+            margin: 1rem 0;
+            line-height: 1.7;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+            line-height: 1.8;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0 0.25rem;
+        }
+
+        .badge-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: var(--primary);
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning);
+            color: #92400e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        tr:hover {
+            background: var(--gray-50);
+        }
+
+        code {
+            background: var(--gray-100);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--gray-900);
+            color: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .feature-card h4 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .toc {
+            background: var(--gray-50);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--gray-700);
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .phase-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .phase-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+        }
+
+        .phase-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 3rem;
+        }
+
+        .phase-content {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script>
+        // Password protection check (with Safari compatibility)
+        (function() {
+            try {
+                if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bhc_authenticated') !== 'true') {
+                    setTimeout(function() {
+                        try {
+                            window.location.href = '../login.html';
+                        } catch(e) {
+                            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h1>Authentication Required</h1><p>Please <a href="../login.html">login here</a> to access this page.</p></div>';
+                        }
+                    }, 100);
+                }
+            } catch(e) {
+                console.log('SessionStorage not available, allowing local access');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>BHC Connect</h1>
+        <p>Enterprise Architecture & Development Plan</p>
+    </div>
+
+    <nav class="nav">
+        <ul class="nav-links">
+            <li><a href="../index.html">🏠 Hub</a></li>
+            <li><a href="ARCHITECTURE_COMPARISON.html">Comparison</a></li>
+            <li><a href="JAVA_QUARKUS_PLAN.html">Java/Quarkus</a></li>
+            <li><a href="NODEJS_PLAN.html">Node.js</a></li>
+            <li><a href="ASSUMPTIONS.html">Assumptions</a></li>
+            <li><a href="tasklist/TASK_LIST.html">Task List</a></li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#timeline">Timeline</a></li>
+            <li><a href="#tech-stack">Tech Stack</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#phases">Phases</a></li>
+            <li><a href="#infrastructure">Infrastructure</a></li>
+            <li><a href="#security">Security</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <!-- Executive Summary -->
+            <section id="overview">
+                <h1>Executive Summary</h1>
+                
+                <p>This plan outlines the architecture and development approach for BehavioralHealth Connect, an enterprise-grade B2B SaaS platform. The system will be built as a <strong>modular monolith</strong> with Docker containerization, designed for horizontal scaling and future microservices migration.</p>
+
+                <div class="alert alert-success">
+                    <p><strong>Development Approach:</strong> Full AI-Assisted Coding (Cursor, GitHub Copilot)</p>
+                    <p><strong>Fastest development with quality assurance:</strong> AI tools for all code generation (components, APIs, business logic, tests). Comprehensive code review, automated testing, and security audits ensure bug-free, production-ready code. Expected efficiency gain: 40-50% faster than manual coding.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Modular Monolith</h4>
+                        <p>Clear module boundaries, ready for microservices migration</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Docker Containers</h4>
+                        <p>All services containerized, RDS for database</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Auto-Scaling</h4>
+                        <p>AWS ECS Fargate with horizontal scaling</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Enterprise-Grade</h4>
+                        <p>High availability, security, monitoring, and observability</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timeline -->
+            <section id="timeline">
+                <h1>Development Timeline</h1>
+
+                <div class="alert alert-info">
+                    <p><strong>Timeline Assumptions:</strong></p>
+                    <ul>
+                        <li><strong>Approach:</strong> Full AI-assisted coding (Cursor, GitHub Copilot) for all development</li>
+                        <li><strong>Team:</strong> 1-2 developers working full-time with AI assistance</li>
+                        <li><strong>Quality Assurance:</strong> Mandatory code review, comprehensive testing, security audits at each phase</li>
+                        <li><strong>Timeline includes:</strong> AI code generation, review cycles, testing, and bug fixes</li>
+                        <li><strong>Efficiency:</strong> 40-50% faster than manual coding with quality gates</li>
+                        <li><strong>Bug Prevention:</strong> Test-driven development, automated linting, security scanning</li>
+                    </ul>
+                </div>
+
+                <div class="phase-timeline">
+                    <div class="phase-item">
+                        <div class="phase-number">1</div>
+                        <div class="phase-content">
+                            <h4>Foundation & Database</h4>
+                            <p><strong>Weeks 1-1.5</strong> - PostgreSQL with PostGIS, Prisma setup, Docker Compose, CI/CD foundation</p>
+                        </div>
+                    </div>
+                    <div class="phase-item">
+                        <div class="phase-number">2</div>
+                        <div class="phase-content">
+                            <h4>Authentication & Registration</h4>
+                            <p><strong>Weeks 1.5-2.5</strong> - Clerk integration, registration flows (Clinician & Provider), RBAC</p>
+                        </div>
+                    </div>
+                    <div class="phase-item">
+                        <div class="phase-number">3</div>
+                        <div class="phase-content">
+                            <h4>Provider Portal</h4>
+                            <p><strong>Weeks 2.5-5</strong> - Dashboard, bed availability widget, magic link system, profile management</p>
+                        </div>
+                    </div>
+                    <div class="phase-item">
+                        <div class="phase-number">4</div>
+                        <div class="phase-content">
+                            <h4>Clinician Portal</h4>
+                            <p><strong>Weeks 5-8</strong> - Hybrid search (PostGIS + Algolia), map integration, saved facilities, contact logs, reviews</p>
+                        </div>
+                    </div>
+                    <div class="phase-item">
+                        <div class="phase-number">5</div>
+                        <div class="phase-content">
+                            <h4>Admin Portal</h4>
+                            <p><strong>Weeks 8-9</strong> - Verification queue, user management, analytics dashboard, review moderation</p>
+                        </div>
+                    </div>
+                    <div class="phase-item">
+                        <div class="phase-number">6</div>
+                        <div class="phase-content">
+                            <h4>Testing & Deployment</h4>
+                            <p><strong>Weeks 9-11</strong> - Comprehensive testing, optimization, production deployment, monitoring setup</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p><strong>Total Timeline:</strong> 11 weeks (~2.5 months) with full AI-assisted development approach</p>
+                <div class="alert alert-success">
+                    <p><strong>Quality Assurance Strategy:</strong></p>
+                    <ul>
+                        <li>All AI-generated code reviewed by developers before merging</li>
+                        <li>Comprehensive automated testing (unit, integration, E2E) to catch bugs early</li>
+                        <li>ESLint, Prettier, TypeScript strict mode enforced</li>
+                        <li>Security-focused code reviews for sensitive operations</li>
+                        <li>Performance testing and profiling</li>
+                        <li>Quality gates at each phase: code review → testing → security check → deployment</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Tech Stack -->
+            <section id="tech-stack">
+                <h1>Recommended Technology Stack</h1>
+
+                <div class="card">
+                    <div class="card-title">Core Application</div>
+                    <ul>
+                        <li><strong>Frontend:</strong> Next.js 14+ (App Router) with TypeScript</li>
+                        <li><strong>Backend API:</strong> Node.js 20+ with Express.js (TypeScript)</li>
+                        <li><strong>UI Framework:</strong> Tailwind CSS + shadcn/ui components</li>
+                        <li><strong>Database:</strong> PostgreSQL 15+ with PostGIS extension (AWS RDS)</li>
+                        <li><strong>ORM:</strong> Prisma (already defined in schema.prisma)</li>
+                        <li><strong>Cache:</strong> Redis (ElastiCache) for sessions and query caching</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Authentication & Authorization</div>
+                    <p><strong>Primary:</strong> Clerk (B2B SaaS optimized, quick setup, enterprise features)</p>
+                    <p><strong>Rationale:</strong> Clerk provides enterprise SSO, organization management, and role-based access out of the box</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Search Architecture (Hybrid Approach)</div>
+                    <ul>
+                        <li><strong>Geospatial Search:</strong> PostgreSQL + PostGIS for radius queries and distance calculations</li>
+                        <li><strong>Full-Text & Faceting:</strong> Algolia for fast multi-filter search, faceted navigation, and typo tolerance</li>
+                    </ul>
+                    <p><strong>Rationale:</strong> PostGIS handles complex geospatial queries efficiently, while Algolia provides sub-100ms search with advanced filtering</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Infrastructure & Deployment</div>
+                    <ul>
+                        <li><strong>Primary:</strong> AWS ECS Fargate (serverless containers, auto-scaling)</li>
+                        <li><strong>Database:</strong> AWS RDS PostgreSQL (Multi-AZ for high availability)</li>
+                        <li><strong>Cache:</strong> AWS ElastiCache Redis</li>
+                        <li><strong>Load Balancer:</strong> Application Load Balancer (ALB)</li>
+                        <li><strong>CDN:</strong> CloudFront for static assets</li>
+                        <li><strong>Container Registry:</strong> Amazon ECR</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Supporting Services</div>
+                    <ul>
+                        <li><strong>Maps:</strong> Mapbox GL JS</li>
+                        <li><strong>Email:</strong> Resend or SendGrid</li>
+                        <li><strong>SMS:</strong> Twilio (for magic link SMS delivery)</li>
+                        <li><strong>Payments:</strong> Stripe</li>
+                        <li><strong>Monitoring:</strong> AWS CloudWatch + Sentry</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Architecture -->
+            <section id="architecture">
+                <h1>Architecture Overview</h1>
+
+                <h3>System Architecture</h3>
+                <p>The system follows a three-tier architecture:</p>
+                <ul>
+                    <li><strong>Client Layer:</strong> Web and mobile browsers via CloudFront CDN</li>
+                    <li><strong>Application Layer:</strong> Docker containers on ECS Fargate (Next.js app, Express API, background workers)</li>
+                    <li><strong>Data Layer:</strong> RDS PostgreSQL (PostGIS), ElastiCache Redis, Algolia search index</li>
+                </ul>
+
+                <h3>Application Architecture (Modular Monolith)</h3>
+                <pre><code>src/
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # Auth routes
+│   ├── (clinician)/       # Clinician portal
+│   ├── (provider)/        # Provider portal
+│   ├── (admin)/           # Admin portal
+│   └── api/               # API routes
+├── server/                # Express API server
+│   ├── modules/
+│   │   ├── auth/          # Authentication
+│   │   ├── provider/      # Provider management
+│   │   ├── clinician/     # Clinician features
+│   │   ├── admin/         # Admin features
+│   │   ├── search/        # Search service
+│   │   ├── notifications/ # Email/SMS
+│   │   └── analytics/     # Analytics
+│   ├── shared/
+│   │   ├── db/           # Prisma client
+│   │   ├── cache/        # Redis client
+│   │   ├── events/       # Event bus
+│   │   └── middleware/   # Auth, validation
+│   └── workers/           # Background jobs
+└── shared/                # Shared types, utils</code></pre>
+
+                <h3>Docker Architecture</h3>
+                <p><strong>Multi-container approach:</strong></p>
+                <ul>
+                    <li><strong>nextjs:</strong> Next.js frontend + API routes</li>
+                    <li><strong>api:</strong> Express API server</li>
+                    <li><strong>worker:</strong> Background jobs (magic links, Algolia sync)</li>
+                    <li><strong>db:</strong> PostgreSQL with PostGIS (local dev only, RDS in production)</li>
+                    <li><strong>redis:</strong> Redis cache (local dev only, ElastiCache in production)</li>
+                </ul>
+            </section>
+
+            <!-- Development Phases -->
+            <section id="phases">
+                <h1>Development Phases</h1>
+
+                <div class="toc">
+                    <h3>Quick Navigation</h3>
+                    <ul>
+                        <li><a href="#phase1">Phase 1: Foundation & Database</a></li>
+                        <li><a href="#phase2">Phase 2: Authentication & Registration</a></li>
+                        <li><a href="#phase3">Phase 3: Provider Portal</a></li>
+                        <li><a href="#phase4">Phase 4: Clinician Portal</a></li>
+                        <li><a href="#phase5">Phase 5: Admin Portal</a></li>
+                        <li><a href="#phase6">Phase 6: Testing & Deployment</a></li>
+                    </ul>
+                </div>
+
+                <h2 id="phase1">Phase 1: Foundation & Database (Weeks 1-2)</h2>
+                <div class="card">
+                    <div class="card-title">Deliverables</div>
+                    <ul>
+                        <li>Database setup with PostGIS extension</li>
+                        <li>Prisma schema implementation and migrations</li>
+                        <li>Database seeding scripts</li>
+                        <li>Docker Compose setup for local development</li>
+                        <li>CI/CD pipeline foundation</li>
+                    </ul>
+                </div>
+
+                <h2 id="phase2">Phase 2: Authentication & Registration (Weeks 3-4)</h2>
+                <div class="card">
+                    <div class="card-title">Deliverables</div>
+                    <ul>
+                        <li>Clerk integration</li>
+                        <li>User registration flows (Clinician, Provider)</li>
+                        <li>Email verification</li>
+                        <li>Role-based access control</li>
+                        <li>Session management</li>
+                    </ul>
+                </div>
+
+                <h2 id="phase3">Phase 3: Provider Portal (Weeks 5-8)</h2>
+                <div class="card">
+                    <div class="card-title">Deliverables</div>
+                    <ul>
+                        <li>Provider dashboard with bed availability widget</li>
+                        <li>Profile management (edit profile page)</li>
+                        <li>Bed availability management</li>
+                        <li>Magic link system for passwordless updates</li>
+                        <li>Provider settings</li>
+                    </ul>
+                    <p><strong>Key Features:</strong> Auto-save bed updates, touch-friendly controls, magic link expiration (48h or on-use)</p>
+                </div>
+
+                <h2 id="phase4">Phase 4: Clinician Portal (Weeks 9-12)</h2>
+                <div class="card">
+                    <div class="card-title">Deliverables</div>
+                    <ul>
+                        <li>Advanced search with geospatial filtering</li>
+                        <li>Search results page with map integration</li>
+                        <li>Provider detail pages</li>
+                        <li>Saved facilities with tags and notes</li>
+                        <li>Contact log system</li>
+                        <li>Review and rating system</li>
+                    </ul>
+                    <p><strong>Key Features:</strong> Hybrid search (PostGIS + Algolia), radius-based search (5-100 miles), multi-filter search, map/list toggle</p>
+                </div>
+
+                <h2 id="phase5">Phase 5: Admin Portal (Weeks 13-14)</h2>
+                <div class="card">
+                    <div class="card-title">Deliverables</div>
+                    <ul>
+                        <li>Admin dashboard with platform metrics</li>
+                        <li>Provider verification queue</li>
+                        <li>User management</li>
+                        <li>Analytics dashboard</li>
+                        <li>Review moderation</li>
+                    </ul>
+                </div>
+
+                <h2 id="phase6">Phase 6: Testing, Optimization & Deployment (Weeks 15-16)</h2>
+                <div class="card">
+                    <div class="card-title">Deliverables</div>
+                    <ul>
+                        <li>Comprehensive test coverage (unit, integration, E2E)</li>
+                        <li>Performance optimization</li>
+                        <li>Production deployment to AWS</li>
+                        <li>Monitoring and logging setup</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Infrastructure -->
+            <section id="infrastructure">
+                <h1>Infrastructure Setup</h1>
+
+                <h3>AWS Resources</h3>
+                <ul>
+                    <li><strong>VPC:</strong> Custom VPC with public/private subnets</li>
+                    <li><strong>RDS:</strong> PostgreSQL 15 with PostGIS (Multi-AZ)</li>
+                    <li><strong>ECS:</strong> Fargate cluster with auto-scaling</li>
+                    <li><strong>ElastiCache:</strong> Redis cluster</li>
+                    <li><strong>ALB:</strong> Application Load Balancer with SSL</li>
+                    <li><strong>CloudFront:</strong> CDN for static assets</li>
+                    <li><strong>ECR:</strong> Container registry</li>
+                    <li><strong>Secrets Manager:</strong> Environment variables and API keys</li>
+                    <li><strong>CloudWatch:</strong> Logging and monitoring</li>
+                    <li><strong>Route 53:</strong> DNS management</li>
+                </ul>
+
+                <h3>Auto-Scaling Configuration</h3>
+                <ul>
+                    <li><strong>ECS Service Auto-Scaling:</strong> Based on CPU (70%) and memory (80%)</li>
+                    <li><strong>Target Tracking:</strong> Maintain 50% CPU utilization</li>
+                    <li><strong>Min Tasks:</strong> 2 (high availability)</li>
+                    <li><strong>Max Tasks:</strong> 10 (cost control)</li>
+                    <li><strong>Scaling Cooldown:</strong> 60 seconds</li>
+                </ul>
+
+                <h3>Estimated Monthly Costs (AWS)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Cost Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>RDS (db.t3.medium, Multi-AZ)</td>
+                            <td>$150-300</td>
+                        </tr>
+                        <tr>
+                            <td>ECS Fargate (2-4 tasks, auto-scaling)</td>
+                            <td>$100-400</td>
+                        </tr>
+                        <tr>
+                            <td>ElastiCache (cache.t3.micro)</td>
+                            <td>$50-100</td>
+                        </tr>
+                        <tr>
+                            <td>ALB</td>
+                            <td>$20-30</td>
+                        </tr>
+                        <tr>
+                            <td>CloudFront</td>
+                            <td>$10-50</td>
+                        </tr>
+                        <tr>
+                            <td>Data Transfer</td>
+                            <td>$20-50</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong>~$350-930/month</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Security -->
+            <section id="security">
+                <h1>Security & Best Practices</h1>
+
+                <h3>Security Checklist</h3>
+                <ul>
+                    <li>HTTPS everywhere (SSL certificates)</li>
+                    <li>Environment variables in Secrets Manager</li>
+                    <li>Input validation on all endpoints</li>
+                    <li>SQL injection prevention (Prisma parameterized queries)</li>
+                    <li>XSS protection (React auto-escaping)</li>
+                    <li>CSRF protection</li>
+                    <li>Rate limiting on API endpoints</li>
+                    <li>Authentication on all protected routes</li>
+                    <li>Role-based access control</li>
+                    <li>Audit logging for sensitive operations</li>
+                    <li>Regular security updates</li>
+                    <li>Penetration testing before launch</li>
+                </ul>
+
+                <h3>Performance Targets</h3>
+                <ul>
+                    <li>Search latency &lt;500ms (p95)</li>
+                    <li>Page load &lt;2s (p95)</li>
+                    <li>Uptime &gt;99.9%</li>
+                    <li>Zero critical security vulnerabilities</li>
+                </ul>
+
+                <h3>Success Criteria</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Technical Metrics</h4>
+                        <ul>
+                            <li>Search latency &lt;500ms</li>
+                            <li>Page load &lt;2s</li>
+                            <li>Uptime &gt;99.9%</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Business Metrics</h4>
+                        <ul>
+                            <li>100+ active providers</li>
+                            <li>500+ monthly active clinicians</li>
+                            <li>80% daily bed update compliance</li>
+                            <li>$50K MRR by Month 12</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section>
+                <h1>Next Steps</h1>
+                
+                <div class="alert alert-success">
+                    <h3>Implementation Roadmap</h3>
+                    <ol>
+                        <li>Review and approve this architecture plan</li>
+                        <li>Set up AWS accounts and initial infrastructure</li>
+                        <li>Initialize project structure</li>
+                        <li>Begin Phase 1: Database setup</li>
+                        <li>Weekly progress reviews and adjustments</li>
+                    </ol>
+                </div>
+
+                <p><strong>This plan provides a solid foundation for building an enterprise-grade, scalable platform while maintaining flexibility for future growth and feature additions.</strong></p>
+            </section>
+
+        </div>
+    </div>
+
+    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p><strong>BehavioralHealth Connect</strong> - Enterprise Architecture Plan</p>
+        <p style="opacity: 0.8; margin-top: 0.5rem;">For detailed technical specifications, refer to the full markdown plan document.</p>
+    </footer>
+</body>
+</html>
