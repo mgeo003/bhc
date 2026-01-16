@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Provider - BehavioralHealth Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1e40af',
+            secondary: '#0d9488',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  
+  <!-- Top Navigation -->
+  <nav class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-gradient-to-br from-secondary to-teal-600 rounded-lg"></div>
+          <span class="text-xl font-bold text-gray-900">BehavioralHealth Connect</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="dashboard.html" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+          <a href="edit-profile.html" class="text-gray-600 hover:text-gray-900">Edit Profile</a>
+          <a href="settings.html" class="text-secondary font-semibold">Settings</a>
+          <button class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100">
+            <div class="w-8 h-8 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+              HR
+            </div>
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Page Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Account Settings</h1>
+      <p class="text-gray-600">Manage your account preferences and notifications</p>
+    </div>
+
+    <!-- Settings Sections -->
+    <div class="space-y-6">
+      
+      <!-- Account Information -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-6">Account Information</h2>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between py-3 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Email Address</p>
+              <p class="text-sm text-gray-500">admin@hoperecovery.com</p>
+            </div>
+            <button class="text-sm text-secondary hover:text-teal-700 font-medium">Change</button>
+          </div>
+          <div class="flex items-center justify-between py-3 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Password</p>
+              <p class="text-sm text-gray-500">Last changed 3 months ago</p>
+            </div>
+            <button class="text-sm text-secondary hover:text-teal-700 font-medium">Change</button>
+          </div>
+          <div class="flex items-center justify-between py-3">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Two-Factor Authentication</p>
+              <p class="text-sm text-gray-500">Add an extra layer of security</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-6">Notification Preferences</h2>
+        <div class="space-y-4">
+          <div class="flex items-start justify-between py-3 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Email Notifications</p>
+              <p class="text-sm text-gray-500">Receive email updates about activity</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+            </label>
+          </div>
+          <div class="pl-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-sm text-gray-700">New searches for your facility</label>
+              <input type="checkbox" checked class="rounded border-gray-300 text-secondary">
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="text-sm text-gray-700">New reviews</label>
+              <input type="checkbox" checked class="rounded border-gray-300 text-secondary">
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="text-sm text-gray-700">Profile views</label>
+              <input type="checkbox" class="rounded border-gray-300 text-secondary">
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="text-sm text-gray-700">Weekly summary report</label>
+              <input type="checkbox" checked class="rounded border-gray-300 text-secondary">
+            </div>
+          </div>
+
+          <div class="flex items-start justify-between py-3 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">SMS Notifications</p>
+              <p class="text-sm text-gray-500">Receive text message alerts</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+            </label>
+          </div>
+          <div class="pl-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-sm text-gray-700">Urgent inquiries</label>
+              <input type="checkbox" checked class="rounded border-gray-300 text-secondary">
+            </div>
+            <div class="flex items-center justify-between">
+              <label class="text-sm text-gray-700">Bed availability requests</label>
+              <input type="checkbox" checked class="rounded border-gray-300 text-secondary">
+            </div>
+          </div>
+
+          <div class="flex items-start justify-between py-3">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Marketing Communications</p>
+              <p class="text-sm text-gray-500">Updates about new features and tips</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-6">Privacy Settings</h2>
+        <div class="space-y-4">
+          <div class="flex items-start justify-between py-3 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Profile Visibility</p>
+              <p class="text-sm text-gray-500">Control who can see your facility</p>
+            </div>
+            <select class="text-sm border border-gray-300 rounded-lg px-3 py-1">
+              <option>Public</option>
+              <option>Verified Clinicians Only</option>
+              <option>Private</option>
+            </select>
+          </div>
+          <div class="flex items-start justify-between py-3 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Contact Information Display</p>
+              <p class="text-sm text-gray-500">Show phone and email on profile</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+            </label>
+          </div>
+          <div class="flex items-start justify-between py-3">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Allow Clinician Reviews</p>
+              <p class="text-sm text-gray-500">Let clinicians leave reviews</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subscription & Billing -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-6">Subscription & Billing</h2>
+        <div class="space-y-4">
+          <div class="p-4 bg-teal-50 border border-teal-200 rounded-lg">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <p class="text-sm font-semibold text-teal-900">Professional Plan</p>
+                <p class="text-xs text-teal-700">$99/month</p>
+              </div>
+              <span class="px-2 py-1 bg-teal-600 text-white text-xs font-medium rounded">Active</span>
+            </div>
+            <p class="text-xs text-teal-700 mb-3">Next billing date: February 8, 2026</p>
+            <button class="text-xs text-teal-700 hover:text-teal-900 font-medium underline">View billing history</button>
+          </div>
+
+          <div class="flex items-center justify-between py-3 border-b border-gray-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Payment Method</p>
+              <p class="text-sm text-gray-500">•••• •••• •••• 4242</p>
+            </div>
+            <button class="text-sm text-secondary hover:text-teal-700 font-medium">Update</button>
+          </div>
+
+          <div class="flex items-center justify-between py-3">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Billing Email</p>
+              <p class="text-sm text-gray-500">billing@hoperecovery.com</p>
+            </div>
+            <button class="text-sm text-secondary hover:text-teal-700 font-medium">Change</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="bg-white rounded-lg shadow-sm border-2 border-red-200 p-6">
+        <h2 class="text-lg font-bold text-red-900 mb-6">Danger Zone</h2>
+        <div class="space-y-4">
+          <div class="flex items-start justify-between py-3 border-b border-red-100">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Deactivate Account</p>
+              <p class="text-sm text-gray-500">Temporarily hide your profile from searches</p>
+            </div>
+            <button class="px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 font-medium text-sm">
+              Deactivate
+            </button>
+          </div>
+          <div class="flex items-start justify-between py-3">
+            <div>
+              <p class="text-sm font-medium text-gray-900">Delete Account</p>
+              <p class="text-sm text-gray-500">Permanently delete your account and all data</p>
+            </div>
+            <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium text-sm">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save Button -->
+      <div class="flex items-center justify-end pt-6">
+        <button class="px-6 py-3 bg-secondary text-white rounded-lg hover:bg-teal-700 font-medium">
+          Save All Changes
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+</body>
+</html>

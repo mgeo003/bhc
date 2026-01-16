@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinician Registration - BehavioralHealth Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: '#0066CC',
+            secondary: '#00A896',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+  
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <h1 class="text-xl font-bold text-primary">BehavioralHealth Connect</h1>
+        <a href="login.html" class="text-sm text-gray-600 hover:text-gray-900">
+          Already have an account? <span class="text-primary font-medium">Sign in</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Progress Indicator -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-2">
+        <span id="step-label" class="text-sm font-medium text-gray-700">Step 1 of 3</span>
+        <span class="text-sm text-gray-500">Clinician Registration</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div id="progress-bar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 33.33%"></div>
+      </div>
+    </div>
+
+    <!-- Step 1: Account Information -->
+    <div id="step-1" class="bg-white rounded-lg shadow-sm p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Create Your Account</h2>
+      <p class="text-gray-600 mb-8">Get started with BehavioralHealth Connect</p>
+
+      <form id="step-1-form" class="space-y-6" onsubmit="event.preventDefault(); nextStep(2);">
+        
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+            Email address <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+            placeholder="you@hospital.org"
+            required
+          >
+          <p class="mt-1 text-sm text-gray-500">Use your organization email address</p>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password-new" class="block text-sm font-medium text-gray-700 mb-1">
+            Password <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="password-new" 
+              name="password"
+              class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+              placeholder="••••••••"
+              minlength="8"
+              required
+              oninput="updatePasswordStrength()"
+            >
+            <button 
+              type="button"
+              onclick="togglePasswordVisibility('password-new', 'password-icon-new')"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <svg id="password-icon-new" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </button>
+          </div>
+          <!-- Password Strength Indicator -->
+          <div class="mt-2">
+            <div class="flex gap-1 mb-1">
+              <div id="strength-1" class="h-1 flex-1 bg-gray-200 rounded"></div>
+              <div id="strength-2" class="h-1 flex-1 bg-gray-200 rounded"></div>
+              <div id="strength-3" class="h-1 flex-1 bg-gray-200 rounded"></div>
+              <div id="strength-4" class="h-1 flex-1 bg-gray-200 rounded"></div>
+            </div>
+            <p id="strength-text" class="text-xs text-gray-500">Minimum 8 characters</p>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label for="password-confirm" class="block text-sm font-medium text-gray-700 mb-1">
+            Confirm Password <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="password" 
+            id="password-confirm" 
+            name="password-confirm"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+            placeholder="••••••••"
+            required
+          >
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div>
+          <label class="flex items-start gap-2 cursor-pointer">
+            <input 
+              type="checkbox" 
+              class="w-4 h-4 mt-1 text-primary border-gray-300 rounded focus:ring-primary"
+              required
+            >
+            <span class="text-sm text-gray-700">
+              I agree to the <a href="#" class="text-primary hover:text-blue-700">Terms of Service</a> and <a href="#" class="text-primary hover:text-blue-700">Privacy Policy</a>
+            </span>
+          </label>
+        </div>
+
+        <!-- Continue Button -->
+        <button 
+          type="submit"
+          class="w-full px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Continue
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Step 2: Professional Information -->
+    <div id="step-2" class="hidden bg-white rounded-lg shadow-sm p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Professional Information</h2>
+      <p class="text-gray-600 mb-8">Tell us about your professional background</p>
+
+      <form id="step-2-form" class="space-y-6" onsubmit="event.preventDefault(); nextStep(3);">
+        
+        <!-- Full Name -->
+        <div>
+          <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">
+            Full Name <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="full-name" 
+            name="full-name"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+            placeholder="John Smith"
+            required
+          >
+        </div>
+
+        <!-- Job Title -->
+        <div>
+          <label for="job-title" class="block text-sm font-medium text-gray-700 mb-1">
+            Job Title <span class="text-red-500">*</span>
+          </label>
+          <select 
+            id="job-title" 
+            name="job-title"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+            required
+          >
+            <option value="">Select your role...</option>
+            <option value="social-worker">Social Worker</option>
+            <option value="case-manager">Case Manager</option>
+            <option value="nurse">Nurse / Nurse Practitioner</option>
+            <option value="physician">Physician</option>
+            <option value="therapist">Therapist / Counselor</option>
+            <option value="discharge-planner">Discharge Planner</option>
+            <option value="care-coordinator">Care Coordinator</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <!-- Organization Name -->
+        <div>
+          <label for="organization" class="block text-sm font-medium text-gray-700 mb-1">
+            Organization Name <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="organization" 
+            name="organization"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+            placeholder="Boston General Hospital"
+            value="Boston General Hospital"
+            required
+          >
+          <p class="mt-1 text-sm text-green-600 flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Auto-detected from email domain
+          </p>
+        </div>
+
+        <!-- Phone Number (Optional) -->
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+            Phone Number <span class="text-gray-400 text-xs">(Optional)</span>
+          </label>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="phone"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+            placeholder="(555) 123-4567"
+          >
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-3">
+          <button 
+            type="button"
+            onclick="previousStep(1)"
+            class="px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Back
+          </button>
+          <button 
+            type="submit"
+            class="flex-1 px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Create Account
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Step 3: Verification Email Sent -->
+    <div id="step-3" class="hidden bg-white rounded-lg shadow-sm p-8 text-center">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h2>
+      <p class="text-gray-600 mb-6">
+        We've sent a verification link to <span class="font-medium text-gray-900">you@hospital.org</span>
+      </p>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left">
+        <h3 class="font-semibold text-blue-900 mb-2">Next Steps:</h3>
+        <ol class="space-y-2 text-sm text-blue-800">
+          <li class="flex items-start gap-2">
+            <span class="font-semibold">1.</span>
+            <span>Check your email inbox (and spam folder)</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="font-semibold">2.</span>
+            <span>Click the verification link</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="font-semibold">3.</span>
+            <span>Start searching for available facilities!</span>
+          </li>
+        </ol>
+      </div>
+
+      <p class="text-sm text-gray-600 mb-4">
+        Didn't receive the email?
+      </p>
+
+      <button 
+        onclick="ToastManager.show('Verification email resent!', 'success')"
+        class="px-6 py-2 text-primary hover:text-blue-700 font-medium"
+      >
+        Resend verification email
+      </button>
+
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <a href="login.html" class="text-sm text-gray-600 hover:text-gray-900">
+          Return to <span class="text-primary font-medium">Sign in</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../assets/scripts.js"></script>
+  <script>
+    function nextStep(step) {
+      // Hide all steps
+      document.querySelectorAll('[id^="step-"]').forEach(el => el.classList.add('hidden'));
+      
+      // Show target step
+      document.getElementById('step-' + step).classList.remove('hidden');
+      
+      // Update progress
+      const progress = (step / 3) * 100;
+      document.getElementById('progress-bar').style.width = progress + '%';
+      document.getElementById('step-label').textContent = 'Step ' + step + ' of 3';
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function previousStep(step) {
+      nextStep(step);
+    }
+
+    function updatePasswordStrength() {
+      const password = document.getElementById('password-new').value;
+      const strength = calculatePasswordStrength(password);
+      
+      // Reset all
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById('strength-' + i).classList.remove('bg-red-500', 'bg-amber-500', 'bg-green-500');
+        document.getElementById('strength-' + i).classList.add('bg-gray-200');
+      }
+      
+      // Update based on strength
+      const colors = ['bg-red-500', 'bg-red-500', 'bg-amber-500', 'bg-green-500'];
+      const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+      
+      if (strength > 0) {
+        for (let i = 1; i <= strength; i++) {
+          document.getElementById('strength-' + i).classList.remove('bg-gray-200');
+          document.getElementById('strength-' + i).classList.add(colors[strength - 1]);
+        }
+        document.getElementById('strength-text').textContent = labels[strength - 1];
+      }
+    }
+
+    function calculatePasswordStrength(password) {
+      if (password.length === 0) return 0;
+      if (password.length < 8) return 1;
+      
+      let strength = 1;
+      if (password.length >= 10) strength++;
+      if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+      if (/\d/.test(password) && /[^a-zA-Z\d]/.test(password)) strength++;
+      
+      return Math.min(strength, 4);
+    }
+  </script>
+</body>
+</html>

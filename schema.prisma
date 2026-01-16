@@ -1,0 +1,665 @@
+// BehavioralHealth Connect - Complete Database Schema
+// Prisma schema with PostgreSQL + PostGIS for geospatial queries
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+// ========================================
+// ENUMS
+// ========================================
+
+enum UserRole {
+  CLINICIAN
+  PROVIDER_ADMIN
+  PLATFORM_ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  SUSPENDED
+}
+
+enum LevelOfCare {
+  DETOX
+  RESIDENTIAL
+  PHP           // Partial Hospitalization Program
+  IOP           // Intensive Outpatient Program
+  OP            // Outpatient
+  SOBER_LIVING
+  TRANSITIONAL
+}
+
+enum BedType {
+  MALE
+  FEMALE
+  COED
+  YOUTH    // Under 18
+  ADULT    // 18+
+  SENIOR   // 65+
+}
+
+enum AgeGroup {
+  YOUTH         // Under 18
+  YOUNG_ADULT   // 18-25
+  ADULT         // 26-64
+  SENIOR        // 65+
+}
+
+enum GenderServed {
+  MALE
+  FEMALE
+  NON_BINARY
+  ALL
+}
+
+enum Specialty {
+  SUBSTANCE_ABUSE
+  MENTAL_HEALTH
+  DUAL_DIAGNOSIS
+  TRAUMA
+  EATING_DISORDERS
+  LGBTQ
+  VETERANS
+  FIRST_RESPONDERS
+  CHRONIC_PAIN
+}
+
+enum AvailabilityStatus {
+  AVAILABLE     // 5+ beds
+  LIMITED       // 1-4 beds
+  FULL          // 0 beds
+  NOT_UPDATED   // Stale (>24h)
+}
+
+enum ContactType {
+  PHONE
+  EMAIL
+  FAX
+  IN_PERSON
+  OTHER
+}
+
+enum ContactStatus {
+  PLACEMENT_MADE
+  AWAITING_RESPONSE
+  NO_AVAILABILITY
+  NOT_APPROPRIATE
+  PATIENT_DECLINED
+  INSURANCE_ISSUE
+  OTHER
+}
+
+enum PatientAcceptance {
+  ACCEPTED
+  DECLINED
+  WAITLISTED
+}
+
+enum OrganizationType {
+  HOSPITAL
+  HEALTH_SYSTEM
+  PRIVATE_PRACTICE
+  GOVERNMENT
+  NON_PROFIT
+  OTHER
+}
+
+enum SubscriptionTier {
+  FREE
+  BASIC
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  TRIALING
+}
+
+enum UpdateMethod {
+  DASHBOARD
+  MAGIC_LINK
+  API
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FLAGGED
+}
+
+enum InsuranceType {
+  PUBLIC      // Medicaid, Medicare
+  PRIVATE     // Commercial insurance
+}
+
+// ========================================
+// USER & AUTHENTICATION
+// ========================================
+
+model User {
+  id             String    @id @default(cuid())
+  clerkId        String    @unique  // Clerk user ID
+  
+  // Profile
+  email          String    @unique
+  firstName      String
+  lastName       String
+  role           UserRole
+  phoneNumber    String?
+  
+  // Credentials
+  licenseNumber  String?
+  licenseState   String?
+  credentials    String?   // e.g., "LCSW", "MD", "NP"
+  
+  // Organization
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  
+  // Status
+  emailVerified  Boolean   @default(false)
+  isActive       Boolean   @default(true)
+  lastLoginAt    DateTime?
+  
+  // Relationships
+  savedProviders SavedProvider[]
+  contactLogs    ContactLog[]
+  reviews        Review[]
+  notifications  Notification[]
+  
+  // Audit
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+  
+  @@index([clerkId])
+  @@index([email])
+  @@index([role])
+  @@index([organizationId])
+  @@map("users")
+}
+
+model Organization {
+  id             String             @id @default(cuid())
+  
+  name           String
+  type           OrganizationType
+  domain         String?            @unique  // Email domain for verification
+  
+  // Contact
+  phoneNumber    String?
+  website        String?
+  
+  // Address (JSON)
+  address        Json?
+  
+  // Status
+  isVerified     Boolean            @default(false)
+  
+  // Relationships
+  users          User[]
+  subscriptions  Subscription[]
+  
+  // Audit
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  deletedAt      DateTime?
+  
+  @@index([domain])
+  @@index([isVerified])
+  @@map("organizations")
+}
+
+// ========================================
+// PROVIDER
+// ========================================
+
+model Provider {
+  id                    String              @id @default(cuid())
+  
+  // Basic Info
+  facilityName          String
+  slug                  String              @unique  // URL-friendly name
+  description           String?             @db.Text
+  logoUrl               String?
+  
+  // Contact
+  email                 String              @unique
+  phoneNumber           String
+  website               String?
+  
+  // Address
+  street                String
+  street2               String?
+  city                  String
+  state                 String              @db.VarChar(2)
+  zipCode               String              @db.VarChar(10)
+  country               String              @default("US") @db.VarChar(2)
+  
+  // Geospatial (PostGIS geometry type)
+  latitude              Float
+  longitude             Float
+  location              Unsupported("geometry(Point, 4326)")?  // PostGIS point
+  
+  // Timezone
+  timezone              String              @default("America/New_York")
+  
+  // Verification
+  verificationStatus    VerificationStatus  @default(PENDING)
+  verifiedAt            DateTime?
+  verifiedBy            String?
+  verificationNotes     String?             @db.Text
+  
+  // License
+  licenseNumber         String?
+  licenseState          String?             @db.VarChar(2)
+  licenseExpiresAt      DateTime?
+  
+  // Programs & Services (Array fields)
+  levelsOfCare          LevelOfCare[]
+  specialties           Specialty[]
+  ageGroupsServed       AgeGroup[]
+  gendersServed         GenderServed[]
+  
+  // Bed Capacity (JSON: { "RESIDENTIAL": 20, "PHP": 15 })
+  bedCapacity           Json                @default("{}")
+  
+  // Magic Link Settings (NEW)
+  magicLinkEnabled      Boolean             @default(true)
+  magicLinkSchedule     String?             // Cron expression
+  magicLinkTime         String?             @default("09:00")  // HH:mm in provider timezone
+  
+  // Metrics
+  profileViews          Int                 @default(0)
+  searchAppearances     Int                 @default(0)
+  averageRating         Float?
+  totalReviews          Int                 @default(0)
+  lastBedUpdateAt       DateTime?
+  lastBedUpdateMethod   UpdateMethod?
+  
+  // Relationships
+  bedAvailability       BedAvailability[]
+  insuranceAccepted     ProviderInsurance[]
+  reviews               Review[]
+  savedBy               SavedProvider[]
+  contactLogs           ContactLog[]
+  bedUpdateTokens       BedUpdateToken[]    // Magic links
+  subscriptions         Subscription[]
+  
+  // Audit
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  deletedAt             DateTime?
+  
+  @@index([slug])
+  @@index([verificationStatus])
+  @@index([state, city])
+  @@index([location], type: Gist)  // Spatial index for PostGIS
+  @@index([levelsOfCare])
+  @@index([verifiedAt])
+  @@map("providers")
+}
+
+// ========================================
+// BED AVAILABILITY
+// ========================================
+
+model BedAvailability {
+  id                String              @id @default(cuid())
+  
+  providerId        String
+  provider          Provider            @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  
+  // Bed breakdown
+  levelOfCare       LevelOfCare
+  bedType           BedType?            // Optional demographic breakdown
+  
+  availableCount    Int                 @default(0)
+  totalCapacity     Int
+  
+  status            AvailabilityStatus  @default(NOT_UPDATED)
+  
+  // Audit trail
+  lastUpdatedBy     String?
+  lastUpdateMethod  UpdateMethod        @default(DASHBOARD)
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@unique([providerId, levelOfCare, bedType])
+  @@index([providerId])
+  @@index([status])
+  @@index([updatedAt])
+  @@map("bed_availability")
+}
+
+// ========================================
+// MAGIC LINKS FOR BED UPDATES (NEW)
+// ========================================
+
+model BedUpdateToken {
+  id                String    @id @default(cuid())
+  
+  token             String    @unique @db.VarChar(64)  // Cryptographically secure token
+  
+  providerId        String
+  provider          Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  
+  // Expiration
+  expiresAt         DateTime
+  usedAt            DateTime?
+  
+  // Security & Audit
+  ipAddress         String?
+  userAgent         String?   @db.Text
+  
+  // Email tracking
+  emailSentAt       DateTime?
+  emailOpenedAt     DateTime?
+  
+  createdAt         DateTime  @default(now())
+  
+  @@index([token])
+  @@index([providerId])
+  @@index([expiresAt])
+  @@index([usedAt])
+  @@map("bed_update_tokens")
+}
+
+// ========================================
+// INSURANCE
+// ========================================
+
+model Insurance {
+  id                String              @id @default(cuid())
+  
+  name              String              @unique
+  type              InsuranceType
+  isActive          Boolean             @default(true)
+  
+  providers         ProviderInsurance[]
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@index([name])
+  @@index([isActive])
+  @@map("insurances")
+}
+
+model ProviderInsurance {
+  id                    String    @id @default(cuid())
+  
+  providerId            String
+  provider              Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  
+  insuranceId           String
+  insurance             Insurance @relation(fields: [insuranceId], references: [id], onDelete: Cascade)
+  
+  acceptsNewPatients    Boolean   @default(true)
+  notes                 String?   @db.Text
+  
+  createdAt             DateTime  @default(now())
+  
+  @@unique([providerId, insuranceId])
+  @@index([providerId])
+  @@index([insuranceId])
+  @@map("provider_insurances")
+}
+
+// ========================================
+// REVIEWS
+// ========================================
+
+model Review {
+  id                      String            @id @default(cuid())
+  
+  // Relationships
+  providerId              String
+  provider                Provider          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  
+  userId                  String
+  user                    User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Ratings (1-5)
+  responsivenessRating    Int               // 1-5
+  overallRating           Int               // 1-5
+  
+  // Patient Acceptance
+  patientAcceptance       PatientAcceptance
+  acceptanceDetails       String?           @db.Text
+  
+  // Comment
+  comment                 String?           @db.Text
+  isAnonymous             Boolean           @default(false)
+  
+  // Moderation
+  moderationStatus        ModerationStatus  @default(PENDING)
+  moderatedBy             String?
+  moderatedAt             DateTime?
+  moderationNotes         String?           @db.Text
+  
+  // Provider Response
+  providerResponse        String?           @db.Text
+  providerRespondedAt     DateTime?
+  
+  // Engagement
+  helpfulCount            Int               @default(0)
+  reportedCount           Int               @default(0)
+  
+  // Audit
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+  deletedAt               DateTime?
+  
+  @@index([providerId])
+  @@index([userId])
+  @@index([moderationStatus])
+  @@index([createdAt])
+  @@map("reviews")
+}
+
+// ========================================
+// SAVED PROVIDERS & CONTACT LOGS
+// ========================================
+
+model SavedProvider {
+  id                String    @id @default(cuid())
+  
+  clinicianId       String
+  user              User      @relation(fields: [clinicianId], references: [id], onDelete: Cascade)
+  
+  providerId        String
+  provider          Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  
+  // Organization
+  tags              String[]  @default([])  // e.g., ["High Priority", "Follow Up"]
+  notes             String?   @db.Text
+  
+  // Tracking
+  lastContactedAt   DateTime?
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  @@unique([clinicianId, providerId])
+  @@index([clinicianId])
+  @@index([providerId])
+  @@map("saved_providers")
+}
+
+model ContactLog {
+  id                    String        @id @default(cuid())
+  
+  // Relationships
+  clinicianId           String
+  user                  User          @relation(fields: [clinicianId], references: [id], onDelete: Cascade)
+  
+  providerId            String
+  provider              Provider      @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  
+  // Contact Details
+  contactType           ContactType
+  contactPerson         String?
+  contactDate           DateTime      @default(now())
+  purpose               String        @db.Text
+  notes                 String?       @db.Text
+  
+  // Status
+  status                ContactStatus
+  duration              Int?          // Seconds (for phone calls)
+  
+  // Follow-up
+  followUpAt            DateTime?
+  followUpCompleted     Boolean       @default(false)
+  
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  
+  @@index([clinicianId])
+  @@index([providerId])
+  @@index([contactDate])
+  @@index([followUpAt])
+  @@map("contact_logs")
+}
+
+// ========================================
+// SUBSCRIPTION & BILLING
+// ========================================
+
+model Subscription {
+  id                      String              @id @default(cuid())
+  
+  // Can belong to provider or organization
+  providerId              String?
+  provider                Provider?           @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  
+  organizationId          String?
+  organization            Organization?       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Subscription
+  tier                    SubscriptionTier
+  status                  SubscriptionStatus
+  
+  // Stripe
+  stripeCustomerId        String?             @unique
+  stripeSubscriptionId    String?             @unique
+  stripePaymentMethodId   String?
+  
+  // Billing periods
+  currentPeriodStart      DateTime
+  currentPeriodEnd        DateTime
+  cancelAt                DateTime?
+  canceledAt              DateTime?
+  
+  // Trial
+  trialStart              DateTime?
+  trialEnd                DateTime?
+  
+  createdAt               DateTime            @default(now())
+  updatedAt               DateTime            @updatedAt
+  
+  @@index([providerId])
+  @@index([organizationId])
+  @@index([status])
+  @@index([stripeCustomerId])
+  @@map("subscriptions")
+}
+
+// ========================================
+// ANALYTICS & TRACKING
+// ========================================
+
+model SearchLog {
+  id                String    @id @default(cuid())
+  
+  userId            String?
+  
+  // Search parameters (JSON)
+  query             String?
+  filters           Json      @default("{}")
+  
+  // Results
+  resultCount       Int
+  clickedProviderId String?
+  
+  // Location
+  searchLatitude    Float?
+  searchLongitude   Float?
+  
+  ipAddress         String?
+  
+  createdAt         DateTime  @default(now())
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@map("search_logs")
+}
+
+model ActivityLog {
+  id                String    @id @default(cuid())
+  
+  userId            String?
+  
+  // Entity
+  entityType        String    // "Provider", "User", "Review", etc.
+  entityId          String
+  action            String    // "view", "update", "create", "delete"
+  
+  // Metadata (JSON)
+  metadata          Json?
+  
+  ipAddress         String?
+  userAgent         String?   @db.Text
+  
+  createdAt         DateTime  @default(now())
+  
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+// ========================================
+// NOTIFICATIONS
+// ========================================
+
+model Notification {
+  id                String    @id @default(cuid())
+  
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type              String
+  title             String
+  message           String    @db.Text
+  metadata          Json?
+  
+  isRead            Boolean   @default(false)
+  readAt            DateTime?
+  
+  actionUrl         String?
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}

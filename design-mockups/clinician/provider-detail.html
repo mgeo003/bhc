@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hope Recovery Center - BehavioralHealth Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { primary: '#0066CC', secondary: '#00A896' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 font-sans">
+  
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-8">
+          <h1 class="text-xl font-bold text-primary">BH Connect</h1>
+          <nav class="hidden md:flex items-center gap-6">
+            <a href="dashboard.html" class="text-gray-600 hover:text-gray-900 pb-5">Dashboard</a>
+            <a href="search-results.html" class="text-gray-900 font-medium border-b-2 border-primary pb-5">Search</a>
+            <a href="saved-list.html" class="text-gray-600 hover:text-gray-900 pb-5">Saved</a>
+            <a href="contact-log.html" class="text-gray-600 hover:text-gray-900 pb-5">Contact Log</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="p-2 text-gray-600 hover:text-gray-900 relative">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+          </button>
+          <div class="relative">
+            <button onclick="toggleDropdown('profile-menu')" data-dropdown-toggle class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100">
+              <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-medium">JS</div>
+            </button>
+            <div id="profile-menu" data-dropdown-menu class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+              <div class="border-t border-gray-200 my-1"></div>
+              <a href="../auth/login.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <nav class="flex" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-sm">
+          <li><a href="dashboard.html" class="text-gray-500 hover:text-gray-700">Home</a></li>
+          <li><svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
+          <li><a href="search-results.html" class="text-gray-500 hover:text-gray-700">Search Results</a></li>
+          <li><svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg></li>
+          <li><span class="text-gray-900 font-medium">Hope Recovery Center</span></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex-shrink-0">
+          <div class="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+            <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="flex-1">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h1 class="text-3xl font-bold text-gray-900 mb-2">Hope Recovery Center</h1>
+              <p class="text-gray-600 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span>Boston, MA 02108</span>
+              </p>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                </svg>
+              </button>
+              <button class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 mb-4">
+            <div class="flex items-center">
+              <span class="text-amber-500 text-lg">★★★★★</span>
+              <span class="text-sm text-gray-600 ml-1.5">4.5 (23 reviews)</span>
+            </div>
+            <span class="text-sm text-gray-500">Updated 2 hours ago</span>
+          </div>
+
+          <!-- Bed Availability Section -->
+          <div class="mb-6 p-5 bg-gray-50 border border-gray-200 rounded-xl">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-bold text-gray-900">Current Bed Availability</span>
+              </div>
+              <span class="text-xs text-gray-500">Updated 2 hours ago</span>
+            </div>
+            <div class="space-y-2.5 text-sm">
+              <div class="flex items-center justify-between py-2 border-b border-gray-200">
+                <span class="text-gray-700">Residential (Male)</span>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-2xl font-bold text-green-700">5</span>
+                  <span class="text-xs text-gray-500">of 10</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between py-2 border-b border-gray-200">
+                <span class="text-gray-700">Residential (Female)</span>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-2xl font-bold text-amber-700">2</span>
+                  <span class="text-xs text-gray-500">of 10</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between py-2 border-b border-gray-200">
+                <span class="text-gray-700">PHP (Coed)</span>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-2xl font-bold text-green-700">8</span>
+                  <span class="text-xs text-gray-500">of 20</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between py-2 border-b border-gray-200">
+                <span class="text-gray-700">IOP (Coed)</span>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-2xl font-bold text-green-700">12</span>
+                  <span class="text-xs text-gray-500">of 30</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t-2 border-gray-300 flex items-center justify-between">
+              <span class="text-gray-700 font-semibold">Total Available:</span>
+              <span class="text-2xl font-bold text-primary">27 beds</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-green-100 text-green-800 text-xs rounded">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              Verified by Recovery.com
+            </span>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <a href="tel:555-123-4567" class="px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+              </svg>
+              Call Now: (555) 123-4567
+            </a>
+            <a href="mailto:admissions@hoperecovery.com" class="px-6 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              Send Email
+            </a>
+            <button class="px-6 py-3 border-2 border-amber-500 text-amber-700 font-semibold rounded-lg hover:bg-amber-50 transition-colors flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              Save Facility
+            </button>
+            <button class="px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Log Contact
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="bg-white border-b border-gray-200 sticky top-16 z-30">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex gap-8 overflow-x-auto" id="provider-tabs" role="tablist">
+        <button onclick="switchTab('provider-tabs', 'tab-overview')" data-tab="tab-overview" role="tab" aria-selected="true" class="py-4 px-1 border-b-2 border-primary text-primary font-medium text-sm whitespace-nowrap">
+          Overview
+        </button>
+        <button onclick="switchTab('provider-tabs', 'tab-insurance')" data-tab="tab-insurance" role="tab" class="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm whitespace-nowrap">
+          Insurance & Payment
+        </button>
+        <button onclick="switchTab('provider-tabs', 'tab-contact')" data-tab="tab-contact" role="tab" class="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm whitespace-nowrap">
+          Contact & Location
+        </button>
+        <button onclick="switchTab('provider-tabs', 'tab-reviews')" data-tab="tab-reviews" role="tab" class="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm whitespace-nowrap">
+          Reviews (23)
+        </button>
+        <button onclick="switchTab('provider-tabs', 'tab-details')" data-tab="tab-details" role="tab" class="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm whitespace-nowrap">
+          Details
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Overview Tab -->
+    <div id="tab-overview" role="tabpanel" class="space-y-8">
+      <section>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">About This Facility</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          Hope Recovery Center is a premier behavioral health treatment facility specializing in comprehensive PHP and IOP programs. Our evidence-based approach combines individual therapy, group sessions, and holistic care to support lasting recovery.
+        </p>
+        <p class="text-gray-700 leading-relaxed">
+          With over 15 years of experience, our experienced clinical team provides compassionate, patient-centered care in a modern, welcoming environment. We focus on treating the whole person, addressing both substance use disorders and co-occurring mental health conditions.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Levels of Care</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="flex items-center gap-2 px-4 py-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-medium text-purple-900">PHP</span>
+          </div>
+          <div class="flex items-center gap-2 px-4 py-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-medium text-purple-900">IOP</span>
+          </div>
+          <div class="flex items-center gap-2 px-4 py-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-medium text-purple-900">Outpatient</span>
+          </div>
+          <div class="flex items-center gap-2 px-4 py-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-medium text-purple-900">MAT</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Specialties</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm font-medium rounded-lg">Substance Use Disorder</span>
+          <span class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm font-medium rounded-lg">Dual Diagnosis</span>
+          <span class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm font-medium rounded-lg">Mental Health</span>
+          <span class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm font-medium rounded-lg">Trauma/PTSD</span>
+          <span class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm font-medium rounded-lg">Depression</span>
+          <span class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm font-medium rounded-lg">Anxiety</span>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Demographics Served</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <p class="text-sm font-medium text-gray-700 mb-2">Age Groups</p>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2 text-gray-700">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Young Adult (18-25)</span>
+              </div>
+              <div class="flex items-center gap-2 text-gray-700">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Adult (26-64)</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-700 mb-2">Gender</p>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2 text-gray-700">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Male</span>
+              </div>
+              <div class="flex items-center gap-2 text-gray-700">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Female</span>
+              </div>
+              <div class="flex items-center gap-2 text-gray-700">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>All Genders</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Amenities & Features</h3>
+        <div class="grid md:grid-cols-2 gap-3">
+          <div class="flex items-center gap-2 text-gray-700">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Medication-Assisted Treatment</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Family Programming</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Aftercare Planning</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Individual Therapy</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Group Therapy</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700">
+            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Holistic Therapies</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Insurance Tab -->
+    <div id="tab-insurance" role="tabpanel" class="hidden space-y-8">
+      <section>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Accepted Insurance & Payment Options</h2>
+        
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Commercial Insurance</h3>
+            <div class="grid md:grid-cols-2 gap-3">
+              <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-blue-900">Blue Cross Blue Shield</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-blue-900">Aetna</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-blue-900">Cigna</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-blue-900">United Healthcare</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-blue-900">Humana</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-blue-900">Anthem</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Government Programs</h3>
+            <div class="grid md:grid-cols-2 gap-3">
+              <div class="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-lg">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-green-900">MassHealth (Medicaid)</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-lg">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-green-900">Medicare</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-lg">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-green-900">TRICARE</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Other Payment Options</h3>
+            <div class="space-y-3">
+              <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-gray-900">Self-Pay / Private Pay</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-gray-900">Payment Plans Available</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="font-medium text-gray-900">Financial Assistance Available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p class="text-sm text-blue-900">
+            <strong>Note:</strong> Insurance coverage may vary by plan. Contact the facility directly to verify your specific coverage and benefits.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Contact Tab -->
+    <div id="tab-contact" role="tabpanel" class="hidden space-y-8">
+      <section class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <svg class="w-6 h-6 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <div>
+                <p class="font-medium text-gray-900">Address</p>
+                <p class="text-gray-600">123 Recovery Lane<br>Boston, MA 02108</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-6 h-6 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+              </svg>
+              <div>
+                <p class="font-medium text-gray-900">Phone</p>
+                <a href="tel:555-123-4567" class="text-primary hover:text-blue-700">(555) 123-4567</a>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-6 h-6 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+              </svg>
+              <div>
+                <p class="font-medium text-gray-900">Fax</p>
+                <p class="text-gray-600">(555) 123-4568</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-6 h-6 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              <div>
+                <p class="font-medium text-gray-900">Email</p>
+                <a href="mailto:admissions@hoperecovery.com" class="text-primary hover:text-blue-700">admissions@hoperecovery.com</a>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-6 h-6 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+              </svg>
+              <div>
+                <p class="font-medium text-gray-900">Website</p>
+                <a href="https://www.hoperecovery.com" target="_blank" class="text-primary hover:text-blue-700">www.hoperecovery.com</a>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-6 h-6 text-gray-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <p class="font-medium text-gray-900">Hours</p>
+                <p class="text-gray-600">24/7 Admissions</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Location Map</h3>
+          <div class="aspect-video bg-gray-200 rounded-lg flex items-center justify-center border border-gray-300">
+            <div class="text-center text-gray-500">
+              <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+              </svg>
+              <p class="text-sm">Interactive Map</p>
+              <p class="text-xs">(Mapbox GL JS integration)</p>
+            </div>
+          </div>
+          <a href="https://maps.google.com/?q=123+Recovery+Lane+Boston+MA" target="_blank" class="mt-4 inline-flex items-center gap-2 text-primary hover:text-blue-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+            </svg>
+            Get Directions
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <!-- Reviews Tab -->
+    <div id="tab-reviews" role="tabpanel" class="hidden space-y-8">
+      <section>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900">Reviews & Ratings</h2>
+          <a href="submit-review.html" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Write a Review
+          </a>
+        </div>
+
+        <!-- Rating Summary -->
+        <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-6 mb-6">
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="text-5xl font-bold text-gray-900 mb-2">4.5</div>
+              <div class="text-amber-500 text-2xl mb-1">★★★★★</div>
+              <div class="text-sm text-gray-600">Based on 23 reviews</div>
+            </div>
+            <div class="md:col-span-2 space-y-2">
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-700 w-32">Responsiveness</span>
+                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                  <div class="bg-amber-500 h-2 rounded-full" style="width: 88%"></div>
+                </div>
+                <span class="text-sm font-medium text-gray-900 w-12">4.4</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-700 w-32">Patient Acceptance</span>
+                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                  <div class="bg-amber-500 h-2 rounded-full" style="width: 90%"></div>
+                </div>
+                <span class="text-sm font-medium text-gray-900 w-12">90%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-700 w-32">Overall Experience</span>
+                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                  <div class="bg-amber-500 h-2 rounded-full" style="width: 92%"></div>
+                </div>
+                <span class="text-sm font-medium text-gray-900 w-12">4.6</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="space-y-6">
+          
+          <!-- Review 1 -->
+          <div class="bg-white border border-gray-200 rounded-lg p-6">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <h4 class="font-semibold text-gray-900">Sarah M., ED Social Worker</h4>
+                <p class="text-sm text-gray-500">Boston General Hospital • 2 days ago</p>
+              </div>
+              <div class="flex items-center">
+                <span class="text-amber-500">★★★★★</span>
+                <span class="text-sm text-gray-600 ml-1.5">5.0</span>
+              </div>
+            </div>
+            <div class="mb-3 flex gap-4 text-sm">
+              <div>
+                <span class="text-gray-500">Responsiveness:</span> <span class="text-amber-500">★★★★★</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Acceptance:</span> <span class="text-green-600">👍 Positive</span>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4">
+              Excellent experience working with Hope Recovery. Their intake coordinator responded within 30 minutes and my patient was accepted same-day. Very professional and accommodating team.
+            </p>
+            <div class="flex items-center gap-4 text-sm">
+              <button class="text-gray-500 hover:text-gray-700 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                </svg>
+                Helpful (5)
+              </button>
+              <button class="text-gray-500 hover:text-gray-700">Report</button>
+            </div>
+          </div>
+
+          <!-- Review 2 -->
+          <div class="bg-white border border-gray-200 rounded-lg p-6">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <h4 class="font-semibold text-gray-900">Anonymous Clinician</h4>
+                <p class="text-sm text-gray-500">1 week ago</p>
+              </div>
+              <div class="flex items-center">
+                <span class="text-amber-500">★★★★</span><span class="text-gray-300">★</span>
+                <span class="text-sm text-gray-600 ml-1.5">4.0</span>
+              </div>
+            </div>
+            <div class="mb-3 flex gap-4 text-sm">
+              <div>
+                <span class="text-gray-500">Responsiveness:</span> <span class="text-amber-500">★★★★</span><span class="text-gray-300">★</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Acceptance:</span> <span class="text-green-600">👍 Positive</span>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4">
+              Good facility with knowledgeable staff. Response time was a bit slower than expected (4-5 hours), but they ultimately accepted my patient and provided quality care.
+            </p>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+              <p class="text-sm font-medium text-blue-900 mb-1">Provider Response:</p>
+              <p class="text-sm text-blue-800">Thank you for your feedback. We've recently added staff to our intake team to improve response times. We appreciate your partnership!</p>
+              <p class="text-xs text-blue-600 mt-2">- Hope Recovery Team, 5 days ago</p>
+            </div>
+            <div class="flex items-center gap-4 text-sm mt-4">
+              <button class="text-gray-500 hover:text-gray-700 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                </svg>
+                Helpful (3)
+              </button>
+              <button class="text-gray-500 hover:text-gray-700">Report</button>
+            </div>
+          </div>
+
+          <!-- Review 3 -->
+          <div class="bg-white border border-gray-200 rounded-lg p-6">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <h4 class="font-semibold text-gray-900">Michael T., Case Manager</h4>
+                <p class="text-sm text-gray-500">Cambridge Recovery Services • 2 weeks ago</p>
+              </div>
+              <div class="flex items-center">
+                <span class="text-amber-500">★★★★★</span>
+                <span class="text-sm text-gray-600 ml-1.5">5.0</span>
+              </div>
+            </div>
+            <div class="mb-3 flex gap-4 text-sm">
+              <div>
+                <span class="text-gray-500">Responsiveness:</span> <span class="text-amber-500">★★★★★</span>
+              </div>
+              <div>
+                <span class="text-gray-500">Acceptance:</span> <span class="text-green-600">👍 Positive</span>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4">
+              Consistently great partner for our patients. Their clinical team is highly skilled and they're always transparent about what they can and cannot treat. Highly recommend.
+            </p>
+            <div class="flex items-center gap-4 text-sm">
+              <button class="text-gray-500 hover:text-gray-700 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                </svg>
+                Helpful (8)
+              </button>
+              <button class="text-gray-500 hover:text-gray-700">Report</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Load More -->
+        <div class="text-center">
+          <button class="px-6 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+            Load More Reviews
+          </button>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- Details Tab -->
+    <div id="tab-details" role="tabpanel" class="hidden space-y-8">
+      <section>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Facility Details</h2>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">General Information</h3>
+            <dl class="space-y-3">
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Year Established</dt>
+                <dd class="text-gray-900">2008</dd>
+              </div>
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Facility Size</dt>
+                <dd class="text-gray-900">60 beds total (PHP: 30, IOP: 30)</dd>
+              </div>
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Treatment Approach</dt>
+                <dd class="text-gray-900">Evidence-based, Cognitive Behavioral Therapy, Motivational Interviewing</dd>
+              </div>
+              <div>
+                <dt class="text-sm font-medium text-gray-500">Average Length of Stay</dt>
+                <dd class="text-gray-900">PHP: 4-6 weeks, IOP: 6-8 weeks</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Accreditations & Certifications</h3>
+            <div class="space-y-3">
+              <div class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-green-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <div>
+                  <p class="font-medium text-gray-900">Verified by Recovery.com</p>
+                  <p class="text-sm text-gray-600">Current certification</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-green-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <div>
+                  <p class="font-medium text-gray-900">Joint Commission Accredited</p>
+                  <p class="text-sm text-gray-600">Gold Seal of Approval</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-green-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <div>
+                  <p class="font-medium text-gray-900">SAMHSA Registered</p>
+                  <p class="text-sm text-gray-600">Substance Abuse Treatment Facility</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-8 border-t border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900 mb-3">Staff & Clinical Team</h3>
+          <p class="text-gray-700 mb-4">
+            Our multidisciplinary team includes licensed clinicians, psychiatrists, nurses, and certified addiction counselors. All staff members maintain current state licensure and participate in ongoing professional development.
+          </p>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+              <div class="text-3xl font-bold text-primary mb-1">15+</div>
+              <div class="text-sm text-gray-600">Licensed Clinicians</div>
+            </div>
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+              <div class="text-3xl font-bold text-primary mb-1">3</div>
+              <div class="text-sm text-gray-600">Psychiatrists</div>
+            </div>
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+              <div class="text-3xl font-bold text-primary mb-1">10</div>
+              <div class="text-sm text-gray-600">Support Staff</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </div>
+
+  <!-- Sticky Footer (Mobile) -->
+  <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 flex gap-3 z-30">
+    <a href="tel:555-123-4567" class="flex-1 px-4 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-blue-700 text-center">
+      Call Now
+    </a>
+    <a href="mailto:admissions@hoperecovery.com" class="flex-1 px-4 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-blue-50 text-center">
+      Email
+    </a>
+  </div>
+
+  <script src="../assets/scripts.js"></script>
+</body>
+</html>

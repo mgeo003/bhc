@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BehavioralHealth Connect - Developer Pitch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .content {
+            background: white;
+            margin: 2rem auto;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin: 2rem 0 0.75rem 0;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        p {
+            margin: 1rem 0;
+            line-height: 1.7;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+            line-height: 1.8;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0 0.25rem;
+        }
+
+        .badge-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: var(--primary);
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: var(--warning);
+            color: #92400e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        tr:hover {
+            background: var(--gray-50);
+        }
+
+        code {
+            background: var(--gray-100);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: var(--primary-dark);
+        }
+
+        pre {
+            background: var(--gray-900);
+            color: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .mockup-link {
+            display: inline-block;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .mockup-link:hover {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .mockup-section {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 2px solid var(--gray-200);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .feature-card h4 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media print {
+            .nav {
+                position: static;
+            }
+            
+            .mockup-link {
+                border: 1px solid var(--gray-300);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .toc {
+            background: var(--gray-50);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--gray-700);
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>BehavioralHealth Connect</h1>
+        <p>Full-Stack B2B SaaS Platform - Developer Pitch</p>
+    </div>
+
+    <nav class="nav">
+        <ul class="nav-links">
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#mockups">Design Mockups</a></li>
+            <li><a href="#technical">Technical Requirements</a></li>
+            <li><a href="#data-model">Data Model</a></li>
+            <li><a href="#future">Future Features</a></li>
+            <li><a href="#questions">Questions</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <!-- Overview Section -->
+            <section id="overview">
+                <h1>What We're Building</h1>
+                
+                <p>A <strong>two-sided marketplace</strong> connecting referring clinicians (ED social workers, case managers) with behavioral health treatment facilities. Real-time bed availability directory that eliminates hours of phone tag.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Type</h4>
+                        <p>B2B SaaS web application</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Users</h4>
+                        <p>Clinicians searching for patient placement + Treatment providers managing availability</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Core Value</h4>
+                        <p>Real-time bed availability, verified providers, peer ratings</p>
+                    </div>
+                </div>
+
+                <h2>The Problem</h2>
+                <div class="alert alert-warning">
+                    <p><strong>Clinicians spend 2-3 hours daily</strong> calling facilities to find patient placement. They rely on outdated spreadsheets with no current availability information. Providers have empty beds but no visibility to referring clinicians.</p>
+                    <p><strong>Result:</strong> Delayed patient care, clinician burnout, missed revenue for providers.</p>
+                </div>
+
+                <h2>Three User Portals</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>1. Clinician Portal</h4>
+                        <p>Search and discover treatment facilities</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>2. Provider Portal</h4>
+                        <p>Manage facility profiles and bed availability</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>3. Admin Portal</h4>
+                        <p>Verify providers, manage users, monitor platform</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Design Mockups Section -->
+            <section id="mockups" class="mockup-section">
+                <h1>Design Mockups (Complete)</h1>
+                
+                <div class="alert alert-info">
+                    <p><strong>📂 Location:</strong> <code>design-mockups/</code> folder</p>
+                    <p><strong>🔗 Quick Access:</strong> <a href="design-mockups/index.html" class="mockup-link">Open Navigation Hub</a> <a href="design-mockups/README.md" class="mockup-link">View README</a></p>
+                </div>
+
+                <h3>18 Interactive HTML/CSS Prototypes</h3>
+
+                <h4>Authentication (3 pages)</h4>
+                <p>
+                    <a href="design-mockups/auth/login.html" class="mockup-link">Login Page</a>
+                    <a href="design-mockups/auth/register-clinician.html" class="mockup-link">Clinician Registration</a>
+                    <a href="design-mockups/auth/register-provider.html" class="mockup-link">Provider Registration</a>
+                </p>
+
+                <h4>Clinician Portal (6 pages)</h4>
+                <p>
+                    <a href="design-mockups/clinician/dashboard.html" class="mockup-link">Clinician Dashboard</a>
+                    <a href="design-mockups/clinician/search-results.html" class="mockup-link">Search Results</a>
+                    <a href="design-mockups/clinician/provider-detail.html" class="mockup-link">Provider Detail</a>
+                    <a href="design-mockups/clinician/submit-review.html" class="mockup-link">Submit Review</a>
+                    <a href="design-mockups/clinician/saved-list.html" class="mockup-link">Saved Facilities</a>
+                    <a href="design-mockups/clinician/contact-log.html" class="mockup-link">Contact Log</a>
+                </p>
+
+                <h4>Provider Portal (3 pages)</h4>
+                <p>
+                    <a href="design-mockups/provider/dashboard.html" class="mockup-link">Provider Dashboard</a>
+                    <a href="design-mockups/provider/edit-profile.html" class="mockup-link">Edit Profile</a>
+                    <a href="design-mockups/provider/settings.html" class="mockup-link">Provider Settings</a>
+                </p>
+
+                <h4>Admin Portal (4 pages)</h4>
+                <p>
+                    <a href="design-mockups/admin/dashboard.html" class="mockup-link">Admin Dashboard</a>
+                    <a href="design-mockups/admin/providers.html" class="mockup-link">Provider Management</a>
+                    <a href="design-mockups/admin/users.html" class="mockup-link">User Management</a>
+                    <a href="design-mockups/admin/analytics.html" class="mockup-link">Analytics</a>
+                </p>
+
+                <h4>Design System</h4>
+                <p>
+                    <a href="design-mockups/design-system.html" class="mockup-link">Design System & Components</a>
+                </p>
+
+                <div class="alert alert-success">
+                    <p><strong>All mockups are:</strong></p>
+                    <ul>
+                        <li>Interactive (functional forms, filters, buttons)</li>
+                        <li>Mobile-responsive</li>
+                        <li>WCAG 2.1 AA compliant</li>
+                        <li>Production-ready designs</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Continue with full content... -->
+            <section id="features">
+                <h1>Complete Feature Scope</h1>
+                
+                <div class="toc">
+                    <h3>Quick Navigation</h3>
+                    <ul>
+                        <li><a href="#provider-features">Provider Portal Features</a></li>
+                        <li><a href="#clinician-features">Clinician Portal Features</a></li>
+                        <li><a href="#admin-features">Admin Portal Features</a></li>
+                    </ul>
+                </div>
+
+                <!-- Provider Portal Features -->
+                <h2 id="provider-features">PROVIDER PORTAL</h2>
+                
+                <p><strong>Reference Mockups:</strong> <a href="design-mockups/provider/">Provider Portal Mockups</a> | <a href="design-mockups/index.html">View All</a></p>
+
+                <div class="card">
+                    <div class="card-title">Registration & Verification</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/auth/register-provider.html">Provider Registration Mockup</a></p>
+                    <ul>
+                        <li>Multi-step registration with facility information</li>
+                        <li>Recovery.com/LegitScript verification requirement</li>
+                        <li>Admin verification queue and approval workflow</li>
+                        <li>Email notifications for verification status</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Profile Management</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/provider/edit-profile.html">Edit Profile Mockup</a></p>
+                    <p><strong>Comprehensive facility profile editor:</strong></p>
+                    <ul>
+                        <li>Basic info: Name, address, phone, email, website, logo</li>
+                        <li>Levels of care: Detox, Residential, PHP, IOP, Outpatient, Sober Living, MAT</li>
+                        <li>Insurance accepted: Multi-select from standardized list (Medicaid, Medicare, commercial, self-pay)</li>
+                        <li>Demographics served: Age ranges, gender, special populations (LGBTQ+, Veterans, First Responders)</li>
+                        <li>Specialties: SUD, Mental Health, Dual Diagnosis, Eating Disorders, Trauma</li>
+                        <li>Amenities: MAT, family programming, aftercare planning</li>
+                        <li>Profile preview mode</li>
+                        <li>Profile completion progress indicator</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Bed Availability Management (Critical Feature)</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/provider/dashboard.html">Provider Dashboard Mockup</a></p>
+                    <p class="highlight"><strong>Must be frictionless:</strong></p>
+                    <ul>
+                        <li>Granular bed counts by level of care AND bed type (e.g., "Residential (Male): 5 beds, Residential (Female): 2 beds, PHP: 8 beds")</li>
+                        <li>Simple +/- buttons for quick updates (touch-friendly)</li>
+                        <li>Auto-save (no submit button)</li>
+                        <li>Last updated timestamp (visible to clinicians)</li>
+                        <li>Visual status indicators: Available (green), Limited (yellow), Full (red)</li>
+                        <li>Bulk update capability</li>
+                        <li>Update history log</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-info">
+                    <h4>Magic Link Updates (Passwordless - NEW FEATURE)</h4>
+                    <p><strong>Core requirement:</strong> Providers can update beds via link sent to email or SMS without logging in.</p>
+                    <p><strong>How it works:</strong></p>
+                    <ul>
+                        <li>System sends unique link daily at provider's preferred time</li>
+                        <li>Link format: <code>app.com/update-beds/{providerId}/{token}</code></li>
+                        <li>Provider clicks → sees simple update interface → updates beds → submit</li>
+                        <li><strong>Token expires when:</strong> Bed count is updated OR 48 hours passes (whichever comes first)</li>
+                        <li>No authentication required</li>
+                        <li>Delivery method: Email AND/OR SMS (provider configurable)</li>
+                        <li>Security: IP logging, rate limiting, notification to provider on update</li>
+                    </ul>
+                    <p><strong>Why this matters:</strong> Reduces friction for daily updates (critical for data freshness), mobile-friendly for staff without computer access</p>
+                </div>
+
+                <!-- Clinician Portal Features -->
+                <h2 id="clinician-features">CLINICIAN PORTAL</h2>
+                
+                <p><strong>Reference Mockups:</strong> <a href="design-mockups/clinician/">Clinician Portal Mockups</a> | <a href="design-mockups/index.html">View All</a></p>
+
+                <div class="card">
+                    <div class="card-title">Advanced Search & Discovery</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/clinician/search-results.html">Search Results Mockup</a></p>
+                    <p><strong>Multi-filter search:</strong></p>
+                    <ul>
+                        <li><strong>Location:</strong> Zip code + radius (5-100 miles), city, state</li>
+                        <li><strong>Insurance:</strong> Searchable multi-select</li>
+                        <li><strong>Level of care:</strong> Multi-select (Detox, Residential, PHP, IOP, etc.)</li>
+                        <li><strong>Demographics:</strong> Age, gender, special populations</li>
+                        <li><strong>Specialties:</strong> SUD, mental health, dual diagnosis, etc.</li>
+                        <li><strong>Availability toggle:</strong> Show only available beds</li>
+                    </ul>
+                    <p><strong>Search results display:</strong></p>
+                    <ul>
+                        <li>Card-based layout with key info</li>
+                        <li><strong>Granular bed availability</strong> (e.g., "Residential (M): 5 • PHP: 8 • IOP: 12")</li>
+                        <li>Distance from search location</li>
+                        <li>Rating stars and review count</li>
+                        <li>Infinite scroll pagination</li>
+                        <li>Sort options: distance, rating, recently updated</li>
+                    </ul>
+                    <p><strong>Map view:</strong></p>
+                    <ul>
+                        <li>Interactive map with provider pins</li>
+                        <li>Clustered markers</li>
+                        <li>Map/list toggle</li>
+                        <li>"Search this area" functionality</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Provider Profile View</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/clinician/provider-detail.html">Provider Detail Mockup</a></p>
+                    <ul>
+                        <li>Hero section with detailed bed availability breakdown</li>
+                        <li>Contact information (Call Now, Email buttons)</li>
+                        <li>Rating and review display</li>
+                        <li>Tabbed sections: Overview, Insurance, Reviews, Details</li>
+                        <li>Last updated timestamp</li>
+                        <li>Action buttons: Save, Call, Email, Log Contact</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Saved Facilities</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/clinician/saved-list.html">Saved Facilities Mockup</a></p>
+                    <ul>
+                        <li>Save/unsave providers</li>
+                        <li>Custom tags (High Priority, Follow Up, Recommended)</li>
+                        <li>Personal notes per facility</li>
+                        <li>Quick actions: View Details, Call, Log Contact, Edit Note</li>
+                        <li>Filter by tags</li>
+                        <li>Display when saved and last contacted</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Contact Log</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/clinician/contact-log.html">Contact Log Mockup</a></p>
+                    <ul>
+                        <li>Log contact from provider detail page</li>
+                        <li>Capture: Contact type (Phone/Email), contact date, purpose, contact person, notes</li>
+                        <li>Follow-up reminders</li>
+                        <li>Status tracking (Placement Made, Awaiting Response, No Availability)</li>
+                        <li>Chronological timeline organized by date</li>
+                        <li>Stats dashboard (today, this week, this month)</li>
+                        <li>Search and filter capabilities</li>
+                        <li>Export contact history</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Rating & Review System</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/clinician/submit-review.html">Submit Review Mockup</a></p>
+                    <ul>
+                        <li>Responsiveness rating (1-5 stars)</li>
+                        <li>Patient Acceptance (thumbs up/down/neutral)</li>
+                        <li>Overall Experience (1-5 stars)</li>
+                        <li>Optional written comment (moderated)</li>
+                        <li>Anonymous submission option</li>
+                        <li>Edit/delete within 24 hours</li>
+                    </ul>
+                </div>
+
+                <!-- Admin Portal Features -->
+                <h2 id="admin-features">ADMIN PORTAL</h2>
+                
+                <p><strong>Reference Mockups:</strong> <a href="design-mockups/admin/">Admin Portal Mockups</a> | <a href="design-mockups/index.html">View All</a></p>
+
+                <div class="card">
+                    <div class="card-title">Provider Management</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/admin/providers.html">Provider Management Mockup</a></p>
+                    <ul>
+                        <li>Verification queue with status filters (Pending, Verified, Suspended)</li>
+                        <li>Review all provider details</li>
+                        <li>Check verification documents</li>
+                        <li>Recovery.com/LegitScript verification lookup</li>
+                        <li>Approve/reject with notes</li>
+                        <li>Verification audit log</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Platform Analytics</div>
+                    <p><strong>Reference:</strong> <a href="design-mockups/admin/analytics.html">Analytics Dashboard Mockup</a></p>
+                    <ul>
+                        <li>Key metrics with trend indicators (Searches, Placements, Reviews)</li>
+                        <li>Interactive charts: Search volume, user growth, top providers</li>
+                        <li>Time period selector (7/30/90 days, This Year, All Time)</li>
+                        <li>Export report functionality</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Technical Requirements -->
+            <section id="technical">
+                <h1>Technical Requirements</h1>
+
+                <div class="card">
+                    <div class="card-title">Geospatial Search (Critical)</div>
+                    <p><strong>Must support:</strong></p>
+                    <ul>
+                        <li>Search by zip code + radius (5-100 miles)</li>
+                        <li>Distance calculations from search location</li>
+                        <li>Map display with provider pins</li>
+                        <li>"Search this area" on map pan/zoom</li>
+                    </ul>
+                    <p><strong>Suggested approach:</strong> PostgreSQL with PostGIS extension</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Magic Link System</div>
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Secure token generation (cryptographically secure, 64+ characters)</li>
+                        <li>Single-use tokens: <strong>expires when bed count updated OR 48 hours (whichever first)</strong></li>
+                        <li>Scheduled delivery (cron job, timezone-aware)</li>
+                        <li><strong>Delivery options:</strong> Email AND/OR SMS (provider configurable)</li>
+                        <li>Public update page (no auth required)</li>
+                        <li>Token usage tracking and analytics</li>
+                        <li>Security: Rate limiting, IP logging, notifications</li>
+                    </ul>
+                    <p><strong>SMS Integration:</strong></p>
+                    <ul>
+                        <li>SMS gateway integration (e.g., Twilio)</li>
+                        <li>Configurable per provider (email only, SMS only, or both)</li>
+                        <li>Message template: "Update your bed availability: [link]"</li>
+                    </ul>
+                </div>
+
+                <h3>Performance & Quality Requirements</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Search results</td>
+                            <td>&lt;500ms (p95)</td>
+                        </tr>
+                        <tr>
+                            <td>Page load time</td>
+                            <td>&lt;2s (p95)</td>
+                        </tr>
+                        <tr>
+                            <td>Lighthouse score</td>
+                            <td>&gt;90 (all categories)</td>
+                        </tr>
+                        <tr>
+                            <td>Accessibility</td>
+                            <td>WCAG 2.1 AA compliant</td>
+                        </tr>
+                        <tr>
+                            <td>Mobile responsive</td>
+                            <td>iOS and Android</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Suggested Tech Stack</h3>
+                <p><em>Note: These are suggestions based on existing codebase. Open to discussion.</em></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>Current/Suggested</th>
+                            <th>Alternatives</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Frontend</strong></td>
+                            <td>Next.js 14+ (App Router)</td>
+                            <td>Remix, SvelteKit</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI</strong></td>
+                            <td>Tailwind CSS + shadcn/ui</td>
+                            <td>Material-UI, Chakra</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend</strong></td>
+                            <td>Node.js 20+ + Express</td>
+                            <td>NestJS, Fastify</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database</strong></td>
+                            <td>PostgreSQL 15+ with PostGIS</td>
+                            <td>MySQL (but PostGIS needed)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Search</strong></td>
+                            <td>Algolia</td>
+                            <td>Elasticsearch, MeiliSearch</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Auth</strong></td>
+                            <td>Clerk</td>
+                            <td>Auth0, NextAuth</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Maps</strong></td>
+                            <td>Mapbox GL JS</td>
+                            <td>Google Maps</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Payments</strong></td>
+                            <td>Stripe</td>
+                            <td>Paddle, Lemon Squeezy</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Data Model -->
+            <section id="data-model">
+                <h1>Data Model (Core Entities)</h1>
+
+                <div class="card">
+                    <div class="card-title">User</div>
+                    <code>id, email, password_hash, role (CLINICIAN, PROVIDER_ADMIN, PLATFORM_ADMIN), organization_id, email_verified, created_at, updated_at</code>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Provider (Facility)</div>
+                    <code>id, name, slug, description, address, city, state, zip, lat, lng (geospatial), phone, email, website, logo_url, verification_status, verification_source, subscription_tier, is_active, created_at, updated_at</code>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">BedAvailability</div>
+                    <code>id, provider_id, level_of_care, bed_type (MALE, FEMALE, COED), total_beds, available_beds, status (AVAILABLE, LIMITED, FULL), updated_at, updated_by</code>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">BedUpdateToken (Magic Links)</div>
+                    <code>id, token (unique), provider_id, expires_at, used_at (NULL until used), delivery_method (EMAIL, SMS, BOTH), ip_address, created_at</code>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">SavedProvider (Clinician Saved Facilities)</div>
+                    <code>id, clinician_id, provider_id, tags (array), notes, created_at</code>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">ContactLog (Clinician Contact Tracking)</div>
+                    <code>id, clinician_id, provider_id, contact_type (PHONE, EMAIL), contact_date, purpose, contact_person, notes, status, follow_up_date, created_at</code>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Review</div>
+                    <code>id, provider_id, user_id, responsiveness_rating (1-5), patient_acceptance (UP, DOWN, NEUTRAL), overall_rating (1-5), comment, is_anonymous, is_moderated, provider_response, created_at</code>
+                </div>
+
+                <h3>Levels of Care (Enum)</h3>
+                <p><span class="badge badge-primary">DETOX</span> <span class="badge badge-primary">RESIDENTIAL</span> <span class="badge badge-primary">PHP</span> <span class="badge badge-primary">IOP</span> <span class="badge badge-primary">OUTPATIENT</span> <span class="badge badge-primary">SOBER_LIVING</span> <span class="badge badge-primary">MAT</span> <span class="badge badge-primary">INPATIENT_PSYCH</span></p>
+
+                <p><strong>Reference:</strong> <a href="schema.prisma">View Full Database Schema</a></p>
+            </section>
+
+            <!-- Future Features -->
+            <section id="future">
+                <h1>Future Features & Architecture Considerations</h1>
+                
+                <div class="alert alert-warning">
+                    <p><strong>Important:</strong> While not part of MVP, the system should be architected with these future features in mind:</p>
+                </div>
+
+                <h2>Phase 2 Features (Post-MVP)</h2>
+
+                <div class="card">
+                    <div class="card-title">1. EHR Integration for Bed Management</div>
+                    <p><strong>Critical future requirement:</strong></p>
+                    <ul>
+                        <li>API connections to common EHR systems (Epic, Cerner, Allscripts, etc.)</li>
+                        <li>Automated bed availability sync (real-time or scheduled)</li>
+                        <li>Two-way data flow: EHR → Platform and Platform → EHR</li>
+                        <li>Standard HL7/FHIR protocols</li>
+                        <li>OAuth authentication for EHR systems</li>
+                    </ul>
+                    <p><strong>Architecture implications:</strong></p>
+                    <ul>
+                        <li>Design data model to be EHR-compatible</li>
+                        <li>Build abstraction layer for bed updates (manual, magic link, API, EHR)</li>
+                        <li>Event-driven architecture for bed availability changes</li>
+                        <li>Webhook support for real-time updates</li>
+                        <li>API versioning from day 1</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">2. Advanced Notification System</div>
+                    <ul>
+                        <li>Clinicians subscribe to alerts when matching beds available</li>
+                        <li>Real-time notifications (email, SMS, push)</li>
+                        <li>Saved search alerts</li>
+                        <li>Customizable notification preferences</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">3. Referral Tracking & Analytics</div>
+                    <ul>
+                        <li>Track referral outcomes (admitted, declined, waitlisted)</li>
+                        <li>Provider conversion metrics</li>
+                        <li>Clinician placement success rates</li>
+                        <li>End-to-end referral analytics</li>
+                    </ul>
+                </div>
+
+                <h2>Architectural Principles (Critical)</h2>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>1. Modularity</h4>
+                        <p>Each feature as self-contained module. Clear boundaries between domains. Easy to add, remove, or replace features.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>2. Flexibility</h4>
+                        <p>Configurable per provider/organization. Feature flags for gradual rollouts. Multi-tenant architecture.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>3. Event-Driven</h4>
+                        <p>Core events: bed_updated, provider_verified, review_submitted. Event bus for module communication.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>4. API-First</h4>
+                        <p>All functionality accessible via API. Version all APIs from start (/v1/). RESTful design.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>5. Scalability</h4>
+                        <p>Stateless services (horizontal scaling). Database connection pooling. Caching strategy (Redis).</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>6. Integration-Ready</h4>
+                        <p>Abstraction layers for external services. Standard protocols (HL7, FHIR, OAuth). Webhook delivery system.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Questions -->
+            <section id="questions">
+                <h1>Questions for Dev Team</h1>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>1. Timeline</h4>
+                        <p>What's realistic timeline to complete MVP?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>2. Team Size</h4>
+                        <p>How many engineers do you recommend?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>3. Tech Stack</h4>
+                        <p>Any concerns with suggested stack? Preferences?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>4. Existing Code</h4>
+                        <p>Continue with current implementation or start fresh?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>5. Scope</h4>
+                        <p>Any features that should be deferred to Phase 2?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>6. Estimate</h4>
+                        <p>What's the cost estimate (time & materials)?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>7. Approach</h4>
+                        <p>How would you structure the development phases?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>8. Hosting</h4>
+                        <p>Preference for infrastructure/hosting?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>9. Testing</h4>
+                        <p>What's your testing strategy?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>10. Handoff</h4>
+                        <p>What do you need for maintenance post-launch?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>11. Architecture</h4>
+                        <p>How will you ensure modularity for future EHR integrations?</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>12. Scaling</h4>
+                        <p>What's your approach to multi-state expansion and API partners?</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Success Metrics -->
+            <section>
+                <h1>Success Metrics (What "Done" Looks Like)</h1>
+
+                <h3>Technical Success</h3>
+                <ul>
+                    <li>✅ All features functional as shown in mockups</li>
+                    <li>✅ Performance targets met</li>
+                    <li>✅ Accessibility compliant</li>
+                    <li>✅ Security best practices implemented</li>
+                    <li>✅ Comprehensive test coverage</li>
+                    <li>✅ Production-ready deployment</li>
+                </ul>
+
+                <h3>User Experience Success</h3>
+                <ul>
+                    <li>✅ Clinician can search → find providers → view availability → contact → log → review</li>
+                    <li>✅ Provider can register → create profile → update beds (dashboard + magic link) → view analytics</li>
+                    <li>✅ Admin can verify providers → manage users → view analytics → moderate content</li>
+                </ul>
+
+                <h3>Business Metrics (Year 1)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Active Providers</td>
+                            <td>100+ in launch state</td>
+                        </tr>
+                        <tr>
+                            <td>Active Clinicians</td>
+                            <td>500+ monthly</td>
+                        </tr>
+                        <tr>
+                            <td>Bed Update Compliance</td>
+                            <td>80% daily</td>
+                        </tr>
+                        <tr>
+                            <td>Monthly Recurring Revenue</td>
+                            <td>$50K by Month 12</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Call to Action -->
+            <section>
+                <h1>Next Steps</h1>
+                
+                <div class="alert alert-success">
+                    <h3>What We're Looking For</h3>
+                    <p><strong>A development team that can:</strong></p>
+                    <ul>
+                        <li>Take full ownership of technical architecture and implementation</li>
+                        <li>Provide realistic timeline and cost estimates</li>
+                        <li>Build production-ready, scalable web application</li>
+                        <li>Deliver clean, tested, maintainable code</li>
+                        <li>Work from design mockups to pixel-perfect implementation</li>
+                        <li>Make smart technical decisions independently</li>
+                        <li>Communicate progress and blockers clearly</li>
+                    </ul>
+                </div>
+
+                <h3>What We Provide</h3>
+                <ul>
+                    <li>✅ Complete design mockups (18 pages)</li>
+                    <li>✅ Feature specifications (this document)</li>
+                    <li>✅ Product decisions and prioritization</li>
+                    <li>✅ Business domain expertise</li>
+                    <li>✅ User feedback and testing coordination</li>
+                    <li>✅ Provider/clinician onboarding (post-launch)</li>
+                </ul>
+
+                <h3>Action Items</h3>
+                <ol>
+                    <li><strong>Review this document and mockups</strong> (<a href="design-mockups/index.html">design-mockups/index.html</a>)</li>
+                    <li><strong>Ask clarifying questions</strong> about scope or features</li>
+                    <li><strong>Propose your approach:</strong> timeline, team structure, tech decisions</li>
+                    <li><strong>Provide estimate:</strong> time and cost</li>
+                    <li><strong>Discuss contract structure:</strong> fixed-price, time & materials, milestones</li>
+                </ol>
+
+                <div class="alert alert-info" style="text-align: center; margin-top: 3rem;">
+                    <h2 style="border: none; margin: 0; color: var(--primary);">Ready to build. Let's discuss your approach.</h2>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
+        <p><strong>BehavioralHealth Connect</strong> - Developer Pitch Package</p>
+        <p style="opacity: 0.8; margin-top: 0.5rem;">For questions or clarifications, please reach out.</p>
+    </footer>
+</body>
+</html>
