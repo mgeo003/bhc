@@ -1,0 +1,3333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BehavioralHealth Connect - Implementation Analysis & Estimates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f9fafb;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .meta-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px 40px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #6b7280;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        nav {
+            background: #fff;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #0066CC;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #0052A3;
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #0066CC;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #0066CC;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #1f2937;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: #374151;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #4b5563;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: #0066CC;
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #059669;
+            color: #065f46;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border-color: #dc2626;
+            color: #991b1b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        thead {
+            background: #f3f4f6;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+            border-bottom: 2px solid #d1d5db;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .comparison-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 25px;
+            background: #fff;
+        }
+
+        .comparison-card h3 {
+            margin-top: 0;
+            color: #0066CC;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-primary { background: #dbeafe; color: #1e40af; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #e0f2fe; color: #075985; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0066CC;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .task-category {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .task-category h4 {
+            margin-top: 0;
+            color: #0066CC;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .task-item {
+            background: white;
+            border-left: 4px solid #0066CC;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .task-name {
+            flex: 1;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .task-duration {
+            background: #0066CC;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+
+        .phase-header {
+            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .phase-duration {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .recommendation-box {
+            background: #f0fdf4;
+            border: 2px solid #059669;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .recommendation-box h3 {
+            color: #065f46;
+            margin-top: 0;
+        }
+
+        .tech-stack-table td:first-child {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            section {
+                page-break-inside: avoid;
+            }
+        }
+
+        .pros-cons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .pros {
+            background: #f0fdf4;
+            border-left: 4px solid #059669;
+        }
+
+        .cons {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+        }
+
+        .pros h4 {
+            color: #065f46;
+            margin-top: 0;
+        }
+
+        .cons h4 {
+            color: #991b1b;
+            margin-top: 0;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 30px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #0066CC;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #0066CC;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #0066CC;
+        }
+
+        .cost-breakdown {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid #0066CC;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BehavioralHealth Connect</h1>
+            <p>Comprehensive Implementation Analysis & Detailed Estimates</p>
+        </header>
+
+        <div class="meta-info">
+            <div class="meta-item">
+                <span class="meta-label">Document Version</span>
+                <span class="meta-value">1.0</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Date Prepared</span>
+                <span class="meta-value">January 16, 2026</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Project Type</span>
+                <span class="meta-value">B2B SaaS Platform</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Prepared By</span>
+                <span class="meta-value">Claude (Opus 4.5)</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="#executive-summary">Executive Summary</a></li>
+                <li><a href="#current-state">Current State</a></li>
+                <li><a href="#best-practices">Best Practices</a></li>
+                <li><a href="#tech-comparison">Technology Comparison</a></li>
+                <li><a href="#nodejs-implementation">Node.js Option</a></li>
+                <li><a href="#java-implementation">Java Option</a></li>
+                <li><a href="#recommendations">Recommendations</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- EXECUTIVE SUMMARY -->
+            <section id="executive-summary">
+                <h2>Executive Summary</h2>
+
+                <div class="alert alert-info">
+                    <strong>Project Overview:</strong> BehavioralHealth Connect is a comprehensive B2B SaaS marketplace platform connecting referring clinicians with behavioral health treatment facilities. The platform features real-time bed availability tracking, geospatial search, and a unique passwordless "magic link" update system.
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">3</span>
+                        <span class="stat-label">User Portals</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">18</span>
+                        <span class="stat-label">UI Mockups Ready</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">14</span>
+                        <span class="stat-label">Database Models</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">100%</span>
+                        <span class="stat-label">Documentation Complete</span>
+                    </div>
+                </div>
+
+                <h3>Key Findings</h3>
+                <ul>
+                    <li><strong>Excellent Documentation:</strong> Comprehensive architecture plan, complete database schema (Prisma), and pixel-perfect UI mockups are already prepared</li>
+                    <li><strong>Complex Requirements:</strong> Geospatial search (PostGIS), real-time availability tracking, multi-filter search (Algolia), magic link system, and role-based access control</li>
+                    <li><strong>Future-Ready Architecture Needed:</strong> System must be architected for EHR integrations, API partners, and multi-tenancy</li>
+                    <li><strong>Two Viable Options:</strong> Both Node.js and Java Spring Boot can deliver, with different trade-offs in development speed, ecosystem maturity, and long-term maintenance</li>
+                </ul>
+
+                <h3>Recommendation at a Glance</h3>
+                <div class="recommendation-box">
+                    <h3>🎯 Primary Recommendation: Node.js + Next.js Stack</h3>
+                    <p><strong>Rationale:</strong></p>
+                    <ul>
+                        <li><strong>Faster Time to Market:</strong> 14-16 weeks vs 16-18 weeks for Java</li>
+                        <li><strong>Full-Stack TypeScript:</strong> Shared types between frontend and backend reduce bugs</li>
+                        <li><strong>Existing Foundation:</strong> Leverages current Prisma schema and Next.js mockups</li>
+                        <li><strong>Modern SaaS Stack:</strong> Proven for B2B SaaS platforms (Vercel, Linear, Cal.com)</li>
+                        <li><strong>Developer Experience:</strong> Rapid prototyping, hot reloading, excellent tooling</li>
+                        <li><strong>Cost Effective:</strong> Lower initial development cost ($112K-$144K vs $128K-$160K)</li>
+                    </ul>
+                    <p><strong>Java Spring Boot Alternative:</strong> Better for teams with existing Java expertise, enterprise-heavy environments, or when strict type safety and mature enterprise patterns are paramount. Recommended if you have in-house Java developers for long-term maintenance.</p>
+                </div>
+            </section>
+
+            <!-- CURRENT STATE ANALYSIS -->
+            <section id="current-state">
+                <h2>Current State Analysis</h2>
+
+                <h3>✅ What's Excellent</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Quality</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Design Mockups</td>
+                            <td><span class="badge badge-success">Excellent</span></td>
+                            <td>100% Complete</td>
+                            <td>18 interactive HTML/CSS prototypes, pixel-perfect, WCAG 2.1 AA compliant</td>
+                        </tr>
+                        <tr>
+                            <td>Database Schema</td>
+                            <td><span class="badge badge-success">Excellent</span></td>
+                            <td>100% Complete</td>
+                            <td>Prisma schema with 14 models, PostGIS support, proper indexes</td>
+                        </tr>
+                        <tr>
+                            <td>Architecture Plan</td>
+                            <td><span class="badge badge-success">Excellent</span></td>
+                            <td>95% Complete</td>
+                            <td>Comprehensive 28KB document with Docker, AWS ECS, 6-phase plan</td>
+                        </tr>
+                        <tr>
+                            <td>Feature Specifications</td>
+                            <td><span class="badge badge-success">Excellent</span></td>
+                            <td>100% Complete</td>
+                            <td>26KB developer pitch with detailed feature descriptions</td>
+                        </tr>
+                        <tr>
+                            <td>Design System</td>
+                            <td><span class="badge badge-success">Excellent</span></td>
+                            <td>100% Complete</td>
+                            <td>Complete component library, colors, typography, interaction patterns</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>📋 Project Scope Summary</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h3>Clinician Portal Features</h3>
+                        <ul>
+                            <li>Advanced geospatial search (zip + radius: 5-100 miles)</li>
+                            <li>Multi-filter search (insurance, level of care, demographics)</li>
+                            <li>Interactive map view (Mapbox)</li>
+                            <li>Provider detail pages with tabs</li>
+                            <li>Saved facilities with custom tags/notes</li>
+                            <li>Contact log system with follow-up reminders</li>
+                            <li>Review and rating system (5-star, moderated)</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h3>Provider Portal Features</h3>
+                        <ul>
+                            <li>Multi-step registration with verification</li>
+                            <li>Comprehensive profile management (20+ fields)</li>
+                            <li>Granular bed availability tracking (by level + type)</li>
+                            <li><strong>Magic link passwordless updates (Email/SMS)</strong></li>
+                            <li>Dashboard with metrics and quick actions</li>
+                            <li>Logo upload with cropping</li>
+                            <li>Settings (magic link schedule, delivery method)</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h3>Admin Portal Features</h3>
+                        <ul>
+                            <li>Platform metrics dashboard</li>
+                            <li>Provider verification queue</li>
+                            <li>User management (search, filter, CRUD)</li>
+                            <li>Analytics dashboard with charts</li>
+                            <li>Review moderation system</li>
+                            <li>Platform-wide settings</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h3>Critical Technical Features</h3>
+                        <ul>
+                            <li><strong>PostGIS:</strong> Geospatial queries, distance calculations</li>
+                            <li><strong>Algolia:</strong> Fast full-text search, faceting</li>
+                            <li><strong>Clerk:</strong> Authentication, RBAC, organization management</li>
+                            <li><strong>Stripe:</strong> Subscription management, billing</li>
+                            <li><strong>Twilio:</strong> SMS delivery for magic links</li>
+                            <li><strong>Resend/SendGrid:</strong> Transactional emails</li>
+                            <li><strong>Redis:</strong> Caching, session management</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>🎯 Success Criteria</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Metric</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Search Results (p95)</td>
+                            <td>&lt; 500ms</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Page Load (p95)</td>
+                            <td>&lt; 2s</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Lighthouse Score</td>
+                            <td>&gt; 90 (all categories)</td>
+                        </tr>
+                        <tr>
+                            <td>Quality</td>
+                            <td>Test Coverage</td>
+                            <td>&gt; 80% (unit tests)</td>
+                        </tr>
+                        <tr>
+                            <td>Quality</td>
+                            <td>Accessibility</td>
+                            <td>WCAG 2.1 AA compliant</td>
+                        </tr>
+                        <tr>
+                            <td>Business</td>
+                            <td>Bed Update Compliance</td>
+                            <td>80% daily updates</td>
+                        </tr>
+                        <tr>
+                            <td>Business</td>
+                            <td>Active Providers (Year 1)</td>
+                            <td>100+</td>
+                        </tr>
+                        <tr>
+                            <td>Business</td>
+                            <td>Monthly Active Clinicians</td>
+                            <td>500+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- BEST PRACTICES -->
+            <section id="best-practices">
+                <h2>Best Practice Recommendations</h2>
+
+                <h3>1. Architecture & Design Patterns</h3>
+
+                <h4>✅ Modular Monolith Architecture (Recommended for MVP)</h4>
+                <div class="alert alert-success">
+                    <strong>Why Modular Monolith:</strong> Start with a well-organized monolith where each feature (Provider, Clinician, Admin, Search, Notifications) is a self-contained module. This provides:
+                    <ul style="margin-top: 10px;">
+                        <li>Faster development and deployment (single codebase)</li>
+                        <li>Easier debugging and testing</li>
+                        <li>Lower operational complexity (one deployment)</li>
+                        <li>Clear migration path to microservices when needed</li>
+                    </ul>
+                </div>
+
+                <h4>Module Structure (Best Practice)</h4>
+                <table class="tech-stack-table">
+                    <thead>
+                        <tr>
+                            <th>Module</th>
+                            <th>Responsibilities</th>
+                            <th>Key APIs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Auth Module</td>
+                            <td>Clerk integration, session management, RBAC middleware</td>
+                            <td>/auth/*, middleware/requireAuth</td>
+                        </tr>
+                        <tr>
+                            <td>Provider Module</td>
+                            <td>Profile CRUD, verification, bed availability, metrics</td>
+                            <td>/providers/*, /bed-availability/*</td>
+                        </tr>
+                        <tr>
+                            <td>Clinician Module</td>
+                            <td>Saved facilities, contact logs, reviews</td>
+                            <td>/saved-providers/*, /contact-logs/*</td>
+                        </tr>
+                        <tr>
+                            <td>Search Module</td>
+                            <td>Hybrid search (PostGIS + Algolia), geospatial queries</td>
+                            <td>/search/*, /search/map</td>
+                        </tr>
+                        <tr>
+                            <td>Notification Module</td>
+                            <td>Email/SMS delivery, magic link generation</td>
+                            <td>/notifications/*, workers/magic-links</td>
+                        </tr>
+                        <tr>
+                            <td>Admin Module</td>
+                            <td>Verification queue, user management, analytics</td>
+                            <td>/admin/*, /admin/analytics</td>
+                        </tr>
+                        <tr>
+                            <td>Analytics Module</td>
+                            <td>Search logs, activity tracking, metrics aggregation</td>
+                            <td>/analytics/*, workers/analytics-sync</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>2. Database Design Best Practices</h3>
+                <div class="task-category">
+                    <h4>✅ Current Schema Strengths</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">PostGIS integration for geospatial queries (GIST index on providers.location)</span>
+                            <span class="badge badge-success">Excellent</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Proper indexes on foreign keys and frequently queried fields</span>
+                            <span class="badge badge-success">Excellent</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Enums for type safety (LevelOfCare, BedType, UserRole, etc.)</span>
+                            <span class="badge badge-success">Excellent</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Soft deletes (deletedAt) for audit trail</span>
+                            <span class="badge badge-success">Excellent</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Audit fields (createdAt, updatedAt) on all models</span>
+                            <span class="badge badge-success">Excellent</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ Recommended Enhancements:</strong>
+                    <ol style="margin-top: 10px;">
+                        <li><strong>Add composite indexes:</strong> For common query patterns like <code>[providerId, levelOfCare]</code> on BedAvailability</li>
+                        <li><strong>Partition large tables:</strong> Consider partitioning <code>search_logs</code> and <code>activity_logs</code> by date for performance</li>
+                        <li><strong>Database connection pooling:</strong> Configure PgBouncer or Prisma pooling (min: 5, max: 20 per instance)</li>
+                        <li><strong>Read replicas:</strong> Add read replica for analytics queries to offload primary database</li>
+                    </ol>
+                </div>
+
+                <h3>3. Search Architecture Best Practices</h3>
+                <div class="comparison-card">
+                    <h3>Hybrid Search Strategy (Recommended)</h3>
+                    <p><strong>Problem:</strong> Need both geospatial filtering (within radius) AND full-text search with faceting.</p>
+                    <p><strong>Solution:</strong> Combine PostGIS (geospatial) with Algolia (full-text, faceting)</p>
+
+                    <h4>Workflow:</h4>
+                    <ol>
+                        <li><strong>User searches:</strong> "Residential facilities, within 25 miles of 02108, accepting BCBS"</li>
+                        <li><strong>PostGIS Query:</strong> Get all provider IDs within 25-mile radius of zip 02108</li>
+                        <li><strong>Algolia Query:</strong> Search with filters (levelOfCare: RESIDENTIAL, insurance: BCBS) restricted to provider IDs from step 2</li>
+                        <li><strong>Merge Results:</strong> Combine with distance calculations from PostGIS</li>
+                        <li><strong>Return:</strong> Sorted, paginated results with distances</li>
+                    </ol>
+
+                    <h4>Performance:</h4>
+                    <ul>
+                        <li>PostGIS geospatial query: &lt;100ms (with GIST index)</li>
+                        <li>Algolia faceted search: &lt;50ms</li>
+                        <li>Total: &lt;200ms (well under 500ms target)</li>
+                    </ul>
+                </div>
+
+                <h3>4. Magic Link System Best Practices</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Security Aspect</th>
+                            <th>Implementation</th>
+                            <th>Rationale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Token Generation</td>
+                            <td>64-character cryptographically secure random hex (crypto.randomBytes(32))</td>
+                            <td>Prevents brute force attacks</td>
+                        </tr>
+                        <tr>
+                            <td>Expiration</td>
+                            <td>Expires on FIRST USE or 48 hours (whichever first)</td>
+                            <td>Minimizes attack window</td>
+                        </tr>
+                        <tr>
+                            <td>Rate Limiting</td>
+                            <td>5 requests per IP per hour on magic link endpoint</td>
+                            <td>Prevents abuse and enumeration</td>
+                        </tr>
+                        <tr>
+                            <td>Audit Logging</td>
+                            <td>Log IP address, user agent, timestamp on each use</td>
+                            <td>Forensic analysis and abuse detection</td>
+                        </tr>
+                        <tr>
+                            <td>Notification</td>
+                            <td>Email provider on bed update (who, when, IP)</td>
+                            <td>Alert provider to unauthorized updates</td>
+                        </tr>
+                        <tr>
+                            <td>Delivery</td>
+                            <td>Configurable: Email only, SMS only, or Both</td>
+                            <td>Provider preference and accessibility</td>
+                        </tr>
+                        <tr>
+                            <td>Scheduling</td>
+                            <td>Timezone-aware (provider's local time)</td>
+                            <td>Sends at optimal time (e.g., 9 AM local)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>5. Caching Strategy Best Practices</h3>
+                <table class="tech-stack-table">
+                    <thead>
+                        <tr>
+                            <th>Data Type</th>
+                            <th>Cache Location</th>
+                            <th>TTL</th>
+                            <th>Invalidation Strategy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Provider Profiles</td>
+                            <td>Redis</td>
+                            <td>5 minutes</td>
+                            <td>Invalidate on profile update</td>
+                        </tr>
+                        <tr>
+                            <td>Bed Availability</td>
+                            <td>Redis</td>
+                            <td>1 minute</td>
+                            <td>Invalidate on bed update (critical freshness)</td>
+                        </tr>
+                        <tr>
+                            <td>Search Results</td>
+                            <td>Redis</td>
+                            <td>2 minutes</td>
+                            <td>Cache key includes all filter params</td>
+                        </tr>
+                        <tr>
+                            <td>User Sessions</td>
+                            <td>Redis</td>
+                            <td>24 hours</td>
+                            <td>Sliding expiration on activity</td>
+                        </tr>
+                        <tr>
+                            <td>Insurance List</td>
+                            <td>Redis</td>
+                            <td>24 hours</td>
+                            <td>Invalidate on insurance CRUD</td>
+                        </tr>
+                        <tr>
+                            <td>Static Assets</td>
+                            <td>CDN (CloudFront)</td>
+                            <td>1 year</td>
+                            <td>Cache busting with hash in filename</td>
+                        </tr>
+                        <tr>
+                            <td>API Responses</td>
+                            <td>None (dynamic)</td>
+                            <td>N/A</td>
+                            <td>No caching for authenticated requests</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>6. Security Best Practices</h3>
+                <div class="pros-cons-grid">
+                    <div class="pros">
+                        <h4>✅ Must Implement (Critical)</h4>
+                        <ul>
+                            <li>HTTPS everywhere (SSL/TLS certificates)</li>
+                            <li>Environment variables in Secrets Manager</li>
+                            <li>Input validation on all endpoints (Zod/Joi)</li>
+                            <li>SQL injection prevention (Prisma parameterized queries)</li>
+                            <li>XSS protection (React auto-escaping + DOMPurify for user content)</li>
+                            <li>CSRF protection (SameSite cookies + CSRF tokens)</li>
+                            <li>Rate limiting (Redis-based, per endpoint)</li>
+                            <li>CORS configuration (whitelist approved domains)</li>
+                            <li>Authentication on all protected routes (Clerk middleware)</li>
+                            <li>RBAC (role-based access control) for all actions</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Common Pitfalls to Avoid</h4>
+                        <ul>
+                            <li>Exposing sensitive data in API responses (e.g., password hashes, internal IDs)</li>
+                            <li>Insufficient rate limiting (leads to abuse, costs)</li>
+                            <li>Not validating file uploads (size, type, malware scanning)</li>
+                            <li>Logging sensitive information (passwords, tokens, PHI)</li>
+                            <li>Trusting client-side validation alone (always validate server-side)</li>
+                            <li>Missing authorization checks (authentication ≠ authorization)</li>
+                            <li>Hardcoding secrets in code (use env vars + secrets manager)</li>
+                            <li>Not implementing proper session management (session fixation, hijacking)</li>
+                            <li>Missing security headers (CSP, X-Frame-Options, etc.)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>7. Testing Best Practices</h3>
+                <table class="tech-stack-table">
+                    <thead>
+                        <tr>
+                            <th>Test Type</th>
+                            <th>Coverage Target</th>
+                            <th>Tools</th>
+                            <th>What to Test</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Unit Tests</td>
+                            <td>&gt;80%</td>
+                            <td>Jest (Node) / JUnit (Java)</td>
+                            <td>Service layer functions, utilities, business logic</td>
+                        </tr>
+                        <tr>
+                            <td>Integration Tests</td>
+                            <td>All API endpoints</td>
+                            <td>Supertest (Node) / RestAssured (Java)</td>
+                            <td>API endpoints, database operations, external service mocks</td>
+                        </tr>
+                        <tr>
+                            <td>E2E Tests</td>
+                            <td>Critical flows</td>
+                            <td>Playwright / Cypress</td>
+                            <td>User registration → Search → Contact log → Review submission</td>
+                        </tr>
+                        <tr>
+                            <td>Performance Tests</td>
+                            <td>Load scenarios</td>
+                            <td>k6 / Artillery</td>
+                            <td>Search under load, concurrent bed updates, API throughput</td>
+                        </tr>
+                        <tr>
+                            <td>Security Tests</td>
+                            <td>OWASP Top 10</td>
+                            <td>OWASP ZAP / Burp Suite</td>
+                            <td>SQL injection, XSS, CSRF, authentication bypass</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>8. Deployment & DevOps Best Practices</h3>
+
+                <div class="task-category">
+                    <h4>CI/CD Pipeline (Recommended)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name"><strong>On Pull Request:</strong> Run linting, type checking, unit tests, integration tests</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name"><strong>On Merge to Main:</strong> Run full test suite, build Docker images, push to ECR</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name"><strong>Deploy to Staging:</strong> Automatic deployment, run E2E tests, smoke tests</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name"><strong>Deploy to Production:</strong> Manual approval, blue-green deployment, health checks, rollback on failure</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name"><strong>Database Migrations:</strong> Run migrations before deployment, backup before migration, rollback scripts ready</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <h4>Infrastructure as Code (IaC) - Recommended</h4>
+                <div class="alert alert-info">
+                    Use <strong>Terraform</strong> or <strong>AWS CDK</strong> to define all infrastructure:
+                    <ul style="margin-top: 10px;">
+                        <li>VPC, subnets, security groups</li>
+                        <li>RDS PostgreSQL (Multi-AZ)</li>
+                        <li>ECS Fargate cluster, services, tasks</li>
+                        <li>ElastiCache Redis</li>
+                        <li>Application Load Balancer</li>
+                        <li>CloudFront distribution</li>
+                        <li>Route 53 DNS records</li>
+                    </ul>
+                    <strong>Benefits:</strong> Version control, reproducible environments, disaster recovery, easy rollback
+                </div>
+
+                <h3>9. Monitoring & Observability Best Practices</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Metrics to Track</th>
+                            <th>Tool</th>
+                            <th>Alert Thresholds</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Application Performance</td>
+                            <td>Request latency (p50, p95, p99), error rate, throughput</td>
+                            <td>CloudWatch + Sentry</td>
+                            <td>p95 latency &gt;2s, error rate &gt;1%</td>
+                        </tr>
+                        <tr>
+                            <td>Database</td>
+                            <td>Connection pool usage, query performance, deadlocks</td>
+                            <td>CloudWatch RDS Metrics</td>
+                            <td>Connection pool &gt;80%, slow queries &gt;1s</td>
+                        </tr>
+                        <tr>
+                            <td>Infrastructure</td>
+                            <td>CPU, memory, disk I/O, network</td>
+                            <td>CloudWatch Container Insights</td>
+                            <td>CPU &gt;80%, memory &gt;85%</td>
+                        </tr>
+                        <tr>
+                            <td>Business Metrics</td>
+                            <td>Search volume, bed update rate, conversion metrics</td>
+                            <td>Custom Dashboard (Grafana)</td>
+                            <td>Bed update compliance &lt;70%</td>
+                        </tr>
+                        <tr>
+                            <td>Error Tracking</td>
+                            <td>Exceptions, stack traces, user context</td>
+                            <td>Sentry</td>
+                            <td>Critical errors, new error types</td>
+                        </tr>
+                        <tr>
+                            <td>Logs</td>
+                            <td>Structured logs (JSON), log levels, correlation IDs</td>
+                            <td>CloudWatch Logs</td>
+                            <td>ERROR logs, suspicious patterns</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- TECHNOLOGY COMPARISON -->
+            <section id="tech-comparison">
+                <h2>Technology Stack Comparison: Node.js vs Java</h2>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h3>Node.js + Express + Next.js</h3>
+                        <p><span class="badge badge-primary">Modern SaaS Stack</span> <span class="badge badge-success">Fast Development</span></p>
+
+                        <h4>Core Stack</h4>
+                        <ul>
+                            <li><strong>Runtime:</strong> Node.js 20 LTS</li>
+                            <li><strong>Backend:</strong> Express.js 4.x</li>
+                            <li><strong>Frontend:</strong> Next.js 14+ (App Router)</li>
+                            <li><strong>Language:</strong> TypeScript 5.x</li>
+                            <li><strong>ORM:</strong> Prisma</li>
+                            <li><strong>Database:</strong> PostgreSQL 15+ + PostGIS</li>
+                        </ul>
+
+                        <h4>Key Strengths</h4>
+                        <ul>
+                            <li>✅ Full-stack TypeScript (shared types)</li>
+                            <li>✅ Rapid prototyping and iteration</li>
+                            <li>✅ Excellent Next.js ecosystem (Vercel)</li>
+                            <li>✅ Prisma ORM (type-safe, migrations)</li>
+                            <li>✅ Huge npm ecosystem</li>
+                            <li>✅ Serverless-friendly (easy to scale)</li>
+                            <li>✅ Hot reloading, fast feedback loop</li>
+                            <li>✅ Lower memory footprint</li>
+                        </ul>
+
+                        <h4>Considerations</h4>
+                        <ul>
+                            <li>⚠️ Single-threaded (use worker threads for CPU-intensive tasks)</li>
+                            <li>⚠️ Callback/async complexity (mitigated with async/await)</li>
+                            <li>⚠️ Less strict type safety vs Java (mitigated with TypeScript strict mode)</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h3>Java + Spring Boot + React</h3>
+                        <p><span class="badge badge-info">Enterprise Grade</span> <span class="badge badge-primary">Mature Ecosystem</span></p>
+
+                        <h4>Core Stack</h4>
+                        <ul>
+                            <li><strong>Runtime:</strong> Java 21 LTS (or 17 LTS)</li>
+                            <li><strong>Backend:</strong> Spring Boot 3.x</li>
+                            <li><strong>Frontend:</strong> React 18+ (Vite)</li>
+                            <li><strong>Language:</strong> Java (backend), TypeScript (frontend)</li>
+                            <li><strong>ORM:</strong> Spring Data JPA + Hibernate</li>
+                            <li><strong>Database:</strong> PostgreSQL 15+ + PostGIS</li>
+                        </ul>
+
+                        <h4>Key Strengths</h4>
+                        <ul>
+                            <li>✅ Compile-time type safety (strict)</li>
+                            <li>✅ Mature Spring ecosystem (battle-tested)</li>
+                            <li>✅ Excellent concurrency (multi-threaded)</li>
+                            <li>✅ Spring Security (comprehensive)</li>
+                            <li>✅ Enterprise patterns built-in</li>
+                            <li>✅ Strong IDE support (IntelliJ IDEA)</li>
+                            <li>✅ Better for CPU-intensive tasks</li>
+                            <li>✅ Familiar to enterprise teams</li>
+                        </ul>
+
+                        <h4>Considerations</h4>
+                        <ul>
+                            <li>⚠️ Higher memory footprint (JVM)</li>
+                            <li>⚠️ Slower development iteration (compile step)</li>
+                            <li>⚠️ More verbose code vs TypeScript</li>
+                            <li>⚠️ Separate frontend/backend languages</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Side-by-Side Feature Comparison</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Node.js Solution</th>
+                            <th>Java Solution</th>
+                            <th>Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Full-Stack Type Safety</td>
+                            <td>TypeScript (frontend + backend)</td>
+                            <td>TypeScript (frontend) + Java (backend)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Development Speed</td>
+                            <td>Fast (hot reload, no compile)</td>
+                            <td>Moderate (compile step)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Runtime Performance</td>
+                            <td>Good (V8 engine)</td>
+                            <td>Excellent (JVM optimization)</td>
+                            <td><span class="badge badge-info">Java</span></td>
+                        </tr>
+                        <tr>
+                            <td>Concurrency Model</td>
+                            <td>Event loop (single-threaded)</td>
+                            <td>Multi-threaded (native)</td>
+                            <td><span class="badge badge-info">Java</span></td>
+                        </tr>
+                        <tr>
+                            <td>ORM Quality</td>
+                            <td>Prisma (excellent DX)</td>
+                            <td>Hibernate (mature, complex)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>PostGIS Support</td>
+                            <td>Good (pg, postgis libraries)</td>
+                            <td>Excellent (Hibernate Spatial)</td>
+                            <td><span class="badge badge-info">Java</span></td>
+                        </tr>
+                        <tr>
+                            <td>Deployment Flexibility</td>
+                            <td>Excellent (serverless, containers)</td>
+                            <td>Good (containers, heavier images)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Memory Efficiency</td>
+                            <td>Excellent (~100-200MB)</td>
+                            <td>Moderate (~500MB-1GB JVM)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Cold Start Time</td>
+                            <td>Fast (&lt;1s)</td>
+                            <td>Slow (5-10s JVM warmup)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise Adoption</td>
+                            <td>Growing (startups, SaaS)</td>
+                            <td>Dominant (banks, healthcare)</td>
+                            <td><span class="badge badge-info">Java</span></td>
+                        </tr>
+                        <tr>
+                            <td>Developer Availability</td>
+                            <td>High (JavaScript ubiquity)</td>
+                            <td>High (enterprise background)</td>
+                            <td><span class="badge badge-warning">Tie</span></td>
+                        </tr>
+                        <tr>
+                            <td>Learning Curve</td>
+                            <td>Moderate (async patterns)</td>
+                            <td>Steep (Spring complexity)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Testing Tools</td>
+                            <td>Jest, Supertest (excellent)</td>
+                            <td>JUnit, Mockito (mature)</td>
+                            <td><span class="badge badge-warning">Tie</span></td>
+                        </tr>
+                        <tr>
+                            <td>Background Jobs</td>
+                            <td>BullMQ, Node-cron (good)</td>
+                            <td>Spring Scheduler, Quartz (excellent)</td>
+                            <td><span class="badge badge-info">Java</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ecosystem Maturity</td>
+                            <td>Rapid evolution (fast-moving)</td>
+                            <td>Mature (stable, conservative)</td>
+                            <td><span class="badge badge-info">Java</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>When to Choose Node.js</h3>
+                <div class="pros">
+                    <ul>
+                        <li>✅ You want <strong>faster time to market</strong> (MVP in 14-16 weeks vs 16-18 weeks)</li>
+                        <li>✅ Your team is already familiar with <strong>JavaScript/TypeScript</strong></li>
+                        <li>✅ You value <strong>full-stack type safety</strong> (TypeScript everywhere)</li>
+                        <li>✅ You're building a <strong>modern SaaS product</strong> with rapid iteration needs</li>
+                        <li>✅ You want <strong>lower infrastructure costs</strong> (smaller containers, less memory)</li>
+                        <li>✅ You need <strong>serverless deployment</strong> options (Vercel, AWS Lambda)</li>
+                        <li>✅ Your workload is <strong>I/O-bound</strong> (database queries, API calls) rather than CPU-intensive</li>
+                        <li>✅ You want to leverage the <strong>Next.js ecosystem</strong> (Vercel, shadcn/ui, etc.)</li>
+                    </ul>
+                </div>
+
+                <h3>When to Choose Java Spring Boot</h3>
+                <div class="cons">
+                    <ul>
+                        <li>✅ Your team has <strong>existing Java expertise</strong> and wants to leverage it</li>
+                        <li>✅ You're in a <strong>regulated industry</strong> (healthcare, finance) where Java is standard</li>
+                        <li>✅ You need <strong>maximum runtime performance</strong> and multi-threaded concurrency</li>
+                        <li>✅ You value <strong>compile-time type safety</strong> over development speed</li>
+                        <li>✅ You have <strong>CPU-intensive workloads</strong> (complex calculations, data processing)</li>
+                        <li>✅ You want <strong>Spring ecosystem</strong> maturity (Spring Security, Spring Data, Spring Cloud)</li>
+                        <li>✅ You need <strong>enterprise integration</strong> patterns (message queues, batch processing)</li>
+                        <li>✅ You plan to hire <strong>enterprise Java developers</strong> for long-term maintenance</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Recommendation -->
+            <div class="recommendation-box" style="margin: 40px 0;">
+                <h3>💡 Our Recommendation: Node.js + Next.js Stack</h3>
+                <p><strong>Primary reasons:</strong></p>
+                <ol>
+                    <li><strong>Existing Foundation:</strong> Your Prisma schema and Next.js mockups are already prepared for Node.js</li>
+                    <li><strong>Faster MVP Delivery:</strong> 14-16 weeks vs 16-18 weeks (2-week advantage)</li>
+                    <li><strong>Lower Costs:</strong> ~$16K savings in development + lower infrastructure costs</li>
+                    <li><strong>Better DX:</strong> Full-stack TypeScript, hot reloading, faster iteration cycles</li>
+                    <li><strong>SaaS-Optimized:</strong> Proven stack for modern B2B SaaS (Cal.com, Vercel products, Linear)</li>
+                    <li><strong>Workload Match:</strong> Your app is I/O-bound (database queries, API calls), not CPU-intensive</li>
+                </ol>
+                <p><strong>Java is still a great choice if:</strong> You have in-house Java expertise or are in a Java-heavy enterprise environment.</p>
+            </div>
+
+            <p style="text-align: center; margin: 40px 0;">
+                <strong>Continue to detailed implementation plans below ⬇️</strong>
+            </p>
+
+            <!-- NODE.JS IMPLEMENTATION -->
+            <section id="nodejs-implementation">
+                <h2>Option 1: Node.js + Next.js Implementation Plan</h2>
+
+                <div class="alert alert-success">
+                    <strong>✅ Recommended Option - Full Details Below</strong><br>
+                    This section provides a complete breakdown of tasks, timeline, and cost estimates for implementing BehavioralHealth Connect using the Node.js stack.
+                </div>
+
+                <h3>Technology Stack - Node.js Option</h3>
+                <table class="tech-stack-table">
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>Technology</th>
+                            <th>Version</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Runtime</strong></td>
+                            <td>Node.js</td>
+                            <td>20 LTS</td>
+                            <td>JavaScript runtime</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Language</strong></td>
+                            <td>TypeScript</td>
+                            <td>5.x</td>
+                            <td>Type-safe JavaScript (frontend + backend)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Frontend Framework</strong></td>
+                            <td>Next.js (App Router)</td>
+                            <td>14.x</td>
+                            <td>React framework with SSR, file-based routing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend Framework</strong></td>
+                            <td>Express.js</td>
+                            <td>4.x</td>
+                            <td>REST API server</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI Library</strong></td>
+                            <td>React</td>
+                            <td>18.x</td>
+                            <td>Component-based UI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI Components</strong></td>
+                            <td>shadcn/ui + Tailwind CSS</td>
+                            <td>Latest</td>
+                            <td>Accessible component library + utility-first CSS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database</strong></td>
+                            <td>PostgreSQL + PostGIS</td>
+                            <td>15.x</td>
+                            <td>Relational database with geospatial extension</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ORM</strong></td>
+                            <td>Prisma</td>
+                            <td>5.x</td>
+                            <td>Type-safe ORM with migrations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cache</strong></td>
+                            <td>Redis</td>
+                            <td>7.x</td>
+                            <td>In-memory cache, session store</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Search</strong></td>
+                            <td>Algolia</td>
+                            <td>Latest</td>
+                            <td>Full-text search, faceting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authentication</strong></td>
+                            <td>Clerk</td>
+                            <td>Latest</td>
+                            <td>Auth, RBAC, organization management</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Maps</strong></td>
+                            <td>Mapbox GL JS</td>
+                            <td>2.x</td>
+                            <td>Interactive maps, geolocation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>Resend</td>
+                            <td>Latest</td>
+                            <td>Transactional emails</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SMS</strong></td>
+                            <td>Twilio</td>
+                            <td>Latest</td>
+                            <td>SMS delivery (magic links)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Payments</strong></td>
+                            <td>Stripe</td>
+                            <td>Latest</td>
+                            <td>Subscription billing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>File Storage</strong></td>
+                            <td>AWS S3 / Vercel Blob</td>
+                            <td>Latest</td>
+                            <td>Logo uploads, static assets</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Background Jobs</strong></td>
+                            <td>BullMQ + node-cron</td>
+                            <td>Latest</td>
+                            <td>Job queue, scheduled tasks (magic links)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing (Unit)</strong></td>
+                            <td>Jest + Testing Library</td>
+                            <td>Latest</td>
+                            <td>Unit and integration tests</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing (E2E)</strong></td>
+                            <td>Playwright</td>
+                            <td>Latest</td>
+                            <td>End-to-end testing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validation</strong></td>
+                            <td>Zod</td>
+                            <td>Latest</td>
+                            <td>Schema validation (TypeScript-first)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Monitoring</strong></td>
+                            <td>Sentry</td>
+                            <td>Latest</td>
+                            <td>Error tracking, performance monitoring</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hosting (Frontend)</strong></td>
+                            <td>Vercel / AWS CloudFront</td>
+                            <td>-</td>
+                            <td>Next.js deployment, CDN</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hosting (Backend)</strong></td>
+                            <td>AWS ECS Fargate</td>
+                            <td>-</td>
+                            <td>Containerized API deployment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database Hosting</strong></td>
+                            <td>AWS RDS PostgreSQL</td>
+                            <td>15.x</td>
+                            <td>Managed database (Multi-AZ)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cache Hosting</strong></td>
+                            <td>AWS ElastiCache</td>
+                            <td>Redis 7.x</td>
+                            <td>Managed Redis cluster</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Development Timeline - Node.js Option</h3>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">14-16</span>
+                        <span class="stat-label">Weeks Total</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">6</span>
+                        <span class="stat-label">Development Phases</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">3-4</span>
+                        <span class="stat-label">Team Size (Developers)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">$112K-$144K</span>
+                        <span class="stat-label">Estimated Cost</span>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Phase 1: Foundation & Database (Weeks 1-2)</h4>
+                        <p>Set up infrastructure, database, and development environment</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 2: Authentication & Registration (Weeks 3-4)</h4>
+                        <p>Implement Clerk auth, registration flows, RBAC</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 3: Provider Portal (Weeks 5-8)</h4>
+                        <p>Dashboard, profile management, bed availability, magic links</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 4: Clinician Portal (Weeks 9-12)</h4>
+                        <p>Search, maps, saved facilities, contact logs, reviews</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 5: Admin Portal (Weeks 13-14)</h4>
+                        <p>Verification queue, user management, analytics</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 6: Testing & Deployment (Weeks 15-16)</h4>
+                        <p>Comprehensive testing, optimization, production deployment</p>
+                    </div>
+                </div>
+
+                <h3>Detailed Task Breakdown by Phase</h3>
+
+                <!-- PHASE 1 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 1: Foundation & Database</span>
+                    <span class="phase-duration">2 Weeks | 80 hours</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>📦 1.1 Project Setup & Infrastructure (24 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Initialize monorepo structure (pnpm workspaces or npm workspaces)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up Next.js 14 app with App Router + TypeScript config</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up Express API server with TypeScript, middleware, error handling</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Tailwind CSS + shadcn/ui components</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up ESLint, Prettier, Husky pre-commit hooks</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Docker Compose for local development (Postgres + PostGIS + Redis)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Environment variable management (.env files, validation)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Git repository setup, branching strategy, PR templates</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🗄️ 1.2 Database Setup (28 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS RDS PostgreSQL 15 with PostGIS extension</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Prisma with existing schema.prisma (14 models)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Generate initial Prisma migration</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up PostGIS spatial indexes (GIST on providers.location)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create seed scripts for development data (insurances, sample providers)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure database connection pooling (Prisma Data Proxy or PgBouncer)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up database backup strategy (automated snapshots)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create database utilities (Prisma client factory, transaction helpers)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Test PostGIS geospatial queries (distance calculations, radius searches)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔧 1.3 Redis & Caching Setup (12 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS ElastiCache Redis cluster</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create Redis client wrapper with connection pooling</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement caching utilities (get, set, invalidate, TTL management)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Test cache performance and connection handling</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🚀 1.4 CI/CD Pipeline (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">GitHub Actions workflow for testing (on PR)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">GitHub Actions workflow for Docker build and ECR push</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS ECS Fargate cluster (dev/staging/prod)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure deployment workflow (blue-green strategy)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 1 Total:</strong> 80 hours (2 weeks with 2 developers)</p>
+
+                <!-- PHASE 2 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 2: Authentication & Registration</span>
+                    <span class="phase-duration">2 Weeks | 80 hours</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔐 2.1 Clerk Authentication Integration (20 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up Clerk application and configure organizations</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Install and configure @clerk/nextjs package</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement authentication middleware for protected routes</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create RBAC middleware (role checking: CLINICIAN, PROVIDER_ADMIN, PLATFORM_ADMIN)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up webhook handlers for Clerk events (user.created, user.updated)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Sync Clerk users with database User model</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📝 2.2 Clinician Registration Flow (20 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build multi-step registration form (3 steps: Account, Professional Info, Verification)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement form validation (Zod schemas)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create organization email domain verification logic</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build API endpoints for registration (POST /api/auth/register-clinician)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Email verification flow (send verification email, verify token)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🏥 2.3 Provider Registration Flow (24 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build multi-step registration form (3 steps: Facility Info, Verification, Pending Confirmation)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement facility information form with all required fields</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Recovery.com/LegitScript verification lookup integration</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create provider profile in database with PENDING status</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build API endpoints for provider registration</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Email notifications (welcome, verification pending, approved/rejected)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔑 2.4 Login & Session Management (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build universal login page (matching mockup)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement password reset flow</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Session management with Redis (store session data, sliding expiration)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement "Remember Me" functionality</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build role-based route redirects (dashboard routing by role)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 2 Total:</strong> 80 hours (2 weeks with 2 developers)</p>
+
+                <!-- PHASE 3 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 3: Provider Portal</span>
+                    <span class="phase-duration">4 Weeks | 160 hours</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>📊 3.1 Provider Dashboard (24 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build dashboard layout matching mockup (stats cards, bed availability widget)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement quick stats (profile views, search appearances, contact clicks, rating)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build prominent bed availability widget with +/- buttons</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement recent activity feed</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Show recent reviews and ratings</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🛏️ 3.2 Bed Availability Management (32 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build granular bed availability CRUD (by level of care + bed type)</span>
+                            <span class="task-duration">8h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement auto-save functionality (debounced updates)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add last updated timestamps and status calculation logic</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create API endpoints (GET/PUT /api/providers/:id/bed-availability)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement bed availability history log</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build visual status indicators (Available/Limited/Full with colors)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Sync bed availability to Algolia search index</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Invalidate Redis cache on bed updates</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔗 3.3 Magic Link System (40 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build secure token generation service (crypto.randomBytes, 64-char hex)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create BedUpdateToken database operations (CRUD)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement token expiration logic (48h OR on-use, whichever first)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build scheduled magic link delivery (node-cron, timezone-aware)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Integrate Twilio SDK for SMS delivery</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create email templates for magic links (Resend)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build public magic link update page (no auth required)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement rate limiting on magic link endpoint (5 req/hour per IP)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add IP logging and user agent tracking for audit</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Send notification email to provider on bed update via magic link</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create admin interface for viewing magic link usage stats</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>✏️ 3.4 Profile Management (32 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build comprehensive profile editor form (20+ fields)</span>
+                            <span class="task-duration">10h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement multi-select for levels of care, specialties, insurance</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build address autocomplete with geolocation (Mapbox Geocoding API)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create API endpoints for profile CRUD</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build profile completion progress indicator</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement profile preview mode</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Sync profile updates to Algolia index</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📁 3.5 Logo Upload & File Management (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS S3 bucket (or Vercel Blob) with CDN</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build drag-and-drop file upload component</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement image cropping UI (react-easy-crop or similar)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create file upload API endpoint with validation (type, size limits)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement image optimization (Sharp library, generate thumbnails)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>⚙️ 3.6 Provider Settings (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build settings page layout matching mockup</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement magic link preferences (enable/disable, schedule, delivery method)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add notification preferences settings</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build account settings (email, phone, timezone)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create API endpoints for settings updates</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 3 Total:</strong> 160 hours (4 weeks with 2 developers)</p>
+
+                <!-- PHASE 4 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 4: Clinician Portal</span>
+                    <span class="phase-duration">4 Weeks | 160 hours</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔍 4.1 Hybrid Search Implementation (40 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up Algolia account and configure index schema</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build Algolia sync worker (index providers on create/update)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement PostGIS geospatial queries (radius search, distance calculation)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build hybrid search service (PostGIS + Algolia combination)</span>
+                            <span class="task-duration">8h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement multi-filter search logic (insurance, level of care, demographics)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add faceted search (filter counts, available facets)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create search API endpoints with pagination and sorting</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement Redis caching for search results (2-min TTL)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📍 4.2 Search Results Page & Map View (32 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build search results page layout matching mockup</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement advanced filter sidebar (collapsible sections)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build provider result cards with bed availability display</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Integrate Mapbox GL JS for interactive map view</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement map markers with clustering</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add map/list toggle and sync between views</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement URL state management for shareable search links</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📄 4.3 Provider Detail Page (24 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build provider detail page layout with hero section</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement tabbed content (Overview, Insurance, Contact, Reviews, Details)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Display granular bed availability breakdown</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add contact buttons (Call Now, Email, Save, Log Contact)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement insurance list by category</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Embed Mapbox map showing facility location</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Track profile view analytics</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>💾 4.4 Saved Facilities (20 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build saved facilities page layout</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement save/unsave functionality with API endpoints</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add custom tags system (create, edit, filter by tags)</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build personal notes feature (per facility)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add quick actions (View, Call, Log Contact, Edit Note)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement search/filter within saved facilities</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📞 4.5 Contact Log System (24 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build contact log page with timeline view</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create contact log form (type, purpose, notes, status, follow-up)</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement API endpoints for contact log CRUD</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build stats dashboard (today, this week, this month)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add follow-up reminder system with notifications</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement search and filter functionality</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>⭐ 4.6 Review & Rating System (20 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build review submission form matching mockup</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement 5-star rating components (interactive)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add patient acceptance tracking (thumbs up/down/neutral)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create review API endpoints (POST, GET, moderation)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build review display list on provider detail page</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Calculate and update provider average rating on review submission</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 4 Total:</strong> 160 hours (4 weeks with 2 developers)</p>
+
+                <!-- PHASE 5 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 5: Admin Portal</span>
+                    <span class="phase-duration">2 Weeks | 80 hours</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>📈 5.1 Admin Dashboard (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build admin dashboard layout with key metrics cards</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement platform stats (active providers, clinicians, searches)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build recent activity feed</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add pending actions table (verifications, reviews, support)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>✅ 5.2 Provider Verification Queue (24 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build provider management page with filterable table</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement verification queue workflow (approve/reject with notes)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add Recovery.com/LegitScript lookup verification tools</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create API endpoints for provider verification actions</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Send email notifications on approval/rejection</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build verification audit log</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>👥 5.3 User Management (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build user management table with search and filters</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement user CRUD operations (view, edit, suspend)</span>
+                            <span class="task-duration">5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add role assignment and organization management</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create user activity log viewer</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📊 5.4 Analytics Dashboard (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build analytics page layout with Chart.js integration</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement search volume chart (time series)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build user growth chart (clinicians vs providers)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Add popular filters breakdown (pie charts)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create analytics API endpoints with date range filtering</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement export functionality (CSV/PDF reports)</span>
+                            <span class="task-duration">1h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🛡️ 5.5 Review Moderation (8 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build moderation queue for flagged reviews</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement approve/reject/hide actions with notes</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create moderation audit log</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 5 Total:</strong> 80 hours (2 weeks with 2 developers)</p>
+
+                <!-- PHASE 6 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 6: Testing, Optimization & Deployment</span>
+                    <span class="phase-duration">2 Weeks | 80 hours</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>🧪 6.1 Comprehensive Testing (32 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Write unit tests for service layer functions (Jest, >80% coverage)</span>
+                            <span class="task-duration">12h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create integration tests for all API endpoints (Supertest)</span>
+                            <span class="task-duration">10h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build E2E tests for critical user flows (Playwright)</span>
+                            <span class="task-duration">8h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Run accessibility audit (axe-core, WCAG 2.1 AA compliance)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>⚡ 6.2 Performance Optimization (20 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Database query optimization (EXPLAIN analysis, index tuning)</span>
+                            <span class="task-duration">6h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement Redis caching strategy for all hot paths</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Next.js image optimization and lazy loading</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up CDN (CloudFront) for static assets</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Run Lighthouse audits and optimize (target >90 all metrics)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔒 6.3 Security Audit & Hardening (12 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">OWASP security audit (SQL injection, XSS, CSRF testing)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement security headers (CSP, HSTS, X-Frame-Options)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Review and secure all API endpoints (authorization checks)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure rate limiting on all public endpoints</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Audit logging for sensitive operations</span>
+                            <span class="task-duration">1h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🚀 6.4 Production Deployment (16 hours)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Configure production infrastructure (AWS ECS, RDS, ElastiCache)</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up monitoring (CloudWatch dashboards, Sentry error tracking)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure auto-scaling policies and health checks</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Deploy to production with blue-green strategy</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Smoke testing and validation in production</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create runbooks and operational documentation</span>
+                            <span class="task-duration">1h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 6 Total:</strong> 80 hours (2 weeks with 2 developers)</p>
+
+                <h3>Node.js Option - Summary & Costs</h3>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">640</span>
+                        <span class="stat-label">Total Development Hours</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">14-16</span>
+                        <span class="stat-label">Weeks (14 Weeks @ 45h/week)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">2-3</span>
+                        <span class="stat-label">Senior Developers Needed</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">$112K-$144K</span>
+                        <span class="stat-label">Estimated Development Cost</span>
+                    </div>
+                </div>
+
+                <div class="cost-breakdown">
+                    <h4>Cost Breakdown (Node.js Option)</h4>
+                    <div class="cost-item">
+                        <span>Development Labor (640 hours @ $175-225/hour)</span>
+                        <span>$112,000 - $144,000</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Third-Party Services (Annual)</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Clerk (Auth): $300/month = $3,600/year</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Algolia (Search): $1/month (free tier) → $100/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Mapbox (Maps): $0/month (free tier) → $200/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Resend (Email): $20/month = $240/year</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Twilio (SMS): $50-200/month (usage-based)</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Stripe (Payments): 2.9% + $0.30 per transaction</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Sentry (Monitoring): $26/month = $312/year</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none; font-weight: 600;">
+                        <span>Subtotal: ~$5,000-$12,000/year</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item">
+                        <span>AWS Infrastructure (Monthly Estimate)</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• RDS PostgreSQL (Multi-AZ): $150-300/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• ECS Fargate (2-4 tasks): $100-400/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• ElastiCache Redis: $50-100/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• ALB + CloudFront + S3: $50-100/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none; font-weight: 600;">
+                        <span>Subtotal: $350-900/month ($4,200-$10,800/year)</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item">
+                        <span><strong>TOTAL PROJECT COST (Year 1)</strong></span>
+                        <span><strong>$121K - $167K</strong></span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>💡 Cost Notes:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Development costs assume $175-225/hour blended rate for senior developers</li>
+                        <li>AWS costs scale with usage; estimates are for MVP with moderate traffic</li>
+                        <li>Third-party services start free/cheap, scale with user growth</li>
+                        <li>Costs do not include project management, design, or ongoing maintenance</li>
+                        <li>Year 2+ costs significantly lower (only infrastructure + services, no dev labor)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- JAVA IMPLEMENTATION CONTINUES ON NEXT PAGE -->
+            <section id="java-implementation" style="page-break-before: always;">
+                <h2>Option 2: Java Spring Boot Implementation Plan</h2>
+
+                <div class="alert alert-info">
+                    <strong>ℹ️ Alternative Option - Enterprise Java Stack</strong><br>
+                    This section provides a complete breakdown for implementing BehavioralHealth Connect using Java Spring Boot. Recommended for teams with existing Java expertise or enterprise-heavy environments.
+                </div>
+
+                <h3>Technology Stack - Java Option</h3>
+                <table class="tech-stack-table">
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>Technology</th>
+                            <th>Version</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Runtime</strong></td>
+                            <td>Java (OpenJDK)</td>
+                            <td>21 LTS (or 17 LTS)</td>
+                            <td>JVM runtime</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend Framework</strong></td>
+                            <td>Spring Boot</td>
+                            <td>3.2.x</td>
+                            <td>Enterprise application framework</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Web Framework</strong></td>
+                            <td>Spring Web MVC</td>
+                            <td>6.x (included in Boot)</td>
+                            <td>REST API framework</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security</strong></td>
+                            <td>Spring Security</td>
+                            <td>6.x (included in Boot)</td>
+                            <td>Authentication, authorization, RBAC</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Frontend Framework</strong></td>
+                            <td>React (Vite)</td>
+                            <td>18.x</td>
+                            <td>Component-based UI (separate from backend)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI Language</strong></td>
+                            <td>TypeScript</td>
+                            <td>5.x</td>
+                            <td>Type-safe JavaScript for frontend</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI Components</strong></td>
+                            <td>Tailwind CSS + shadcn/ui</td>
+                            <td>Latest</td>
+                            <td>Same as Node.js option</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database</strong></td>
+                            <td>PostgreSQL + PostGIS</td>
+                            <td>15.x</td>
+                            <td>Relational database with geospatial</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ORM</strong></td>
+                            <td>Spring Data JPA + Hibernate</td>
+                            <td>6.x</td>
+                            <td>ORM with Hibernate Spatial for PostGIS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cache</strong></td>
+                            <td>Redis + Spring Cache</td>
+                            <td>7.x</td>
+                            <td>Caching abstraction with Redis backend</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Search</strong></td>
+                            <td>Algolia Java Client</td>
+                            <td>Latest</td>
+                            <td>Full-text search, faceting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authentication</strong></td>
+                            <td>Spring Security + JWT or OAuth2</td>
+                            <td>6.x</td>
+                            <td>Custom auth or integrate with Clerk via OAuth2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Background Jobs</strong></td>
+                            <td>Spring Scheduler + Quartz</td>
+                            <td>2.x (Quartz)</td>
+                            <td>Scheduled tasks, job queuing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validation</strong></td>
+                            <td>Jakarta Bean Validation</td>
+                            <td>3.x</td>
+                            <td>Declarative validation with annotations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Build Tool</strong></td>
+                            <td>Maven or Gradle</td>
+                            <td>Latest</td>
+                            <td>Dependency management, build automation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing (Unit)</strong></td>
+                            <td>JUnit 5 + Mockito</td>
+                            <td>Latest</td>
+                            <td>Unit testing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing (Integration)</strong></td>
+                            <td>Spring Boot Test + RestAssured</td>
+                            <td>Latest</td>
+                            <td>Integration and API testing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing (E2E)</strong></td>
+                            <td>Playwright (same as Node.js)</td>
+                            <td>Latest</td>
+                            <td>End-to-end testing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Monitoring</strong></td>
+                            <td>Spring Boot Actuator + Micrometer</td>
+                            <td>Latest</td>
+                            <td>Metrics, health checks, + Sentry</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Documentation</strong></td>
+                            <td>SpringDoc OpenAPI</td>
+                            <td>Latest</td>
+                            <td>Auto-generated API docs (Swagger UI)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hosting</strong></td>
+                            <td>AWS ECS Fargate (same as Node.js)</td>
+                            <td>-</td>
+                            <td>Docker containers for Spring Boot app</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Development Timeline - Java Option</h3>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">16-18</span>
+                        <span class="stat-label">Weeks Total</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">6</span>
+                        <span class="stat-label">Development Phases</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">3-4</span>
+                        <span class="stat-label">Team Size (Developers)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">$128K-$160K</span>
+                        <span class="stat-label">Estimated Cost</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>⏱️ Timeline Difference: +2 weeks vs Node.js</strong><br>
+                    Java implementation takes slightly longer due to:
+                    <ul style="margin-top: 10px;">
+                        <li>More verbose code (Java vs TypeScript)</li>
+                        <li>Separate frontend/backend development (React + Spring Boot)</li>
+                        <li>Entity and DTO mapping layers</li>
+                        <li>More configuration required (Spring Boot properties, JPA mappings)</li>
+                        <li>Longer build times (compile step vs interpreted)</li>
+                    </ul>
+                </div>
+
+                <h3>Phase Summary - Java Option</h3>
+                <div class="task-category">
+                    <h4>Phase 1: Foundation & Database (2.5 weeks | 100 hours)</h4>
+                    <ul>
+                        <li>Spring Boot project setup with Maven/Gradle</li>
+                        <li>Configure Spring Data JPA + Hibernate Spatial for PostGIS</li>
+                        <li>Entity classes for all 14 database models</li>
+                        <li>Flyway or Liquibase database migrations</li>
+                        <li>Docker Compose (Postgres + Redis)</li>
+                        <li>CI/CD with GitHub Actions + Docker</li>
+                    </ul>
+                    <p><strong>Additional time vs Node.js:</strong> +20 hours (entity mapping, verbose config)</p>
+                </div>
+
+                <div class="task-category">
+                    <h4>Phase 2: Authentication & Registration (2.5 weeks | 100 hours)</h4>
+                    <ul>
+                        <li>Spring Security configuration with JWT or OAuth2</li>
+                        <li>Custom UserDetailsService for RBAC</li>
+                        <li>Registration endpoints (Clinician, Provider)</li>
+                        <li>Email verification service with templates</li>
+                        <li>React frontend for auth pages (separate from backend)</li>
+                    </ul>
+                    <p><strong>Additional time vs Node.js:</strong> +20 hours (Spring Security complexity, frontend/backend separation)</p>
+                </div>
+
+                <div class="task-category">
+                    <h4>Phase 3: Provider Portal (4.5 weeks | 180 hours)</h4>
+                    <ul>
+                        <li>Provider REST controllers and services</li>
+                        <li>Bed availability management with JPA repositories</li>
+                        <li>Magic link system (Spring Scheduler + Quartz)</li>
+                        <li>Twilio SMS integration</li>
+                        <li>File upload with S3 (Spring Boot starter)</li>
+                        <li>React frontend for provider dashboard, profile editor</li>
+                    </ul>
+                    <p><strong>Additional time vs Node.js:</strong> +20 hours (DTO mapping, service layers)</p>
+                </div>
+
+                <div class="task-category">
+                    <h4>Phase 4: Clinician Portal (4.5 weeks | 180 hours)</h4>
+                    <ul>
+                        <li>Hybrid search (PostGIS + Algolia) with custom repositories</li>
+                        <li>Saved facilities and contact log services</li>
+                        <li>Review system with moderation</li>
+                        <li>React frontend with Mapbox integration</li>
+                        <li>API endpoints for all clinician features</li>
+                    </ul>
+                    <p><strong>Additional time vs Node.js:</strong> +20 hours (complex JPA queries, projection DTOs)</p>
+                </div>
+
+                <div class="task-category">
+                    <h4>Phase 5: Admin Portal (2.5 weeks | 100 hours)</h4>
+                    <ul>
+                        <li>Admin REST controllers</li>
+                        <li>Verification queue service</li>
+                        <li>User management with RBAC checks</li>
+                        <li>Analytics queries with Spring Data JPA</li>
+                        <li>React admin frontend with charts</li>
+                    </ul>
+                    <p><strong>Additional time vs Node.js:</strong> +20 hours (admin-specific DTOs, complex queries)</p>
+                </div>
+
+                <div class="task-category">
+                    <h4>Phase 6: Testing & Deployment (2 weeks | 80 hours)</h4>
+                    <ul>
+                        <li>JUnit unit tests (service layer)</li>
+                        <li>Spring Boot Test integration tests</li>
+                        <li>Playwright E2E tests</li>
+                        <li>Performance tuning (JPA query optimization, connection pooling)</li>
+                        <li>Security audit</li>
+                        <li>Production deployment to AWS ECS</li>
+                    </ul>
+                    <p><strong>Same as Node.js</strong></p>
+                </div>
+
+                <h3>Java Option - Summary & Costs</h3>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">740</span>
+                        <span class="stat-label">Total Development Hours</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">16-18</span>
+                        <span class="stat-label">Weeks (16 Weeks @ 46h/week)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">2-3</span>
+                        <span class="stat-label">Senior Developers Needed</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">$128K-$160K</span>
+                        <span class="stat-label">Estimated Development Cost</span>
+                    </div>
+                </div>
+
+                <div class="cost-breakdown">
+                    <h4>Cost Breakdown (Java Option)</h4>
+                    <div class="cost-item">
+                        <span>Development Labor (740 hours @ $175-225/hour)</span>
+                        <span>$128,000 - $160,000</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Third-Party Services (Annual - SAME as Node.js)</span>
+                        <span>$5,000 - $12,000/year</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>AWS Infrastructure (Monthly - SAME as Node.js)</span>
+                        <span>$350-900/month ($4,200-$10,800/year)</span>
+                    </div>
+                    <div class="cost-item">
+                        <span><strong>TOTAL PROJECT COST (Year 1)</strong></span>
+                        <span><strong>$137K - $183K</strong></span>
+                    </div>
+                    <div class="cost-item">
+                        <span><strong>Cost Difference vs Node.js</strong></span>
+                        <span><strong>+$16K - $19K (+14%)</strong></span>
+                    </div>
+                </div>
+
+                <div class="pros-cons-grid" style="margin-top: 30px;">
+                    <div class="pros">
+                        <h4>✅ Java Spring Boot Advantages</h4>
+                        <ul>
+                            <li>Compile-time type safety (fewer runtime errors)</li>
+                            <li>Mature Spring ecosystem (decades of production use)</li>
+                            <li>Excellent multi-threading (better for CPU-intensive tasks)</li>
+                            <li>Enterprise-grade security (Spring Security)</li>
+                            <li>Better for teams with existing Java expertise</li>
+                            <li>Hibernate Spatial (excellent PostGIS support)</li>
+                            <li>Strong IDE support (IntelliJ IDEA)</li>
+                            <li>JVM optimization (faster at scale)</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Java Spring Boot Trade-offs</h4>
+                        <ul>
+                            <li>2 weeks longer development time</li>
+                            <li>~$16K higher development cost</li>
+                            <li>Higher memory footprint (500MB-1GB vs 100-200MB)</li>
+                            <li>Slower development iteration (compile step)</li>
+                            <li>More verbose code (Java vs TypeScript)</li>
+                            <li>Separate frontend/backend languages</li>
+                            <li>Heavier Docker images (200MB+ vs 50-100MB)</li>
+                            <li>Longer cold start times (5-10s vs <1s)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FINAL RECOMMENDATIONS -->
+            <section id="recommendations" style="page-break-before: always;">
+                <h2>Final Recommendations & Next Steps</h2>
+
+                <div class="recommendation-box">
+                    <h3>🎯 Primary Recommendation: Node.js + Next.js Stack</h3>
+                    <p><strong>Recommended for this project because:</strong></p>
+                    <ol>
+                        <li><strong>Time to Market:</strong> Launch 2 weeks faster (14-16 weeks vs 16-18 weeks)</li>
+                        <li><strong>Cost Efficiency:</strong> Save ~$16K in development costs</li>
+                        <li><strong>Existing Assets:</strong> Prisma schema and Next.js mockups are already built for Node.js</li>
+                        <li><strong>Full-Stack TypeScript:</strong> Shared types reduce bugs, improve developer experience</li>
+                        <li><strong>Modern SaaS Fit:</strong> Proven stack for B2B SaaS platforms (Vercel, Linear, Cal.com)</li>
+                        <li><strong>Infrastructure Efficiency:</strong> Lower memory footprint = lower AWS costs</li>
+                        <li><strong>Developer Velocity:</strong> Hot reloading, fast feedback loops, rapid prototyping</li>
+                    </ol>
+                </div>
+
+                <h3>When to Choose Java Instead</h3>
+                <div class="alert alert-info">
+                    <strong>Consider Java Spring Boot if you have:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>✅ <strong>Existing Java team:</strong> In-house Java developers who will maintain the codebase</li>
+                        <li>✅ <strong>Enterprise environment:</strong> Java-heavy infrastructure, existing Spring Boot microservices</li>
+                        <li>✅ <strong>Regulatory requirements:</strong> Industry standards that prefer Java (banking, healthcare)</li>
+                        <li>✅ <strong>CPU-intensive needs:</strong> Heavy computational workloads (not applicable to this project)</li>
+                        <li>✅ <strong>Long-term scale concerns:</strong> Planning for massive scale from day 1 (premature optimization)</li>
+                    </ul>
+                </div>
+
+                <h3>Side-by-Side Comparison Matrix</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Node.js + Next.js</th>
+                            <th>Java + Spring Boot</th>
+                            <th>Winner for BHC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Time to MVP</strong></td>
+                            <td>14-16 weeks</td>
+                            <td>16-18 weeks</td>
+                            <td><span class="badge badge-success">Node.js (2 weeks faster)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Development Cost</strong></td>
+                            <td>$112K-$144K</td>
+                            <td>$128K-$160K</td>
+                            <td><span class="badge badge-success">Node.js ($16K cheaper)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Infrastructure Cost</strong></td>
+                            <td>$350-900/month</td>
+                            <td>$350-900/month (same)</td>
+                            <td><span class="badge badge-warning">Tie</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Code Maintainability</strong></td>
+                            <td>Good (TypeScript strict mode)</td>
+                            <td>Excellent (compile-time safety)</td>
+                            <td><span class="badge badge-info">Java (slightly)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Developer Experience</strong></td>
+                            <td>Excellent (hot reload, fast iteration)</td>
+                            <td>Good (compile step slows iteration)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Type Safety</strong></td>
+                            <td>Good (TypeScript end-to-end)</td>
+                            <td>Excellent (Java backend only)</td>
+                            <td><span class="badge badge-success">Node.js (full-stack TS)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ecosystem Maturity</strong></td>
+                            <td>Rapidly evolving (fast-moving)</td>
+                            <td>Mature (stable, conservative)</td>
+                            <td><span class="badge badge-info">Java</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>PostGIS Support</strong></td>
+                            <td>Good (pg + postgis libraries)</td>
+                            <td>Excellent (Hibernate Spatial)</td>
+                            <td><span class="badge badge-info">Java (slightly)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Search Integration</strong></td>
+                            <td>Excellent (Algolia JS SDK)</td>
+                            <td>Good (Algolia Java client)</td>
+                            <td><span class="badge badge-warning">Tie</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Deployment Flexibility</strong></td>
+                            <td>Excellent (serverless, containers)</td>
+                            <td>Good (containers, heavier)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory Efficiency</strong></td>
+                            <td>~100-200MB per instance</td>
+                            <td>~500MB-1GB per instance</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Workload Match</strong></td>
+                            <td>Perfect (I/O-bound workload)</td>
+                            <td>Good (CPU strength not needed)</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Team Availability</strong></td>
+                            <td>High (JavaScript ubiquity)</td>
+                            <td>High (enterprise backgrounds)</td>
+                            <td><span class="badge badge-warning">Tie</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Existing Foundation</strong></td>
+                            <td>✅ Prisma schema + Next.js mockups ready</td>
+                            <td>❌ Need to convert schema to JPA entities</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Risk Analysis</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Risk</th>
+                            <th>Impact</th>
+                            <th>Mitigation Strategy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Performance Issues (Search)</strong></td>
+                            <td><span class="badge badge-danger">High</span></td>
+                            <td>
+                                • Hybrid PostGIS + Algolia approach<br>
+                                • Redis caching (2-min TTL)<br>
+                                • Database index optimization<br>
+                                • Load testing before launch
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Magic Link Abuse</strong></td>
+                            <td><span class="badge badge-warning">Medium</span></td>
+                            <td>
+                                • Rate limiting (5 req/hour per IP)<br>
+                                • IP logging and audit trail<br>
+                                • Email notifications on updates<br>
+                                • Single-use tokens with 48h expiration
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database Performance</strong></td>
+                            <td><span class="badge badge-warning">Medium</span></td>
+                            <td>
+                                • PostGIS GIST indexes on location<br>
+                                • Connection pooling (max 20/instance)<br>
+                                • Read replicas for analytics<br>
+                                • Query optimization (EXPLAIN analysis)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scope Creep</strong></td>
+                            <td><span class="badge badge-warning">Medium</span></td>
+                            <td>
+                                • Strict adherence to MVP scope<br>
+                                • Change request process<br>
+                                • Weekly progress reviews<br>
+                                • Defer non-critical features to Phase 2
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Third-Party API Changes</strong></td>
+                            <td><span class="badge badge-info">Low</span></td>
+                            <td>
+                                • Abstraction layers for external services<br>
+                                • Version pinning for critical dependencies<br>
+                                • Monitor changelog for breaking changes
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security Vulnerabilities</strong></td>
+                            <td><span class="badge badge-danger">High</span></td>
+                            <td>
+                                • OWASP security audit before launch<br>
+                                • Automated dependency scanning (Dependabot)<br>
+                                • Security headers (CSP, HSTS)<br>
+                                • Rate limiting on all public endpoints
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Next Steps - Getting Started</h3>
+
+                <div class="task-category">
+                    <h4>Immediate Actions (Week 1)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Decision: Select technology stack (Node.js or Java)</span>
+                            <span class="badge badge-danger">Critical</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Assemble development team (2-3 senior developers + 1 PM)</span>
+                            <span class="badge badge-danger">Critical</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up project repository and branching strategy</span>
+                            <span class="badge badge-warning">High</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create AWS account and set up billing alerts</span>
+                            <span class="badge badge-warning">High</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Sign up for third-party services (Clerk, Algolia, Mapbox, etc.)</span>
+                            <span class="badge badge-warning">High</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Schedule kickoff meeting and architecture review</span>
+                            <span class="badge badge-info">Medium</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>Week 2-3: Phase 1 Execution</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Initialize monorepo structure with workspaces</span>
+                            <span class="task-duration">Week 2</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up PostgreSQL + PostGIS on AWS RDS</span>
+                            <span class="task-duration">Week 2</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure ORM (Prisma or Hibernate) with migrations</span>
+                            <span class="task-duration">Week 2</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Docker Compose for local development environment</span>
+                            <span class="task-duration">Week 2</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">CI/CD pipeline with GitHub Actions</span>
+                            <span class="task-duration">Week 3</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Weekly demo to stakeholders (Friday EOD)</span>
+                            <span class="task-duration">Week 3</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Success Metrics & Acceptance Criteria</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Metric</th>
+                            <th>Target</th>
+                            <th>How to Measure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Search latency (p95)</td>
+                            <td>&lt; 500ms</td>
+                            <td>CloudWatch metrics, load testing</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Page load time (p95)</td>
+                            <td>&lt; 2s</td>
+                            <td>Lighthouse audits, real user monitoring</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Lighthouse score</td>
+                            <td>&gt; 90 (all categories)</td>
+                            <td>Lighthouse CI in GitHub Actions</td>
+                        </tr>
+                        <tr>
+                            <td>Quality</td>
+                            <td>Test coverage</td>
+                            <td>&gt; 80% (unit tests)</td>
+                            <td>Jest/JUnit coverage reports</td>
+                        </tr>
+                        <tr>
+                            <td>Quality</td>
+                            <td>Accessibility</td>
+                            <td>WCAG 2.1 AA compliant</td>
+                            <td>axe-core audits, manual testing</td>
+                        </tr>
+                        <tr>
+                            <td>Quality</td>
+                            <td>Security</td>
+                            <td>0 critical vulnerabilities</td>
+                            <td>OWASP ZAP scan, dependency scanning</td>
+                        </tr>
+                        <tr>
+                            <td>Functionality</td>
+                            <td>Feature completeness</td>
+                            <td>100% of MVP features</td>
+                            <td>Feature checklist against mockups</td>
+                        </tr>
+                        <tr>
+                            <td>Reliability</td>
+                            <td>Uptime</td>
+                            <td>&gt; 99.9%</td>
+                            <td>CloudWatch uptime monitoring</td>
+                        </tr>
+                        <tr>
+                            <td>Business</td>
+                            <td>Bed update compliance</td>
+                            <td>80% daily updates</td>
+                            <td>Magic link usage analytics</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Ongoing Support & Maintenance</h3>
+
+                <div class="alert alert-info">
+                    <strong>Post-Launch Maintenance Estimate:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Bug Fixes & Updates:</strong> 20-40 hours/month ($3,500-$7,000/month)</li>
+                        <li><strong>Dependency Updates:</strong> 10 hours/month ($1,750/month)</li>
+                        <li><strong>Feature Enhancements:</strong> As needed (separate quotes)</li>
+                        <li><strong>Infrastructure Monitoring:</strong> Included in AWS costs</li>
+                        <li><strong>Security Patches:</strong> Immediate response (included in retainer)</li>
+                    </ul>
+                    <strong>Recommended:</strong> 3-6 month retainer post-launch for stabilization period
+                </div>
+
+                <h3>Final Summary</h3>
+
+                <div class="stat-grid">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
+                        <span class="stat-value" style="color: #065f46;">Node.js</span>
+                        <span class="stat-label">Recommended Option</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">14-16</span>
+                        <span class="stat-label">Weeks to Launch</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">$121K-$167K</span>
+                        <span class="stat-label">Total Year 1 Cost</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">100%</span>
+                        <span class="stat-label">Feature Complete MVP</span>
+                    </div>
+                </div>
+
+                <div class="recommendation-box" style="margin-top: 40px;">
+                    <h3>✅ Ready to Proceed?</h3>
+                    <p><strong>Contact us to:</strong></p>
+                    <ul>
+                        <li>✅ Finalize technology stack selection</li>
+                        <li>✅ Review and approve detailed estimates</li>
+                        <li>✅ Schedule project kickoff meeting</li>
+                        <li>✅ Sign Statement of Work (SOW) and begin development</li>
+                        <li>✅ Set up weekly progress reviews and demos</li>
+                    </ul>
+                    <p style="margin-top: 20px;"><strong>Questions?</strong> We're here to clarify any aspect of this proposal.</p>
+                </div>
+
+                <div style="text-align: center; margin: 60px 0 40px 0; padding: 40px; background: #f9fafb; border-radius: 8px;">
+                    <h2 style="color: #0066CC; margin-bottom: 20px;">Thank You!</h2>
+                    <p style="font-size: 1.1rem; color: #4b5563;">
+                        This comprehensive analysis was prepared with care to help you make the best decision for BehavioralHealth Connect.
+                    </p>
+                    <p style="font-size: 0.9rem; color: #6b7280; margin-top: 20px;">
+                        Document Generated: January 16, 2026 | Prepared by: Claude (Opus 4.5)
+                    </p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Print functionality
+        function printDocument() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
