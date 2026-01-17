@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC - Java Quarkus Implementation Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f9fafb;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .meta-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px 40px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #6b7280;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        nav {
+            background: #fff;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #DC2626;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #991B1B;
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #DC2626;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #DC2626;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #1f2937;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: #374151;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #4b5563;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: #DC2626;
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #059669;
+            color: #065f46;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        thead {
+            background: #f3f4f6;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+            border-bottom: 2px solid #d1d5db;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-primary { background: #fee2e2; color: #991b1b; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: #e0f2fe; color: #075985; }
+        .badge-ai { background: #ddd6fe; color: #5b21b6; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #DC2626;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .task-category {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .task-category h4 {
+            margin-top: 0;
+            color: #DC2626;
+        }
+
+        .task-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .task-item {
+            background: white;
+            border-left: 4px solid #DC2626;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .task-name {
+            flex: 1;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .task-duration {
+            background: #DC2626;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+
+        .phase-header {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .phase-duration {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .cost-breakdown {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid #DC2626;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .highlight-box h3 {
+            color: #92400e;
+            margin-top: 0;
+        }
+
+        .ai-box {
+            background: #ede9fe;
+            border: 2px solid #7c3aed;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .ai-box h3 {
+            color: #5b21b6;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            nav {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BehavioralHealth Connect</h1>
+            <p>Java + Quarkus Implementation Plan with AWS Infrastructure</p>
+        </header>
+
+        <div class="meta-info">
+            <div class="meta-item">
+                <span class="meta-label">Document Version</span>
+                <span class="meta-value">1.0</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Date Prepared</span>
+                <span class="meta-value">January 17, 2026</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Tech Stack</span>
+                <span class="meta-value">Java 21 + Quarkus 3.x</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Infrastructure</span>
+                <span class="meta-value">AWS (ECS, RDS, ElastiCache)</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#tech-stack">Technology Stack</a></li>
+                <li><a href="#quarkus-advantages">Why Quarkus</a></li>
+                <li><a href="#implementation-plan">Implementation Plan</a></li>
+                <li><a href="#ai-impact">AI Cost Reduction</a></li>
+                <li><a href="#cost-summary">Cost Summary</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- OVERVIEW -->
+            <section id="overview">
+                <h2>Executive Overview</h2>
+
+                <div class="alert alert-info">
+                    <strong>Alternative Enterprise Stack:</strong> This document provides a comprehensive implementation plan for BehavioralHealth Connect using Java 21 + Quarkus framework with AWS cloud infrastructure. Quarkus offers significant advantages over traditional Spring Boot, including faster startup times, lower memory footprint, and native compilation support.
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">15-17</span>
+                        <span class="stat-label">Weeks Total</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">680</span>
+                        <span class="stat-label">Development Hours</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">$119K-$153K</span>
+                        <span class="stat-label">Dev Cost (with AI)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">25-30%</span>
+                        <span class="stat-label">AI Cost Reduction</span>
+                    </div>
+                </div>
+
+                <h3>Key Highlights</h3>
+                <ul>
+                    <li><strong>Modern Java Stack:</strong> Quarkus 3.x with Java 21 LTS for cutting-edge performance</li>
+                    <li><strong>Cloud-Native:</strong> Designed for Kubernetes/containers from day one</li>
+                    <li><strong>Fast Startup:</strong> Sub-second startup time (vs 5-10s with Spring Boot)</li>
+                    <li><strong>Low Memory:</strong> ~70MB memory footprint (vs 500MB+ Spring Boot)</li>
+                    <li><strong>GraalVM Native:</strong> Option for native compilation (even faster startup, lower memory)</li>
+                    <li><strong>AI-Assisted Development:</strong> 25-30% cost reduction through AI-powered code generation</li>
+                </ul>
+            </section>
+
+            <!-- TECHNOLOGY STACK -->
+            <section id="tech-stack">
+                <h2>Complete Technology Stack</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>Technology</th>
+                            <th>Version</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Runtime</strong></td>
+                            <td>Java (OpenJDK)</td>
+                            <td>21 LTS</td>
+                            <td>Modern Java with virtual threads, pattern matching</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Framework</strong></td>
+                            <td>Quarkus</td>
+                            <td>3.7+</td>
+                            <td>Supersonic Subatomic Java framework</td>
+                        </tr>
+                        <tr>
+                            <td><strong>REST API</strong></td>
+                            <td>Quarkus RESTEasy Reactive</td>
+                            <td>3.x</td>
+                            <td>Reactive REST endpoints (non-blocking I/O)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database ORM</strong></td>
+                            <td>Hibernate ORM with Panache</td>
+                            <td>6.x</td>
+                            <td>Simplified ORM with Active Record pattern</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Geospatial</strong></td>
+                            <td>Hibernate Spatial</td>
+                            <td>6.x</td>
+                            <td>PostGIS integration for geospatial queries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database</strong></td>
+                            <td>PostgreSQL + PostGIS</td>
+                            <td>15.x</td>
+                            <td>Relational database with geospatial extension</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Migrations</strong></td>
+                            <td>Flyway</td>
+                            <td>9.x</td>
+                            <td>Database schema versioning and migrations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validation</strong></td>
+                            <td>Hibernate Validator</td>
+                            <td>8.x</td>
+                            <td>Bean validation with annotations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security</strong></td>
+                            <td>Quarkus Security + JWT</td>
+                            <td>3.x</td>
+                            <td>Authentication, RBAC, JWT tokens</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cache</strong></td>
+                            <td>Quarkus Cache (Redis)</td>
+                            <td>3.x</td>
+                            <td>Distributed caching with Redis backend</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scheduler</strong></td>
+                            <td>Quarkus Scheduler</td>
+                            <td>3.x</td>
+                            <td>Scheduled tasks (magic link delivery)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Messaging</strong></td>
+                            <td>Quarkus Mailer</td>
+                            <td>3.x</td>
+                            <td>Email integration (Resend/SendGrid)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Search</strong></td>
+                            <td>Algolia Java Client</td>
+                            <td>3.x</td>
+                            <td>Full-text search, faceting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SMS</strong></td>
+                            <td>Twilio Java SDK</td>
+                            <td>Latest</td>
+                            <td>SMS delivery for magic links</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Payments</strong></td>
+                            <td>Stripe Java SDK</td>
+                            <td>Latest</td>
+                            <td>Subscription billing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>File Storage</strong></td>
+                            <td>AWS S3 SDK for Java</td>
+                            <td>2.x</td>
+                            <td>Object storage for logos, assets</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Monitoring</strong></td>
+                            <td>Quarkus Micrometer + Sentry</td>
+                            <td>3.x</td>
+                            <td>Metrics, health checks, error tracking</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OpenAPI Docs</strong></td>
+                            <td>Quarkus OpenAPI</td>
+                            <td>3.x</td>
+                            <td>Auto-generated API documentation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing (Unit)</strong></td>
+                            <td>JUnit 5 + Mockito</td>
+                            <td>Latest</td>
+                            <td>Unit testing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing (Integration)</strong></td>
+                            <td>Quarkus Test + RestAssured</td>
+                            <td>3.x</td>
+                            <td>Integration and API testing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Build Tool</strong></td>
+                            <td>Maven</td>
+                            <td>3.9+</td>
+                            <td>Dependency management, builds</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Frontend</strong></td>
+                            <td>React 18 + Vite + TypeScript</td>
+                            <td>Latest</td>
+                            <td>SPA frontend (separate deployment)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI Components</strong></td>
+                            <td>Tailwind CSS + shadcn/ui</td>
+                            <td>Latest</td>
+                            <td>Same UI as mockups</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Container</strong></td>
+                            <td>Docker + GraalVM (optional)</td>
+                            <td>Latest</td>
+                            <td>JVM or native container images</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Orchestration</strong></td>
+                            <td>AWS ECS Fargate</td>
+                            <td>-</td>
+                            <td>Serverless container platform</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database Hosting</strong></td>
+                            <td>AWS RDS PostgreSQL (Multi-AZ)</td>
+                            <td>15.x</td>
+                            <td>Managed database</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cache Hosting</strong></td>
+                            <td>AWS ElastiCache Redis</td>
+                            <td>7.x</td>
+                            <td>Managed Redis cluster</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CDN</strong></td>
+                            <td>AWS CloudFront</td>
+                            <td>-</td>
+                            <td>Content delivery network</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Load Balancer</strong></td>
+                            <td>AWS Application Load Balancer</td>
+                            <td>-</td>
+                            <td>HTTP/HTTPS traffic distribution</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- QUARKUS ADVANTAGES -->
+            <section id="quarkus-advantages">
+                <h2>Why Quarkus Over Spring Boot?</h2>
+
+                <h3>Performance Comparison</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Quarkus (JVM Mode)</th>
+                            <th>Quarkus (Native)</th>
+                            <th>Spring Boot</th>
+                            <th>Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Startup Time</strong></td>
+                            <td>~1 second</td>
+                            <td>~0.05 seconds</td>
+                            <td>5-10 seconds</td>
+                            <td><span class="badge badge-success">Quarkus</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory (RSS)</strong></td>
+                            <td>~70-100MB</td>
+                            <td>~30-50MB</td>
+                            <td>~500MB-1GB</td>
+                            <td><span class="badge badge-success">Quarkus</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>First Response Time</strong></td>
+                            <td><50ms</td>
+                            <td><10ms</td>
+                            <td>2-5 seconds</td>
+                            <td><span class="badge badge-success">Quarkus</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Docker Image Size</strong></td>
+                            <td>~150MB</td>
+                            <td>~50MB</td>
+                            <td>~200-300MB</td>
+                            <td><span class="badge badge-success">Quarkus</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Throughput (req/sec)</strong></td>
+                            <td>~15,000+</td>
+                            <td>~20,000+</td>
+                            <td>~10,000</td>
+                            <td><span class="badge badge-success">Quarkus</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Developer Experience</strong></td>
+                            <td>Excellent (Live reload)</td>
+                            <td>Good</td>
+                            <td>Good</td>
+                            <td><span class="badge badge-success">Quarkus</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ecosystem Maturity</strong></td>
+                            <td>Growing (4+ years)</td>
+                            <td>Growing</td>
+                            <td>Mature (15+ years)</td>
+                            <td><span class="badge badge-primary">Spring Boot</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h3>🚀 Key Quarkus Advantages for BHC</h3>
+                    <ul>
+                        <li><strong>Lower AWS Costs:</strong> 70-85% less memory = smaller ECS tasks = lower costs</li>
+                        <li><strong>Faster Scaling:</strong> Sub-second cold starts enable true serverless-like scaling</li>
+                        <li><strong>Developer Productivity:</strong> Live reload without restarting (like Node.js hot reload)</li>
+                        <li><strong>Cloud-Native:</strong> Built for Kubernetes, Docker, and serverless from day 1</li>
+                        <li><strong>Reactive by Default:</strong> Non-blocking I/O for better throughput</li>
+                        <li><strong>Extension Ecosystem:</strong> 200+ Quarkus extensions for common tasks</li>
+                        <li><strong>Standards-Based:</strong> Uses Jakarta EE, MicroProfile standards (not proprietary)</li>
+                        <li><strong>GraalVM Native Option:</strong> Compile to native binary for extreme performance</li>
+                    </ul>
+                </div>
+
+                <h3>Quarkus vs Spring Boot Trade-offs</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Quarkus Advantage</th>
+                            <th>Spring Boot Advantage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Performance</td>
+                            <td>✅ 5-10x faster startup, 5-7x less memory</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Infrastructure Cost</td>
+                            <td>✅ 70-85% lower memory usage = lower ECS costs</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Developer Experience</td>
+                            <td>✅ Live reload, fast feedback loop</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Ecosystem Maturity</td>
+                            <td>-</td>
+                            <td>✅ 15+ years, massive community, more Stack Overflow answers</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise Adoption</td>
+                            <td>Growing (Red Hat backing)</td>
+                            <td>✅ Dominant in enterprise Java</td>
+                        </tr>
+                        <tr>
+                            <td>Developer Availability</td>
+                            <td>Smaller talent pool</td>
+                            <td>✅ Larger talent pool</td>
+                        </tr>
+                        <tr>
+                            <td>Learning Curve</td>
+                            <td>✅ Simpler (less magic, more explicit)</td>
+                            <td>Steeper (more abstractions)</td>
+                        </tr>
+                        <tr>
+                            <td>Native Compilation</td>
+                            <td>✅ First-class GraalVM support</td>
+                            <td>Experimental (Spring Native)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- AI IMPACT -->
+            <section id="ai-impact">
+                <h2>AI-Driven Development Cost Reduction</h2>
+
+                <div class="ai-box">
+                    <h3>🤖 AI Code Generation Impact (25-30% Reduction)</h3>
+                    <p>Modern AI coding assistants (GitHub Copilot, Claude, GPT-4) significantly accelerate Java development. Here's how:</p>
+
+                    <h4>AI-Assisted Tasks (High Impact)</h4>
+                    <ul>
+                        <li><strong>Entity Generation:</strong> 50-60% time savings
+                            <ul>
+                                <li>AI generates JPA entities from schema descriptions</li>
+                                <li>Auto-generates getters, setters, constructors, equals/hashCode</li>
+                                <li>Creates proper annotations (@Entity, @Table, @Column, etc.)</li>
+                            </ul>
+                        </li>
+                        <li><strong>DTO Mapping:</strong> 40-50% time savings
+                            <ul>
+                                <li>AI generates DTO classes and MapStruct mappers</li>
+                                <li>Auto-generates conversion logic between entities and DTOs</li>
+                            </ul>
+                        </li>
+                        <li><strong>CRUD Endpoints:</strong> 40-50% time savings
+                            <ul>
+                                <li>AI generates boilerplate REST controllers</li>
+                                <li>Standard CRUD operations with validation</li>
+                                <li>OpenAPI documentation generation</li>
+                            </ul>
+                        </li>
+                        <li><strong>Test Generation:</strong> 50-60% time savings
+                            <ul>
+                                <li>AI writes unit tests with mocked dependencies</li>
+                                <li>Generates integration tests for REST endpoints</li>
+                                <li>Creates test data builders and fixtures</li>
+                            </ul>
+                        </li>
+                        <li><strong>SQL Queries:</strong> 30-40% time savings
+                            <ul>
+                                <li>AI writes complex JPQL/Criteria queries</li>
+                                <li>Optimizes PostGIS spatial queries</li>
+                                <li>Generates database migration scripts</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>AI-Assisted Tasks (Medium Impact)</h4>
+                    <ul>
+                        <li><strong>Business Logic:</strong> 20-30% time savings (requires human review)</li>
+                        <li><strong>Configuration:</strong> 30-40% time savings (application.properties, Docker, CI/CD)</li>
+                        <li><strong>Documentation:</strong> 40-50% time savings (JavaDoc, API docs, README)</li>
+                        <li><strong>Refactoring:</strong> 25-35% time savings (code cleanup, pattern application)</li>
+                    </ul>
+
+                    <h4>Tasks Not Significantly Accelerated by AI</h4>
+                    <ul>
+                        <li>Architecture decisions (5-10% savings)</li>
+                        <li>Complex business logic (15-20% savings - requires careful review)</li>
+                        <li>Security implementation (10-15% savings - too critical to automate)</li>
+                        <li>Performance optimization (15-20% savings)</li>
+                        <li>Integration debugging (10-15% savings)</li>
+                    </ul>
+                </div>
+
+                <h3>AI Impact by Development Phase</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Traditional Hours</th>
+                            <th>AI Acceleration</th>
+                            <th>Hours with AI</th>
+                            <th>Savings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Phase 1: Foundation & Database</td>
+                            <td>100 hours</td>
+                            <td>35% (config, entities, migrations)</td>
+                            <td>65 hours</td>
+                            <td><span class="badge badge-ai">-35 hours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Phase 2: Authentication</td>
+                            <td>100 hours</td>
+                            <td>25% (DTOs, endpoints, tests)</td>
+                            <td>75 hours</td>
+                            <td><span class="badge badge-ai">-25 hours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Phase 3: Provider Portal</td>
+                            <td>180 hours</td>
+                            <td>30% (CRUD, services, tests)</td>
+                            <td>126 hours</td>
+                            <td><span class="badge badge-ai">-54 hours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Phase 4: Clinician Portal</td>
+                            <td>180 hours</td>
+                            <td>25% (search complexity, custom logic)</td>
+                            <td>135 hours</td>
+                            <td><span class="badge badge-ai">-45 hours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Phase 5: Admin Portal</td>
+                            <td>100 hours</td>
+                            <td>30% (standard CRUD, reports)</td>
+                            <td>70 hours</td>
+                            <td><span class="badge badge-ai">-30 hours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Phase 6: Testing & Deployment</td>
+                            <td>80 hours</td>
+                            <td>15% (critical path, human oversight needed)</td>
+                            <td>68 hours</td>
+                            <td><span class="badge badge-ai">-12 hours</span></td>
+                        </tr>
+                        <tr style="font-weight: bold; background: #fef3c7;">
+                            <td>TOTAL</td>
+                            <td>740 hours</td>
+                            <td>27% average</td>
+                            <td>539 hours</td>
+                            <td><span class="badge badge-ai">-201 hours</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ AI Considerations:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>AI savings assume experienced developers using tools effectively (not junior devs)</li>
+                        <li>All AI-generated code must be reviewed for correctness, security, and performance</li>
+                        <li>Complex business logic and security-critical code require more human oversight</li>
+                        <li>Time savings are based on industry benchmarks (GitHub Copilot studies show 25-40% improvement)</li>
+                        <li>Conservative estimate: 25% savings; Optimistic: 35% savings</li>
+                    </ul>
+                </div>
+
+                <h3>Recommended AI Tools for Java + Quarkus</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Cost</th>
+                            <th>Best For</th>
+                            <th>ROI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GitHub Copilot</strong></td>
+                            <td>$10-19/user/month</td>
+                            <td>Code completion, boilerplate generation</td>
+                            <td>Very High (25-30% time savings)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Claude 3.5 Sonnet/Opus</strong></td>
+                            <td>$20/month (Pro) or API usage</td>
+                            <td>Architecture, complex logic, refactoring</td>
+                            <td>High (15-20% on complex tasks)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GPT-4 Turbo</strong></td>
+                            <td>$20/month (Plus) or API usage</td>
+                            <td>Code review, debugging, documentation</td>
+                            <td>Medium-High (10-15% time savings)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tabnine</strong></td>
+                            <td>$12/user/month</td>
+                            <td>Code completion (alternative to Copilot)</td>
+                            <td>High (20-25% time savings)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>JetBrains AI Assistant</strong></td>
+                            <td>$10/user/month</td>
+                            <td>IntelliJ IDEA integration, refactoring</td>
+                            <td>Medium (10-15% for IntelliJ users)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Recommendation:</strong> GitHub Copilot ($19/month/dev) + Claude API ($50-100/month) = ~$300/month total for 3 devs. Cost: $300/month over 4 months = $1,200. Savings: 201 hours × $200/hour = $40,200. <strong>ROI: 3,350%</strong></p>
+            </section>
+
+            <!-- IMPLEMENTATION PLAN CONTINUES... -->
+            <section id="implementation-plan">
+                <h2>Detailed Implementation Plan</h2>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">15-17</span>
+                        <span class="stat-label">Weeks Total Duration</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">539</span>
+                        <span class="stat-label">Hours (With AI Assistance)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">740</span>
+                        <span class="stat-label">Hours (Without AI)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">3-4</span>
+                        <span class="stat-label">Senior Java Developers</span>
+                    </div>
+                </div>
+
+                <!-- PHASE 1 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 1: Foundation & Database</span>
+                    <span class="phase-duration">2 Weeks | 65 hours (AI) / 100 hours (No AI)</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>📦 1.1 Quarkus Project Setup (16 hours → 10 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Generate Quarkus project (code.quarkus.io) with extensions</span>
+                            <span class="task-duration">1h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Maven multi-module project structure (api, domain, infrastructure)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up application.properties for dev/staging/prod profiles</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Docker Compose (Postgres + PostGIS + Redis)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up Quarkus Dev Services (auto-configured test containers)</span>
+                            <span class="task-duration">1h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure code formatting (Google Java Style), linting</span>
+                            <span class="task-duration">1h (AI: -20%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🗄️ 1.2 Database & Entities (32 hours → 20 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS RDS PostgreSQL 15 with PostGIS extension</span>
+                            <span class="task-duration">4h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Hibernate ORM with Panache (simplified ORM)</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create 14 JPA entity classes with Hibernate Spatial for PostGIS</span>
+                            <span class="task-duration">12h (AI: -60%!) → 5h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up Flyway migrations for schema versioning</span>
+                            <span class="task-duration">4h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create database seed scripts (insurances, sample providers)</span>
+                            <span class="task-duration">5h (AI: -50%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure connection pooling (Agroal, max 20 connections)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Test PostGIS spatial queries (ST_Distance, ST_DWithin)</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔧 1.3 Redis Cache Setup (8 hours → 5 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS ElastiCache Redis cluster</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Quarkus Cache with Redis backend</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create cache utilities (annotations @CacheResult, @CacheInvalidate)</span>
+                            <span class="task-duration">1h (AI: -40%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🚀 1.4 CI/CD & Docker (12 hours → 8 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create Dockerfile (JVM mode) with multi-stage build</span>
+                            <span class="task-duration">2h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Optional: Create native Dockerfile with GraalVM (for later optimization)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">GitHub Actions workflow for testing and Docker build</span>
+                            <span class="task-duration">3h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS ECS Fargate cluster, task definitions, services</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📁 1.5 Frontend Setup (React + Vite) (12 hours → 8 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Initialize Vite + React + TypeScript project</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure Tailwind CSS + shadcn/ui components</span>
+                            <span class="task-duration">3h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up React Router, API client (Axios/Fetch), state management</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 1 Total:</strong> 65 hours with AI (35% savings from 100 hours)</p>
+
+                <!-- PHASE 2 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 2: Authentication & Registration</span>
+                    <span class="phase-duration">2 Weeks | 75 hours (AI) / 100 hours (No AI)</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔐 2.1 Quarkus Security + JWT (18 hours → 14 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Configure Quarkus JWT RBAC (SmallRye JWT)</span>
+                            <span class="task-duration">4h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement UserService for authentication (password hashing with BCrypt)</span>
+                            <span class="task-duration">4h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create JWT token generation and validation</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build RBAC annotations (@RolesAllowed("CLINICIAN", "PROVIDER_ADMIN"))</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create authentication endpoints (POST /auth/login, /auth/refresh)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📝 2.2 Clinician Registration (20 hours → 15 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create ClinicianDTO and validation annotations</span>
+                            <span class="task-duration">2h (AI: -50%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build registration service (email domain validation)</span>
+                            <span class="task-duration">4h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create REST endpoints (POST /auth/register-clinician)</span>
+                            <span class="task-duration">3h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Email verification flow (generate token, send email, verify)</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build React multi-step registration form</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🏥 2.3 Provider Registration (24 hours → 18 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create ProviderDTO with nested validation (facility info)</span>
+                            <span class="task-duration">3h (AI: -50%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build provider registration service with verification workflow</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Recovery.com/LegitScript API integration for verification</span>
+                            <span class="task-duration">4h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create REST endpoints (POST /auth/register-provider)</span>
+                            <span class="task-duration">3h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Email notifications (Quarkus Mailer with templates)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build React provider registration flow</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔑 2.4 Login & Session Management (18 hours → 13 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build React login page (matching mockup)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Password reset flow (generate token, send email, reset)</span>
+                            <span class="task-duration">4h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">JWT refresh token mechanism</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Role-based routing in React (redirect by user role)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 2 Total:</strong> 75 hours with AI (25% savings from 100 hours)</p>
+
+                <!-- PHASE 3 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 3: Provider Portal</span>
+                    <span class="phase-duration">3.5 Weeks | 126 hours (AI) / 180 hours (No AI)</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>📊 3.1 Provider Dashboard (20 hours → 15 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build ProviderStatsService (profile views, search appearances, ratings)</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create REST endpoint (GET /providers/{id}/stats)</span>
+                            <span class="task-duration">2h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build React dashboard with stat cards and bed availability widget</span>
+                            <span class="task-duration">6h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Recent activity feed component</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🛏️ 3.2 Bed Availability Management (32 hours → 22 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create BedAvailabilityService with CRUD operations</span>
+                            <span class="task-duration">5h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build REST endpoints (GET/PUT /providers/{id}/bed-availability)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement auto-save with optimistic locking (prevent concurrent updates)</span>
+                            <span class="task-duration">4h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Bed availability history log (audit table)</span>
+                            <span class="task-duration">3h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Status calculation logic (Available/Limited/Full)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Sync to Algolia search index on bed updates</span>
+                            <span class="task-duration">4h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Cache invalidation on updates</span>
+                            <span class="task-duration">1h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React bed management UI with +/- buttons</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔗 3.3 Magic Link System (40 hours → 28 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create MagicLinkService (token generation with SecureRandom)</span>
+                            <span class="task-duration">3h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build BedUpdateToken entity and repository</span>
+                            <span class="task-duration">2h (AI: -50%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement token expiration logic (48h OR on-use)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Quarkus Scheduler for daily magic link delivery (cron expression)</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Twilio SMS integration for magic link delivery</span>
+                            <span class="task-duration">4h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Email template creation (Quarkus Qute templates)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Public magic link update endpoint (no auth required)</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Rate limiting with Quarkus Rate Limiting extension</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">IP logging and audit trail</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Notification email on bed update via magic link</span>
+                            <span class="task-duration">2h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React public magic link update page</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>✏️ 3.4 Profile Management (32 hours → 22 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create comprehensive ProviderProfileDTO (20+ fields)</span>
+                            <span class="task-duration">3h (AI: -50%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build ProviderProfileService (CRUD operations)</span>
+                            <span class="task-duration">5h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Mapbox Geocoding API integration (address autocomplete)</span>
+                            <span class="task-duration">4h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (GET/PUT /providers/{id}/profile)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Profile completion calculation</span>
+                            <span class="task-duration">2h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Sync profile updates to Algolia index</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React profile editor form with multi-select components</span>
+                            <span class="task-duration">7h (AI: -25%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📁 3.5 Logo Upload (16 hours → 11 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up AWS S3 bucket with public access for logos</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure AWS SDK for Java (S3 client)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build file upload service with validation (size, type)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Image optimization (thumbnail generation with ImageMagick or Thumbnailator)</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React drag-and-drop upload with cropping (react-easy-crop)</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>⚙️ 3.6 Provider Settings (16 hours → 12 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create ProviderSettingsDTO and service</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Magic link preferences (schedule, delivery method)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Notification preferences</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (GET/PUT /providers/{id}/settings)</span>
+                            <span class="task-duration">2h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React settings page</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 3 Total:</strong> 126 hours with AI (30% savings from 180 hours)</p>
+
+                <!-- PHASE 4 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 4: Clinician Portal</span>
+                    <span class="phase-duration">3.5 Weeks | 135 hours (AI) / 180 hours (No AI)</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔍 4.1 Hybrid Search Implementation (40 hours → 30 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Set up Algolia account and create search index</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create AlgoliaSearchService (sync providers to index)</span>
+                            <span class="task-duration">5h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build PostGIS geospatial query repository (ST_DWithin for radius search)</span>
+                            <span class="task-duration">6h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement hybrid search service (PostGIS + Algolia combination)</span>
+                            <span class="task-duration">8h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Multi-filter logic (insurance, level of care, demographics)</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Faceted search (filter counts)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST search endpoint with pagination (GET /search)</span>
+                            <span class="task-duration">4h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Cache search results (Quarkus Cache, 2-min TTL)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📍 4.2 Search Results & Map (32 hours → 24 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Build React search results page layout</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Advanced filter sidebar with collapsible sections</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Provider result cards with bed availability display</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Mapbox GL JS integration with provider markers</span>
+                            <span class="task-duration">6h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Map marker clustering</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Map/list toggle and state sync</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">URL state management (shareable search links)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📄 4.3 Provider Detail Page (24 hours → 18 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create ProviderDetailDTO with all profile data</span>
+                            <span class="task-duration">2h (AI: -50%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoint (GET /providers/{id})</span>
+                            <span class="task-duration">2h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Profile view tracking (analytics)</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React provider detail page with hero section</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Tabbed content (Overview, Insurance, Contact, Reviews, Details)</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Mapbox map embed showing facility location</span>
+                            <span class="task-duration">2h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>💾 4.4 Saved Facilities (20 hours → 15 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create SavedProviderService and entity</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (POST/DELETE /saved-providers, GET /saved-providers)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Tags system (create, filter by tags)</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Personal notes (per facility)</span>
+                            <span class="task-duration">2h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React saved facilities page with search/filter</span>
+                            <span class="task-duration">5h (AI: -25%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📞 4.5 Contact Log System (24 hours → 18 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create ContactLogService and entity</span>
+                            <span class="task-duration">4h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (POST/GET/PUT /contact-logs)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Stats calculation (today, this week, this month)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Follow-up reminder system (scheduled notifications)</span>
+                            <span class="task-duration">4h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React contact log page with timeline view</span>
+                            <span class="task-duration">6h (AI: -25%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>⭐ 4.6 Review & Rating System (20 hours → 15 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create ReviewService and entity</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (POST/GET /reviews)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Average rating calculation and update on provider</span>
+                            <span class="task-duration">2h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React review submission form</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Review list display on provider detail page</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 4 Total:</strong> 135 hours with AI (25% savings from 180 hours)</p>
+
+                <!-- PHASE 5 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 5: Admin Portal</span>
+                    <span class="phase-duration">2 Weeks | 70 hours (AI) / 100 hours (No AI)</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>📈 5.1 Admin Dashboard (14 hours → 10 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create AdminStatsService (platform metrics)</span>
+                            <span class="task-duration">3h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoint (GET /admin/stats)</span>
+                            <span class="task-duration">2h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React admin dashboard with key metrics cards</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>✅ 5.2 Provider Verification Queue (24 hours → 17 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create VerificationService (approve/reject workflow)</span>
+                            <span class="task-duration">5h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (GET /admin/verifications, POST /admin/verifications/{id}/approve)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Email notifications on approval/rejection</span>
+                            <span class="task-duration">2h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Verification audit log</span>
+                            <span class="task-duration">2h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React verification queue with filterable table</span>
+                            <span class="task-duration">6h (AI: -25%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>👥 5.3 User Management (16 hours → 11 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create UserManagementService (CRUD operations)</span>
+                            <span class="task-duration">4h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (GET/PUT /admin/users)</span>
+                            <span class="task-duration">3h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React user management table with search/filters</span>
+                            <span class="task-duration">5h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>📊 5.4 Analytics Dashboard (16 hours → 11 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create AnalyticsService (search logs, user growth queries)</span>
+                            <span class="task-duration">4h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (GET /admin/analytics)</span>
+                            <span class="task-duration">2h (AI: -40%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React analytics page with Chart.js integration</span>
+                            <span class="task-duration">5h (AI: -30%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🛡️ 5.5 Review Moderation (8 hours → 6 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Create ModerationService (approve/reject/hide reviews)</span>
+                            <span class="task-duration">3h (AI: -30%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">REST endpoints (GET/PUT /admin/reviews)</span>
+                            <span class="task-duration">2h (AI: -35%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React moderation queue</span>
+                            <span class="task-duration">3h (AI: -25%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 5 Total:</strong> 70 hours with AI (30% savings from 100 hours)</p>
+
+                <!-- PHASE 6 -->
+                <div class="phase-header">
+                    <span class="phase-title">Phase 6: Testing, Optimization & Deployment</span>
+                    <span class="phase-duration">2 Weeks | 68 hours (AI) / 80 hours (No AI)</span>
+                </div>
+
+                <div class="task-category">
+                    <h4>🧪 6.1 Comprehensive Testing (28 hours → 24 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Write JUnit unit tests for service layer (target >80% coverage)</span>
+                            <span class="task-duration">10h (AI: -50% - AI excels at test generation!)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Create Quarkus Test integration tests for REST endpoints</span>
+                            <span class="task-duration">8h (AI: -50%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Build Playwright E2E tests for critical user flows</span>
+                            <span class="task-duration">6h (AI: -20%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>⚡ 6.2 Performance Optimization (18 hours → 16 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Database query optimization (EXPLAIN ANALYZE, index tuning)</span>
+                            <span class="task-duration">5h (AI: -10%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement caching strategy for all hot paths</span>
+                            <span class="task-duration">4h (AI: -15%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure CloudFront CDN for static assets</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">React bundle optimization (code splitting, lazy loading)</span>
+                            <span class="task-duration">3h (AI: -15%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🔒 6.3 Security Audit (10 hours → 8 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">OWASP security audit (SQL injection, XSS, CSRF testing)</span>
+                            <span class="task-duration">3h</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Implement security headers (CSP, HSTS, X-Frame-Options)</span>
+                            <span class="task-duration">2h (AI: -25%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Review authorization checks on all endpoints</span>
+                            <span class="task-duration">2h (AI: -20%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="task-category">
+                    <h4>🚀 6.4 Production Deployment (12 hours → 10 hours with AI)</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <span class="task-name">Configure production AWS infrastructure (ECS, RDS, ElastiCache)</span>
+                            <span class="task-duration">3h (AI: -15%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Set up Quarkus Micrometer metrics + CloudWatch dashboards</span>
+                            <span class="task-duration">3h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Configure auto-scaling policies and health checks</span>
+                            <span class="task-duration">2h (AI: -20%)</span>
+                        </li>
+                        <li class="task-item">
+                            <span class="task-name">Deploy to production with blue-green strategy</span>
+                            <span class="task-duration">2h</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p><strong>Phase 6 Total:</strong> 68 hours with AI (15% savings from 80 hours)</p>
+
+                <div class="alert alert-success">
+                    <strong>✅ Total Implementation Hours Summary:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Without AI:</strong> 740 hours</li>
+                        <li><strong>With AI:</strong> 539 hours</li>
+                        <li><strong>Time Savings:</strong> 201 hours (27% reduction)</li>
+                        <li><strong>Cost Savings:</strong> $35,175 - $45,225 (at $175-225/hour)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- COST SUMMARY -->
+            <section id="cost-summary">
+                <h2>Complete Cost Summary</h2>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">539</span>
+                        <span class="stat-label">Dev Hours (With AI)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">15-17</span>
+                        <span class="stat-label">Weeks to Complete</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">$119K-$153K</span>
+                        <span class="stat-label">Total Dev Cost (AI)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">27%</span>
+                        <span class="stat-label">Cost Reduction vs No AI</span>
+                    </div>
+                </div>
+
+                <div class="cost-breakdown">
+                    <h4>Development Costs - Java + Quarkus</h4>
+                    <div class="cost-item">
+                        <span>Labor WITHOUT AI (740 hours @ $175-225/hour)</span>
+                        <span>$129,500 - $166,500</span>
+                    </div>
+                    <div class="cost-item" style="background: #d1fae5; font-weight: 600;">
+                        <span>Labor WITH AI (539 hours @ $175-225/hour)</span>
+                        <span>$94,325 - $121,275</span>
+                    </div>
+                    <div class="cost-item" style="background: #ede9fe;">
+                        <span>AI Tooling Costs (4 months)</span>
+                        <span>$1,200</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Third-Party Services (Annual)</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Algolia (Search): $100-600/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Mapbox (Maps): $0-200/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Resend (Email): $20/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Twilio (SMS): $50-200/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Stripe (Payments): 2.9% + $0.30 per transaction</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• Sentry (Monitoring): $26/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none; font-weight: 600;">
+                        <span>Subtotal: ~$3,000-$10,000/year</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item">
+                        <span>AWS Infrastructure (Monthly Estimate)</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• RDS PostgreSQL (Multi-AZ): $150-300/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none; background: #d1fae5;">
+                        <span>• ECS Fargate (2-4 tasks, LOWER due to Quarkus): $60-250/month 🎉</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• ElastiCache Redis: $50-100/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none;">
+                        <span>• ALB + CloudFront + S3: $50-100/month</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="padding-left: 20px; border: none; font-weight: 600;">
+                        <span>Subtotal: $310-750/month ($3,720-$9,000/year)</span>
+                        <span></span>
+                    </div>
+                    <div class="cost-item" style="background: #fef3c7;">
+                        <span><strong>TOTAL YEAR 1 COST (with AI)</strong></span>
+                        <span><strong>$98K - $140K</strong></span>
+                    </div>
+                    <div class="cost-item" style="background: #fee2e2;">
+                        <span>WITHOUT AI (for comparison)</span>
+                        <span>$133K - $186K</span>
+                    </div>
+                    <div class="cost-item" style="background: #d1fae5; font-weight: 700; font-size: 1.2rem;">
+                        <span>💰 TOTAL SAVINGS WITH AI</span>
+                        <span>$35K - $46K (27%)</span>
+                    </div>
+                </div>
+
+                <h3>Cost Comparison: Quarkus vs Spring Boot vs Node.js</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stack</th>
+                            <th>Dev Hours (AI)</th>
+                            <th>Dev Cost (AI)</th>
+                            <th>AWS Monthly Cost</th>
+                            <th>Year 1 Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #d1fae5;">
+                            <td><strong>Node.js + Next.js</strong></td>
+                            <td>480 hours</td>
+                            <td>$84K - $108K</td>
+                            <td>$350-900</td>
+                            <td>$92K - $129K</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>Java + Quarkus (This Plan)</strong></td>
+                            <td>539 hours</td>
+                            <td>$94K - $121K</td>
+                            <td>$310-750 (lower ECS!)</td>
+                            <td>$98K - $140K</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Java + Spring Boot</strong></td>
+                            <td>555 hours (estimated with AI)</td>
+                            <td>$97K - $125K</td>
+                            <td>$450-1,100 (higher ECS)</td>
+                            <td>$105K - $151K</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h3>💡 Key Insights</h3>
+                    <ul>
+                        <li><strong>Quarkus saves 30-50% on AWS costs vs Spring Boot</strong> due to lower memory footprint (70MB vs 500MB+)</li>
+                        <li><strong>AI reduces development time by 27%</strong> (201 hours saved) across all tasks</li>
+                        <li><strong>Quarkus development is only 12% more expensive than Node.js</strong> but offers Java's type safety and enterprise patterns</li>
+                        <li><strong>Infrastructure costs are LOWER with Quarkus than Spring Boot</strong> ($310-750/mo vs $450-1,100/mo)</li>
+                        <li><strong>Best of both worlds:</strong> Enterprise Java + Cloud-native performance + AI acceleration</li>
+                    </ul>
+                </div>
+
+                <h3>When to Choose Java + Quarkus</h3>
+                <div class="ai-box">
+                    <h3>✅ Choose Quarkus If You Need:</h3>
+                    <ul>
+                        <li>✅ <strong>Enterprise Java with modern performance:</strong> Get Java's type safety and ecosystem WITHOUT the bloat</li>
+                        <li>✅ <strong>Lower cloud costs:</strong> 70-85% less memory = 30-50% lower AWS ECS costs vs Spring Boot</li>
+                        <li>✅ <strong>Fast startup:</strong> Sub-second cold starts (important for auto-scaling)</li>
+                        <li>✅ <strong>Existing Java team:</strong> Leverage Java expertise but with better DX than Spring Boot</li>
+                        <li>✅ <strong>Future-proof:</strong> Red Hat backing, growing community, active development</li>
+                        <li>✅ <strong>Native compilation option:</strong> GraalVM native for extreme performance when needed</li>
+                        <li>✅ <strong>Standards-based:</strong> Jakarta EE, MicroProfile (not vendor lock-in)</li>
+                    </ul>
+                </div>
+
+                <h3>Ongoing Costs (Year 2+)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cost Category</th>
+                            <th>Monthly</th>
+                            <th>Annual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AWS Infrastructure (Quarkus)</td>
+                            <td>$310-750</td>
+                            <td>$3,720-$9,000</td>
+                        </tr>
+                        <tr>
+                            <td>Third-Party Services</td>
+                            <td>$250-850</td>
+                            <td>$3,000-$10,000</td>
+                        </tr>
+                        <tr>
+                            <td>Maintenance & Support (20-40 hrs/month)</td>
+                            <td>$3,500-$9,000</td>
+                            <td>$42,000-$108,000</td>
+                        </tr>
+                        <tr style="font-weight: bold;">
+                            <td>TOTAL YEAR 2+</td>
+                            <td>$4,060-$10,600</td>
+                            <td>$48,720-$127,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- FINAL SECTION -->
+            <section>
+                <h2>Next Steps & Recommendations</h2>
+
+                <div class="highlight-box">
+                    <h3>🎯 Our Recommendation</h3>
+                    <p><strong>For BehavioralHealth Connect, we recommend:</strong></p>
+                    <ol>
+                        <li><strong>Primary Option:</strong> Node.js + Next.js (fastest, cheapest, best fit for your mockups)</li>
+                        <li><strong>Alternative #1:</strong> Java + Quarkus (if Java expertise exists, want enterprise patterns)</li>
+                        <li><strong>Alternative #2:</strong> Java + Spring Boot (if very mature ecosystem is critical)</li>
+                    </ol>
+                    <p><strong>Quarkus is best if:</strong> You want Java's benefits WITHOUT the traditional drawbacks (slow startup, high memory, verbose config).</p>
+                </div>
+
+                <h3>Decision Matrix</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Your Situation</th>
+                            <th>Best Choice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Need fastest time to market</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Have existing Java team</td>
+                            <td><span class="badge badge-primary">Quarkus</span></td>
+                        </tr>
+                        <tr>
+                            <td>Want lowest infrastructure costs</td>
+                            <td><span class="badge badge-primary">Quarkus</span> (tie with Node.js)</td>
+                        </tr>
+                        <tr>
+                            <td>Need maximum ecosystem maturity</td>
+                            <td><span class="badge badge-info">Spring Boot</span></td>
+                        </tr>
+                        <tr>
+                            <td>Want cloud-native from day 1</td>
+                            <td><span class="badge badge-primary">Quarkus</span> or <span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Prefer full-stack TypeScript</td>
+                            <td><span class="badge badge-success">Node.js</span></td>
+                        </tr>
+                        <tr>
+                            <td>Want native compilation option</td>
+                            <td><span class="badge badge-primary">Quarkus</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="text-align: center; margin: 60px 0 40px 0; padding: 40px; background: #fee2e2; border-radius: 8px; border: 2px solid #DC2626;">
+                    <h2 style="color: #DC2626; margin-bottom: 20px;">Ready to Build with Quarkus?</h2>
+                    <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 20px;">
+                        <strong>15-17 weeks to launch</strong> | <strong>$98K-$140K total Year 1</strong> | <strong>27% cost savings with AI</strong>
+                    </p>
+                    <p style="font-size: 0.9rem; color: #6b7280;">
+                        Contact us to discuss this implementation plan and finalize your technology stack decision.
+                    </p>
+                </div>
+
+                <div style="text-align: center; margin: 40px 0; padding: 20px; background: #f9fafb; border-radius: 8px;">
+                    <p style="font-size: 0.9rem; color: #6b7280;">
+                        Document Generated: January 17, 2026 | Prepared by: Claude (Opus 4.5)<br>
+                        Java 21 + Quarkus 3.x + AWS Infrastructure + AI-Assisted Development
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
