@@ -358,22 +358,22 @@
             <h2>📊 Executive Summary</h2>
             <div class="stat-grid">
                 <div class="stat-card">
-                    <span class="stat-value">704</span>
+                    <span class="stat-value">690</span>
                     <span class="stat-label">Traditional Hours</span>
-                    <div class="stat-sublabel">Dev: 544h • DevOps: 116h • QA: 44h</div>
+                    <div class="stat-sublabel">Dev: 544h • DevOps: 76h • QA: 70h</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">528</span>
+                    <span class="stat-value">517</span>
                     <span class="stat-label">AI-Assisted Hours</span>
-                    <div class="stat-sublabel">Dev: 408h • DevOps: 87h • QA: 33h</div>
+                    <div class="stat-sublabel">Dev: 408h • DevOps: 57h • QA: 52h</div>
                 </div>
                 <div class="stat-card highlight">
-                    <span class="stat-value">176</span>
+                    <span class="stat-value">173</span>
                     <span class="stat-label">Hours Saved</span>
                     <div class="stat-sublabel">25% reduction with AI tools</div>
                 </div>
                 <div class="stat-card highlight">
-                    <span class="stat-value">$9,515</span>
+                    <span class="stat-value">$9,245</span>
                     <span class="stat-label">Cost Savings</span>
                     <div class="stat-sublabel">Labor cost reduction (25%)</div>
                 </div>
@@ -410,32 +410,32 @@
                     <tr>
                         <td class="role-header">DevOps Engineer</td>
                         <td class="center">$55/hr</td>
-                        <td class="center">116</td>
-                        <td class="center">87</td>
-                        <td class="center savings">29</td>
-                        <td>$6,380</td>
-                        <td>$4,785</td>
-                        <td class="savings">$1,595 <span class="percentage">(25%)</span></td>
+                        <td class="center">76</td>
+                        <td class="center">57</td>
+                        <td class="center savings">19</td>
+                        <td>$4,180</td>
+                        <td>$3,135</td>
+                        <td class="savings">$1,045 <span class="percentage">(25%)</span></td>
                     </tr>
                     <tr>
                         <td class="role-header">QA Engineer</td>
                         <td class="center">$40/hr</td>
-                        <td class="center">44</td>
-                        <td class="center">33</td>
-                        <td class="center savings">11</td>
-                        <td>$1,760</td>
-                        <td>$1,320</td>
-                        <td class="savings">$440 <span class="percentage">(25%)</span></td>
+                        <td class="center">70</td>
+                        <td class="center">52</td>
+                        <td class="center savings">18</td>
+                        <td>$2,800</td>
+                        <td>$2,080</td>
+                        <td class="savings">$720 <span class="percentage">(26%)</span></td>
                     </tr>
                     <tr class="total-row">
                         <td>Total Labor</td>
                         <td class="center">—</td>
-                        <td class="center">704</td>
-                        <td class="center">528</td>
-                        <td class="center savings">176</td>
-                        <td>$38,060</td>
-                        <td>$28,545</td>
-                        <td class="savings">$9,515 <span class="percentage">(25%)</span></td>
+                        <td class="center">690</td>
+                        <td class="center">517</td>
+                        <td class="center savings">173</td>
+                        <td>$36,900</td>
+                        <td>$27,655</td>
+                        <td class="savings">$9,245 <span class="percentage">(25%)</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -704,14 +704,14 @@
         <section class="section">
             <h2>⚙️ DevOps & Infrastructure Effort</h2>
             <p style="color: #6b7280; margin-bottom: 1.5rem;">
-                <strong>Source:</strong> BHC_Implementation_Analysis_and_Estimates.html<br>
-                <strong>Total DevOps Hours:</strong> 116 hours (Traditional) → 87 hours (AI-Assisted)
+                <strong>Source:</strong> BHC_Implementation_Analysis_and_Estimates.html (adjusted based on project needs)<br>
+                <strong>Total DevOps Hours:</strong> 76 hours (Traditional) → 57 hours (AI-Assisted)
             </p>
 
             <div class="phase-card additional-effort">
                 <div class="phase-header-row">
                     <span class="phase-title">DevOps Tasks</span>
-                    <span class="phase-hours">116 hours → 87 hours (AI)</span>
+                    <span class="phase-hours">76 hours → 57 hours (AI)</span>
                 </div>
                 <ul class="task-list">
                     <li class="task-item">
@@ -723,20 +723,6 @@
                     </li>
                     <li class="task-item">
                         <div class="task-info">
-                            <span class="task-name">Database Setup</span>
-                            <span class="task-detail">PostgreSQL + PostGIS configuration, RDS setup, connection pooling, migrations</span>
-                        </div>
-                        <span class="task-hours">28h → 21h</span>
-                    </li>
-                    <li class="task-item">
-                        <div class="task-info">
-                            <span class="task-name">Redis & Caching Setup</span>
-                            <span class="task-detail">ElastiCache configuration, caching strategies, session management</span>
-                        </div>
-                        <span class="task-hours">12h → 9h</span>
-                    </li>
-                    <li class="task-item">
-                        <div class="task-info">
                             <span class="task-name">CI/CD Pipeline</span>
                             <span class="task-detail">GitHub Actions workflows, Docker configuration, automated deployments</span>
                         </div>
@@ -744,15 +730,15 @@
                     </li>
                     <li class="task-item">
                         <div class="task-info">
-                            <span class="task-name">Performance Optimization</span>
-                            <span class="task-detail">Database query optimization, caching tuning, load testing</span>
+                            <span class="task-name">Production Deployment</span>
+                            <span class="task-detail">ECS Fargate setup, ALB/CloudFront configuration, SSL/TLS, monitoring, DNS setup</span>
                         </div>
                         <span class="task-hours">20h → 15h</span>
                     </li>
                     <li class="task-item">
                         <div class="task-info">
-                            <span class="task-name">Production Deployment</span>
-                            <span class="task-detail">ECS Fargate setup, ALB/CloudFront configuration, SSL/TLS, monitoring</span>
+                            <span class="task-name">AWS Infrastructure Configuration</span>
+                            <span class="task-detail">S3 bucket setup, CloudFront CDN, security groups, IAM roles and policies</span>
                         </div>
                         <span class="task-hours">16h → 12h</span>
                     </li>
@@ -764,29 +750,57 @@
         <section class="section">
             <h2>🧪 Quality Assurance Effort</h2>
             <p style="color: #6b7280; margin-bottom: 1.5rem;">
-                <strong>Source:</strong> BHC_Implementation_Analysis_and_Estimates.html<br>
-                <strong>Total QA Hours:</strong> 44 hours (Traditional) → 33 hours (AI-Assisted)
+                <strong>Source:</strong> BHC_Implementation_Analysis_and_Estimates.html (enhanced for comprehensive testing)<br>
+                <strong>Total QA Hours:</strong> 70 hours (Traditional) → 52 hours (AI-Assisted)
             </p>
 
             <div class="phase-card additional-effort">
                 <div class="phase-header-row">
                     <span class="phase-title">QA & Testing Tasks</span>
-                    <span class="phase-hours">44 hours → 33 hours (AI)</span>
+                    <span class="phase-hours">70 hours → 52 hours (AI)</span>
                 </div>
                 <ul class="task-list">
                     <li class="task-item">
                         <div class="task-info">
-                            <span class="task-name">Comprehensive Testing</span>
-                            <span class="task-detail">Unit tests (JUnit/Jest), Integration tests, E2E tests (Playwright), API testing (Postman/REST Assured), >80% code coverage</span>
+                            <span class="task-name">Unit & Integration Testing</span>
+                            <span class="task-detail">Backend unit tests (JUnit/Jest), Service layer integration tests, Repository tests, >80% code coverage</span>
                         </div>
-                        <span class="task-hours">32h → 24h</span>
+                        <span class="task-hours">16h → 12h</span>
+                    </li>
+                    <li class="task-item">
+                        <div class="task-info">
+                            <span class="task-name">API Testing</span>
+                            <span class="task-detail">REST API endpoint testing (Postman/REST Assured), Request/response validation, Error handling tests, Authentication flows</span>
+                        </div>
+                        <span class="task-hours">12h → 9h</span>
+                    </li>
+                    <li class="task-item">
+                        <div class="task-info">
+                            <span class="task-name">UI/Frontend Testing</span>
+                            <span class="task-detail">Component testing (React Testing Library), UI interaction tests, Form validation testing, Responsive design testing</span>
+                        </div>
+                        <span class="task-hours">12h → 9h</span>
+                    </li>
+                    <li class="task-item">
+                        <div class="task-info">
+                            <span class="task-name">End-to-End Testing</span>
+                            <span class="task-detail">E2E tests (Playwright/Cypress), User journey testing, Cross-browser testing, Mobile responsiveness testing</span>
+                        </div>
+                        <span class="task-hours">12h → 9h</span>
+                    </li>
+                    <li class="task-item">
+                        <div class="task-info">
+                            <span class="task-name">Performance Testing</span>
+                            <span class="task-detail">Load testing, Database query optimization, API response time testing, Frontend bundle size optimization</span>
+                        </div>
+                        <span class="task-hours">10h → 7h</span>
                     </li>
                     <li class="task-item">
                         <div class="task-info">
                             <span class="task-name">Security Audit & Hardening</span>
-                            <span class="task-detail">OWASP Top 10 review, dependency vulnerability scanning, penetration testing, security best practices implementation</span>
+                            <span class="task-detail">OWASP Top 10 review, Dependency vulnerability scanning, Authentication/authorization testing, Input validation testing</span>
                         </div>
-                        <span class="task-hours">12h → 9h</span>
+                        <span class="task-hours">8h → 6h</span>
                     </li>
                 </ul>
             </div>
@@ -855,30 +869,30 @@
                     </tr>
                     <tr style="background: #fef3c7;">
                         <td class="role-header">DevOps & Infrastructure</td>
-                        <td class="center">116</td>
-                        <td class="center">87</td>
-                        <td class="center savings">29</td>
-                        <td>$6,380</td>
-                        <td>$4,785</td>
-                        <td class="savings">$1,595</td>
+                        <td class="center">76</td>
+                        <td class="center">57</td>
+                        <td class="center savings">19</td>
+                        <td>$4,180</td>
+                        <td>$3,135</td>
+                        <td class="savings">$1,045</td>
                     </tr>
                     <tr style="background: #fef3c7;">
                         <td class="role-header">Quality Assurance & Testing</td>
-                        <td class="center">44</td>
-                        <td class="center">33</td>
-                        <td class="center savings">11</td>
-                        <td>$1,760</td>
-                        <td>$1,320</td>
-                        <td class="savings">$440</td>
+                        <td class="center">70</td>
+                        <td class="center">52</td>
+                        <td class="center savings">18</td>
+                        <td>$2,800</td>
+                        <td>$2,080</td>
+                        <td class="savings">$720</td>
                     </tr>
                     <tr class="total-row">
                         <td>Total Project Hours</td>
-                        <td class="center">704</td>
-                        <td class="center">528</td>
-                        <td class="center savings">176</td>
-                        <td>$38,060</td>
-                        <td>$28,545</td>
-                        <td class="savings">$9,515 <span class="percentage">(25%)</span></td>
+                        <td class="center">690</td>
+                        <td class="center">517</td>
+                        <td class="center savings">173</td>
+                        <td>$36,900</td>
+                        <td>$27,655</td>
+                        <td class="savings">$9,245 <span class="percentage">(25%)</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -984,9 +998,9 @@
                 <tbody>
                     <tr>
                         <td class="role-header">Development Labor</td>
-                        <td>$38,060</td>
-                        <td>$28,545</td>
-                        <td class="savings">-$9,515 (25%)</td>
+                        <td>$36,900</td>
+                        <td>$27,655</td>
+                        <td class="savings">-$9,245 (25%)</td>
                     </tr>
                     <tr>
                         <td class="role-header">Infrastructure (6 months avg.)</td>
@@ -1008,9 +1022,9 @@
                     </tr>
                     <tr class="total-row">
                         <td>Total Project Cost (Development + 6mo Infrastructure)</td>
-                        <td>$41,987</td>
-                        <td>$33,444</td>
-                        <td class="savings">-$8,543 (20.3%)</td>
+                        <td>$40,827</td>
+                        <td>$32,554</td>
+                        <td class="savings">-$8,273 (20.3%)</td>
                     </tr>
                 </tbody>
             </table>
@@ -1021,19 +1035,19 @@
             <h2>📊 Effort Distribution by Role</h2>
             <div class="stat-grid">
                 <div class="stat-card">
-                    <span class="stat-value">77.3%</span>
+                    <span class="stat-value">78.8%</span>
                     <span class="stat-label">Development</span>
-                    <div class="stat-sublabel">544 hours of 704 total</div>
+                    <div class="stat-sublabel">544 hours of 690 total</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">16.5%</span>
+                    <span class="stat-value">11.0%</span>
                     <span class="stat-label">DevOps</span>
-                    <div class="stat-sublabel">116 hours of 704 total</div>
+                    <div class="stat-sublabel">76 hours of 690 total</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">6.2%</span>
+                    <span class="stat-value">10.1%</span>
                     <span class="stat-label">QA</span>
-                    <div class="stat-sublabel">44 hours of 704 total</div>
+                    <div class="stat-sublabel">70 hours of 690 total</div>
                 </div>
             </div>
         </section>
@@ -1045,7 +1059,8 @@
                 <li><strong>AI Development Assumptions:</strong> 25% productivity improvement with GitHub Copilot, Claude API, and JetBrains AI Assistant for code generation, debugging, and test writing</li>
                 <li><strong>Team Composition:</strong> 2-3 developers + 1 DevOps engineer (part-time) + 1 QA engineer (part-time)</li>
                 <li><strong>Development Effort Source:</strong> TaskList2.xlsx provided by Sonu Kurien (Developer) - 544 hours of pure development work</li>
-                <li><strong>DevOps & QA Source:</strong> Extracted from BHC_Implementation_Analysis_and_Estimates.html (Node.js option baseline)</li>
+                <li><strong>DevOps Scope:</strong> Adjusted from BHC analysis baseline - excluded database setup and Redis caching (handled within development effort). Focused on CI/CD, deployment, and AWS infrastructure configuration</li>
+                <li><strong>QA Scope:</strong> Enhanced from BHC analysis baseline - comprehensive testing including unit/integration, API, UI/frontend, E2E, performance, and security testing (70 hours total)</li>
                 <li><strong>Pricing Rates:</strong> Developer @ $55/hr, DevOps Engineer @ $55/hr, QA Engineer @ $40/hr</li>
                 <li><strong>Infrastructure Costs:</strong> Based on AWS pricing for small-to-medium production deployment with high availability</li>
                 <li><strong>Project Timeline:</strong> Estimated 4-6 months with 2-3 person team (dates excluded from this estimate per request)</li>
