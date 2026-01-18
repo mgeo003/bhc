@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BHC Connect - Enhanced Development Task List</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>BHC Connect - Sonu's Implementation Plan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,500 +12,1558 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #0891b2;
-            --primary-dark: #0e7490;
-            --secondary: #06b6d4;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: var(--gray-800);
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
-            min-height: 100vh;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: drift 20s linear infinite;
-        }
-
-        @keyframes drift {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-        }
-
-        .nav {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 3px solid var(--primary);
-        }
-
-        .nav a {
-            color: var(--gray-700);
-            text-decoration: none;
-            font-weight: 500;
-            margin-right: 2rem;
-            transition: color 0.2s;
-        }
-
-        .nav a:hover {
-            color: var(--primary);
+            color: #1f2937;
+            background: #f9fafb;
+            padding: 20px;
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
         }
 
-        /* Stats Dashboard */
-        .stats-dashboard {
+        header {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: white;
+            opacity: 0.95;
+        }
+
+        .meta-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            gap: 20px;
+            padding: 30px 40px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border-top: 4px solid var(--primary);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--gray-600);
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        /* Filters */
-        .filters {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        .meta-item {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: center;
+            flex-direction: column;
         }
 
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border: 2px solid var(--gray-200);
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 200px;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--gray-200);
-            border-radius: 8px;
-            font-size: 0.95rem;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
-        }
-
-        /* Phase Sections */
-        .phase-section {
-            margin: 3rem 0;
-        }
-
-        .phase-header-card {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .phase-header-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-
-        .phase-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .phase-meta {
-            display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .phase-meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Task Cards Grid */
-        .tasks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .task-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border-left: 4px solid var(--primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .task-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.3s;
-        }
-
-        .task-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-        }
-
-        .task-card:hover::before {
-            width: 6px;
-        }
-
-        .task-card.backend {
-            border-left-color: #3b82f6;
-        }
-
-        .task-card.ui {
-            border-left-color: #ec4899;
-        }
-
-        .task-card.both {
-            border-left-color: var(--success);
-        }
-
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .task-title {
-            font-size: 1.1rem;
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #6b7280;
             font-weight: 600;
-            color: var(--gray-900);
-            flex: 1;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
         }
 
-        .task-badges {
+        .meta-value {
+            font-size: 1rem;
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        nav {
+            background: #fff;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
             display: flex;
-            gap: 0.5rem;
             flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #0891b2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #0e7490;
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #0891b2;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #0891b2;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #1f2937;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: #374151;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #4b5563;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #4b5563;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #ecfeff;
+            border-color: #0891b2;
+            color: #0e7490;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #059669;
+            color: #065f46;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        thead {
+            background: #f3f4f6;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+            border-bottom: 2px solid #d1d5db;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        tr:hover {
+            background: #f9fafb;
         }
 
         .badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-primary { background: #cffafe; color: #0e7490; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: #e0f2fe; color: #075985; }
+        .badge-backend { background: #dbeafe; color: #1e40af; }
+        .badge-ui { background: #fce7f3; color: #9f1239; }
+        .badge-dev { background: #dbeafe; color: #1e40af; }
+        .badge-infra { background: #fef3c7; color: #92400e; }
+        .badge-qa { background: #d1fae5; color: #065f46; }
+
+        .category-breakdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .category-item {
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: 6px;
+        }
+
+        .category-item.dev { background: #dbeafe; border: 2px solid #3b82f6; }
+        .category-item.infra { background: #fef3c7; border: 2px solid #f59e0b; }
+        .category-item.qa { background: #d1fae5; border: 2px solid #10b981; }
+        .category-item.total { background: #cffafe; border: 2px solid #0891b2; }
+
+        .category-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .category-item.dev .category-value { color: #1e40af; }
+        .category-item.infra .category-value { color: #92400e; }
+        .category-item.qa .category-value { color: #065f46; }
+        .category-item.total .category-value { color: #0891b2; }
+
+        .category-label {
             font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 4px solid #0891b2;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0891b2;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .task-category {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .task-category h4 {
+            margin-top: 0;
+            color: #0891b2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .task-item {
+            background: white;
+            border-left: 4px solid #0891b2;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .task-item.backend { border-left-color: #3b82f6; }
+        .task-item.ui { border-left-color: #ec4899; }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-name {
+            font-weight: 500;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .task-detail {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-duration {
+            background: #0891b2;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
             font-weight: 600;
             white-space: nowrap;
         }
 
-        .badge-team-backend {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .badge-team-ui {
-            background: #fce7f3;
-            color: #9f1239;
-        }
-
-        .badge-status-open {
+        .task-notes {
+            font-size: 0.8rem;
+            color: #f59e0b;
+            font-style: italic;
+            margin-top: 4px;
+            padding: 4px 8px;
             background: #fef3c7;
-            color: #92400e;
+            border-radius: 4px;
+            display: inline-block;
         }
 
-        .badge-duration {
-            background: var(--gray-100);
-            color: var(--gray-700);
-            font-weight: 500;
-        }
-
-        .task-subtask {
-            font-size: 0.95rem;
-            color: var(--gray-700);
-            margin: 0.5rem 0;
-            font-weight: 500;
-        }
-
-        .task-detail {
-            font-size: 0.9rem;
-            color: var(--gray-600);
-            margin: 0.75rem 0;
-            line-height: 1.6;
-        }
-
-        .task-footer {
+        .phase-header {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-200);
         }
 
-        .task-date {
-            font-size: 0.85rem;
-            color: var(--gray-600);
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        .task-notes {
-            font-size: 0.85rem;
-            color: var(--warning);
-            font-style: italic;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            background: #fef3c7;
+        .phase-duration {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
             border-radius: 6px;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--gray-600);
-        }
-
-        .empty-state svg {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1rem;
-            opacity: 0.5;
-        }
-
-        /* Timeline View Toggle */
-        .view-toggle {
-            background: white;
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 1rem 0;
-            display: flex;
-            gap: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .view-btn {
-            padding: 0.5rem 1rem;
-            border: 2px solid var(--gray-200);
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .view-btn.active {
-            background: var(--primary);
+        .summary-box {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
-            border-color: var(--primary);
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: center;
         }
 
-        /* Timeline View */
-        .timeline-view {
-            display: none;
+        .summary-box h3 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.5rem;
         }
 
-        .timeline-view.active {
-            display: block;
+        .summary-box p {
+            color: white;
+            opacity: 0.95;
         }
 
-        .timeline {
-            position: relative;
-            padding: 2rem 0;
+        .highlight-box {
+            background: #ecfeff;
+            border: 2px solid #0891b2;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
         }
 
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 2rem;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--primary);
+        .highlight-box h3 {
+            color: #0e7490;
+            margin-top: 0;
         }
 
-        .timeline-item {
-            position: relative;
-            padding-left: 5rem;
-            margin-bottom: 2rem;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 1.25rem;
-            top: 0.5rem;
-            width: 1.5rem;
-            height: 1.5rem;
-            background: var(--primary);
-            border: 4px solid white;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .timeline-content {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            nav {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
         }
 
         @media (max-width: 768px) {
-            .tasks-grid {
-                grid-template-columns: 1fr;
+            .category-breakdown {
+                grid-template-columns: repeat(2, 1fr);
             }
-
-            .filters {
+            .phase-header {
                 flex-direction: column;
+                gap: 10px;
+                text-align: center;
             }
-
-            .search-box {
-                width: 100%;
-            }
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: var(--gray-200);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--success);
-            transition: width 0.3s;
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sonu's Implementation Plan</h1>
+            <p>BehavioralHealth Connect - Development Roadmap & Task Breakdown</p>
+        </header>
+
+        <div class="meta-info">
+            <div class="meta-item">
+                <span class="meta-label">Plan Author</span>
+                <span class="meta-value">Sonu</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Total Duration</span>
+                <span class="meta-value">~75 Days</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Phases</span>
+                <span class="meta-value">4 Development Phases</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Target</span>
+                <span class="meta-value">Production Launch</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="../../index.html">🏠 Hub</a></li>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#phase1">Phase 1: Authentication</a></li>
+                <li><a href="#phase2">Phase 2: Provider</a></li>
+                <li><a href="#phase3">Phase 3: Clinician</a></li>
+                <li><a href="#phase4">Phase 4: Admin</a></li>
+                <li><a href="#summary">Summary</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- OVERVIEW -->
+            <section id="overview">
+                <h2>Executive Overview</h2>
+
+                <div class="alert alert-info">
+                    <strong>Implementation Plan by Sonu:</strong> This document provides a comprehensive development roadmap for BehavioralHealth Connect, organized into 4 major phases with detailed task breakdowns by team (Backend/UI) and estimated durations.
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">4</span>
+                        <span class="stat-label">Development Phases</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">75</span>
+                        <span class="stat-label">Total Days</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">68</span>
+                        <span class="stat-label">Total Tasks</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">2</span>
+                        <span class="stat-label">Team Tracks</span>
+                    </div>
+                </div>
+
+                <h3>Phase Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Focus Area</th>
+                            <th>Duration</th>
+                            <th>Key Deliverables</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Phase 1</strong></td>
+                            <td>Authentication & User Management</td>
+                            <td>~14 days</td>
+                            <td>Login, Registration (Clinician & Provider), Email Verification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 2</strong></td>
+                            <td>Provider Experience</td>
+                            <td>~28 days</td>
+                            <td>Dashboard, Bed Management, Profile, Settings, Magic Links</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 3</strong></td>
+                            <td>Clinician Experience</td>
+                            <td>~22 days</td>
+                            <td>Search, Provider Details, Saved Facilities, Contact Logs, Reviews</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 4</strong></td>
+                            <td>Admin Experience</td>
+                            <td>~17 days</td>
+                            <td>Admin Dashboard, Provider & User Management, Analytics</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Team Distribution</h3>
+                <div class="category-breakdown">
+                    <div class="category-item dev">
+                        <span class="category-value">Backend</span>
+                        <span class="category-label">API & Services</span>
+                    </div>
+                    <div class="category-item" style="background: #fce7f3; border: 2px solid #ec4899;">
+                        <span class="category-value" style="color: #9f1239;">UI</span>
+                        <span class="category-label">Frontend Pages</span>
+                    </div>
+                    <div class="category-item infra">
+                        <span class="category-value">Setup</span>
+                        <span class="category-label">Infrastructure</span>
+                    </div>
+                    <div class="category-item total">
+                        <span class="category-value">68</span>
+                        <span class="category-label">Total Tasks</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHASE 1: AUTHENTICATION -->
+            <section id="phase1">
+                <h2>Phase 1: Authentication & User Management</h2>
+
+                <div class="phase-header">
+                    <span class="phase-title">Phase 1: Authentication & User Management</span>
+                    <span class="phase-duration">~14 Days</span>
+                </div>
+
+                <div class="category-breakdown">
+                    <div class="category-item dev">
+                        <span class="category-value">8</span>
+                        <span class="category-label">Backend Tasks</span>
+                    </div>
+                    <div class="category-item" style="background: #fce7f3; border: 2px solid #ec4899;">
+                        <span class="category-value" style="color: #9f1239;">3</span>
+                        <span class="category-label">UI Tasks</span>
+                    </div>
+                    <div class="category-item infra">
+                        <span class="category-value">1</span>
+                        <span class="category-label">Setup Tasks</span>
+                    </div>
+                    <div class="category-item total">
+                        <span class="category-value">14d</span>
+                        <span class="category-label">Duration</span>
+                    </div>
+                </div>
+
+                <!-- Initial Setup -->
+                <div class="task-category">
+                    <h4>🔧 1.1 Initial Setup</h4>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <div class="task-content">
+                                <div class="task-name">Frontend, Backend, Database & Docker Setup</div>
+                                <div class="task-detail">Complete development environment configuration</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="task-duration">5 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Authentication -->
+                <div class="task-category">
+                    <h4>🔐 1.2 Authentication System</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Universal Login API</div>
+                                <div class="task-detail">JWT issuance & refresh, Password hashing and policy, Session expiration rules, Logout & token revocation, Google sign in, Forgot password</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">1 day</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Sign Up API</div>
+                                <div class="task-detail">User registration endpoint with validation</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">1 day</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Login Page</div>
+                                <div class="task-detail">Design and implement login page UI</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Clinician Registration -->
+                <div class="task-category">
+                    <h4>👤 1.3 Clinician Registration Flow</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Account Creation API</div>
+                                <div class="task-detail">Clinician account registration endpoint</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">2 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Account Creation Page</div>
+                                <div class="task-detail">Include 3 steps registration wizard</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-content">
+                                <div class="task-name">Email Verification Service</div>
+                                <div class="task-detail">Send and verify email verification tokens</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Provider Registration -->
+                <div class="task-category">
+                    <h4>🏥 1.4 Provider Registration Flow</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Facility Account Creation API</div>
+                                <div class="task-detail">Provider/facility registration endpoint</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">2 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Facility Account Creation Page</div>
+                                <div class="task-detail">Provider registration form UI</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">External Verification Integration</div>
+                                <div class="task-detail">Recovery.com or LegitScript integration</div>
+                                <div class="task-notes">📝 Need more detail on this</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Pending Verification State</div>
+                                <div class="task-detail">Handle provider verification status workflow</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Admin Approval Workflow</div>
+                                <div class="task-detail">Manual approval process for providers</div>
+                                <div class="task-notes">📝 Manually approving initially</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>Phase 1 Complete:</strong> Authentication system with login, clinician and provider registration, email verification, and admin approval workflow.
+                </div>
+            </section>
+
+            <!-- PHASE 2: PROVIDER EXPERIENCE -->
+            <section id="phase2">
+                <h2>Phase 2: Provider Experience</h2>
+
+                <div class="phase-header">
+                    <span class="phase-title">Phase 2: Provider Experience</span>
+                    <span class="phase-duration">~28 Days</span>
+                </div>
+
+                <div class="category-breakdown">
+                    <div class="category-item dev">
+                        <span class="category-value">12</span>
+                        <span class="category-label">Backend Tasks</span>
+                    </div>
+                    <div class="category-item" style="background: #fce7f3; border: 2px solid #ec4899;">
+                        <span class="category-value" style="color: #9f1239;">5</span>
+                        <span class="category-label">UI Tasks</span>
+                    </div>
+                    <div class="category-item infra">
+                        <span class="category-value">1</span>
+                        <span class="category-label">Cron Jobs</span>
+                    </div>
+                    <div class="category-item total">
+                        <span class="category-value">28d</span>
+                        <span class="category-label">Duration</span>
+                    </div>
+                </div>
+
+                <!-- Provider Dashboard -->
+                <div class="task-category">
+                    <h4>📊 2.1 Provider Dashboard</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Analytic Data API</div>
+                                <div class="task-detail">Dashboard metrics and statistics endpoint</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get Bed Availability API</div>
+                                <div class="task-detail">Retrieve current bed availability status</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Update Bed Availability API</div>
+                                <div class="task-detail">Update bed counts and availability status</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Update/Edit Profile API</div>
+                                <div class="task-detail">Provider profile update endpoint</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get Profile API</div>
+                                <div class="task-detail">Retrieve provider profile data</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Activity API</div>
+                                <div class="task-detail">Provider activity feed and logging</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Review API</div>
+                                <div class="task-detail">Get reviews for provider</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Update Review API</div>
+                                <div class="task-detail">Provider response to reviews</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Dashboard Page Creation and Integration</div>
+                                <div class="task-detail">Complete provider dashboard UI with all widgets</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Edit Profile -->
+                <div class="task-category">
+                    <h4>✏️ 2.2 Edit Profile</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Save Profile API</div>
+                                <div class="task-detail">Persist provider profile changes</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">2 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Profile Page Creation and Integration</div>
+                                <div class="task-detail">Complete profile editor with all fields</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Provider Settings -->
+                <div class="task-category">
+                    <h4>⚙️ 2.3 Provider Settings</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get Account Setting API</div>
+                                <div class="task-detail">Retrieve provider account settings</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Update Account Setting API</div>
+                                <div class="task-detail">Update account preferences</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Subscription and Billing</div>
+                                <div class="task-detail">Subscription management functionality</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Account Setting Page Creation and Integration</div>
+                                <div class="task-detail">Complete settings page UI</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                                <span class="task-duration">4 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Magic Link System -->
+                <div class="task-category">
+                    <h4>🔗 2.4 Magic Link System</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Magic Link Provider API</div>
+                                <div class="task-detail">Scheduled delivery via cron job for daily bed update reminders</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">UI Page to Update Beds</div>
+                                <div class="task-detail">Public magic link page for bed updates</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                                <span class="task-duration">2 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>Phase 2 Complete:</strong> Full provider experience including dashboard, profile management, settings, and magic link bed update system.
+                </div>
+            </section>
+
+            <!-- PHASE 3: CLINICIAN EXPERIENCE -->
+            <section id="phase3">
+                <h2>Phase 3: Clinician Experience</h2>
+
+                <div class="phase-header">
+                    <span class="phase-title">Phase 3: Clinician Experience</span>
+                    <span class="phase-duration">~22 Days</span>
+                </div>
+
+                <div class="category-breakdown">
+                    <div class="category-item dev">
+                        <span class="category-value">15</span>
+                        <span class="category-label">Backend Tasks</span>
+                    </div>
+                    <div class="category-item" style="background: #fce7f3; border: 2px solid #ec4899;">
+                        <span class="category-value" style="color: #9f1239;">7</span>
+                        <span class="category-label">UI Tasks</span>
+                    </div>
+                    <div class="category-item infra">
+                        <span class="category-value">0</span>
+                        <span class="category-label">Infra Tasks</span>
+                    </div>
+                    <div class="category-item total">
+                        <span class="category-value">22d</span>
+                        <span class="category-label">Duration</span>
+                    </div>
+                </div>
+
+                <!-- Clinician Dashboard -->
+                <div class="task-category">
+                    <h4>📊 3.1 Clinician Dashboard</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Recently Viewed Providers API</div>
+                                <div class="task-detail">Track and retrieve recently viewed facilities</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Saved Searches API</div>
+                                <div class="task-detail">Save and retrieve search criteria</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Notifications API</div>
+                                <div class="task-detail">Clinician notification management</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Activity API</div>
+                                <div class="task-detail">Clinician activity logging and retrieval</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Dashboard Page Creation and Integration</div>
+                                <div class="task-detail">Complete clinician dashboard UI</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Search Results -->
+                <div class="task-category">
+                    <h4>🔍 3.2 Search Results</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Search API</div>
+                                <div class="task-detail">Filter handling, Sorting logic, Search validation, Location input (geo/autocomplete), Pagination</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Save Search API</div>
+                                <div class="task-detail">Persist search criteria for later use</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Save Facilities API</div>
+                                <div class="task-detail">Bookmark/save providers to favorites</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get Saved Search API</div>
+                                <div class="task-detail">Retrieve saved search criteria</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Search Page Creation and Integration</div>
+                                <div class="task-detail">Complete search interface with filters and results</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                                <span class="task-duration">2 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Provider Detail -->
+                <div class="task-category">
+                    <h4>📄 3.3 Provider Detail</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">View Search Result API</div>
+                                <div class="task-detail">Detailed provider information endpoint</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">2 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Search Result Page Creation and Integration</div>
+                                <div class="task-detail">Provider detail page with all information tabs</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Submit Review -->
+                <div class="task-category">
+                    <h4>⭐ 3.4 Submit Review</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Submit Review API</div>
+                                <div class="task-detail">Create and submit provider reviews</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Submit Review Page Creation and Integration</div>
+                                <div class="task-detail">Review submission form UI</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Saved Facilities -->
+                <div class="task-category">
+                    <h4>💾 3.5 Saved Facilities</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get Saved Facilities API</div>
+                                <div class="task-detail">Retrieve bookmarked/saved providers</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Saved Facilities Page Creation and Integration</div>
+                                <div class="task-detail">Saved providers list with management</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact Log -->
+                <div class="task-category">
+                    <h4>📞 3.6 Contact Log</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get Contact Log API</div>
+                                <div class="task-detail">Retrieve contact history with providers</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Create New Contact Log API</div>
+                                <div class="task-detail">Log new contact with provider</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Update Contact Log API</div>
+                                <div class="task-detail">Update existing contact log entry</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Contact Log Page Creation and Integration</div>
+                                <div class="task-detail">Contact log interface with timeline view</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>Phase 3 Complete:</strong> Full clinician experience including search, provider details, saved facilities, contact logs, and review submission.
+                </div>
+            </section>
+
+            <!-- PHASE 4: ADMIN EXPERIENCE -->
+            <section id="phase4">
+                <h2>Phase 4: Admin Experience</h2>
+
+                <div class="phase-header">
+                    <span class="phase-title">Phase 4: Admin Experience</span>
+                    <span class="phase-duration">~17 Days → LIVE 🚀</span>
+                </div>
+
+                <div class="category-breakdown">
+                    <div class="category-item dev">
+                        <span class="category-value">12</span>
+                        <span class="category-label">Backend Tasks</span>
+                    </div>
+                    <div class="category-item" style="background: #fce7f3; border: 2px solid #ec4899;">
+                        <span class="category-value" style="color: #9f1239;">4</span>
+                        <span class="category-label">UI Tasks</span>
+                    </div>
+                    <div class="category-item infra">
+                        <span class="category-value">0</span>
+                        <span class="category-label">Infra Tasks</span>
+                    </div>
+                    <div class="category-item total">
+                        <span class="category-value">17d</span>
+                        <span class="category-label">Duration</span>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div class="task-category">
+                    <h4>📈 4.1 Admin Dashboard</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Recent Activity API</div>
+                                <div class="task-detail">Platform-wide activity feed</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Pending Action API</div>
+                                <div class="task-detail">Items requiring admin attention</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Summary Report API</div>
+                                <div class="task-detail">Platform summary statistics</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Dashboard Page Creation and Integration</div>
+                                <div class="task-detail">Complete admin dashboard UI</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Provider Management -->
+                <div class="task-category">
+                    <h4>🏥 4.2 Provider Management</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Summary Report for Provider API</div>
+                                <div class="task-detail">Provider-specific metrics and reports</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">4 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get All Provider API - Pagination</div>
+                                <div class="task-detail">Paginated provider listing</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Search with Filter for Provider API</div>
+                                <div class="task-detail">Advanced provider search and filtering</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Provider Management Page Creation and Integration</div>
+                                <div class="task-detail">Admin provider management interface</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- User Management -->
+                <div class="task-category">
+                    <h4>👥 4.3 User Management</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Summary Report for User API</div>
+                                <div class="task-detail">User metrics and statistics</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">3 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Get All User Detail API - Pagination</div>
+                                <div class="task-detail">Paginated user listing</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">User Data Export API</div>
+                                <div class="task-detail">Export user data (CSV, Excel)</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Add New User API</div>
+                                <div class="task-detail">Admin-initiated user creation</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">User Management Page Creation and Integration</div>
+                                <div class="task-detail">Admin user management interface</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Analytics -->
+                <div class="task-category">
+                    <h4>📊 4.4 Analytics</h4>
+                    <ul class="task-list">
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Summary Report API</div>
+                                <div class="task-detail">Platform-wide analytics summary</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                                <span class="task-duration">4 days</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Search Report API</div>
+                                <div class="task-detail">Search analytics and trends</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">User Report API</div>
+                                <div class="task-detail">User behavior analytics</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item backend">
+                            <div class="task-content">
+                                <div class="task-name">Analytic Data API</div>
+                                <div class="task-detail">Raw analytics data endpoint</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-backend">Backend</span>
+                            </div>
+                        </li>
+                        <li class="task-item ui">
+                            <div class="task-content">
+                                <div class="task-name">Analytics Page and Integration</div>
+                                <div class="task-detail">Admin analytics dashboard with charts</div>
+                            </div>
+                            <div class="task-meta">
+                                <span class="badge badge-ui">UI</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="summary-box">
+                    <h3>🚀 GO LIVE!</h3>
+                    <p style="font-size: 1.2rem; margin-bottom: 10px;">Production deployment after Phase 4 completion</p>
+                    <p>All features tested, deployed, and ready for users</p>
+                </div>
+            </section>
+
+            <!-- SUMMARY -->
+            <section id="summary">
+                <h2>Implementation Summary</h2>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">75</span>
+                        <span class="stat-label">Total Days</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">68</span>
+                        <span class="stat-label">Total Tasks</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">47</span>
+                        <span class="stat-label">Backend Tasks</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">19</span>
+                        <span class="stat-label">UI Tasks</span>
+                    </div>
+                </div>
+
+                <h3>Phase Duration Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Backend</th>
+                            <th>UI</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Phase 1:</strong> Authentication & User Management</td>
+                            <td>8 tasks</td>
+                            <td>3 tasks</td>
+                            <td>14 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 2:</strong> Provider Experience</td>
+                            <td>12 tasks</td>
+                            <td>5 tasks</td>
+                            <td>28 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 3:</strong> Clinician Experience</td>
+                            <td>15 tasks</td>
+                            <td>7 tasks</td>
+                            <td>22 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 4:</strong> Admin Experience</td>
+                            <td>12 tasks</td>
+                            <td>4 tasks</td>
+                            <td>17 days (→ LIVE)</td>
+                        </tr>
+                        <tr style="background: #cffafe; font-weight: bold;">
+                            <td>TOTAL</td>
+                            <td>47 tasks</td>
+                            <td>19 tasks</td>
+                            <td>~75 days (15 weeks)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h3>📋 Key Notes from Sonu's Plan</h3>
+                    <ul>
+                        <li><strong>External Verification:</strong> Recovery.com or LegitScript integration needs more detail</li>
+                        <li><strong>Provider Approval:</strong> Initially manual approval workflow</li>
+                        <li><strong>Magic Links:</strong> Scheduled delivery via cron job for bed update reminders</li>
+                        <li><strong>Search:</strong> Includes filter handling, sorting, geo/autocomplete, and pagination</li>
+                        <li><strong>Analytics:</strong> Comprehensive reporting for search, users, and providers</li>
+                    </ul>
+                </div>
+
+                <div style="text-align: center; margin: 60px 0 40px 0; padding: 40px; background: #ecfeff; border-radius: 8px; border: 2px solid #0891b2;">
+                    <h2 style="color: #0891b2; margin-bottom: 20px;">Sonu's Implementation Plan</h2>
+                    <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 20px;">
+                        <strong>~75 days to launch</strong> | <strong>4 Phases</strong> | <strong>68 Tasks</strong>
+                    </p>
+                    <p style="font-size: 0.9rem; color: #6b7280;">
+                        Backend (47 tasks) + UI (19 tasks) + Infrastructure (2 tasks)
+                    </p>
+                </div>
+
+                <div style="text-align: center; margin: 40px 0; padding: 20px; background: #f9fafb; border-radius: 8px;">
+                    <p style="font-size: 0.9rem; color: #6b7280;">
+                        Implementation Plan by: <strong>Sonu</strong><br>
+                        BehavioralHealth Connect - Development Roadmap<br>
+                        <em>Organized by phase with Backend/UI task breakdown</em>
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
     <script>
         // Password protection check (with Safari compatibility)
         (function() {
@@ -524,402 +1582,16 @@
             }
         })();
 
-        // Task Data
-        const tasks = [
-            {"PHASE": "Authentication & User Management", "DATE": "2026-01-19", "DURATION": "5", "TASK": "Initial Setup", "SUBTASK": "Setup", "DETAIL": "Frontend setup, backend setup, database setup, docker setup", "TEAM": "", "STATUS": "", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-01-27", "DURATION": "1", "TASK": "Authentication", "SUBTASK": "Universal Login API", "DETAIL": "JWT issuance & refresh, Password hashing and policy,Session expiration rules, Logout & token revocation, Google sign in, Forgot password", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-01-28", "DURATION": "1", "TASK": "", "SUBTASK": "Sign Up API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Login page", "DETAIL": "Design login page ", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-01-29", "DURATION": "2", "TASK": "Clinician Registration Flow", "SUBTASK": "Account creation API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Account creation Page", "DETAIL": "Include 3 steps", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Email Verification Service", "DETAIL": "", "TEAM": "", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-02-02", "DURATION": "2", "TASK": "Provider Registration Flow", "SUBTASK": "Facility account creation API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Facility account creation Page", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "External verification integration (Recovery.com or LegitScript)", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": "Need more detail on it"},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Pending verification state", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Admin approval workflow", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": "Manually approving initially"},
-            {"PHASE": "Provider Experience", "DATE": "2026-02-04", "DURATION": "3", "TASK": "Provider Dashboard", "SUBTASK": "Analytic Data API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get Bed Availability API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update Bed Availability API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update/Edit Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-02-09", "DURATION": "3", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-02-12", "DURATION": "2", "TASK": "Edit Profile", "SUBTASK": "Save Profile API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-02-16", "DURATION": "3", "TASK": "", "SUBTASK": "Profile page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-02-19", "DURATION": "3", "TASK": "Provider Setting", "SUBTASK": "Get Account Setting API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update Account Setting API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Subscription and Billing ", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-02-24", "DURATION": "4", "TASK": "", "SUBTASK": "Account Setting page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-02", "DURATION": "3", "TASK": "", "SUBTASK": "Magic Link Provider API(for Scheduled delivery- cron job)", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-05", "DURATION": "2", "TASK": "", "SUBTASK": "UI Page to update beds ", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "Clinician Experience", "DATE": "2026-03-09", "DURATION": "3", "TASK": "Clinician Dashboard", "SUBTASK": "Recently viewed providers API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Saved searches API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Notifications API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-12", "DURATION": "3", "TASK": "Search Results", "SUBTASK": "Search API ", "DETAIL": "Filter handling \nSorting logic\nSearch validation\nSearch Entry (Dashboard)\nLocation input (geo / autocomplete), Pagination", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Save Search API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Save facilities API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get Saved Search API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-17", "DURATION": "2", "TASK": "", "SUBTASK": "Search Page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-19", "DURATION": "2", "TASK": "Provider Detail", "SUBTASK": "View Search Result API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Search Result Page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-23", "DURATION": "3", "TASK": "Submit Review", "SUBTASK": "Submit Review API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Submit Review page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-26", "DURATION": "3", "TASK": "Saved Facilities", "SUBTASK": "Get Saved Facilities API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Saved Facilities page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-03-31", "DURATION": "3", "TASK": "Contact Log", "SUBTASK": "Get contact Log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Create new contact log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Update contact log API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Contact Log page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "Admin Experience", "DATE": "2026-04-06", "DURATION": "3", "TASK": "Admin Dashboard", "SUBTASK": "Recent Activity API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Pending Action API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Summary Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-04-09", "DURATION": "3", "TASK": "", "SUBTASK": "Dashboard page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-04-14", "DURATION": "4", "TASK": "Provider Management", "SUBTASK": "Summary Report for Provider API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get All Provider API - Pagination", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Search with Filter for Provider API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-04-20", "DURATION": "3", "TASK": "", "SUBTASK": "Provider Management page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-04-23", "DURATION": "3", "TASK": "User Management", "SUBTASK": "Summary Report for User API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Get All user detail API - Pagination", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "User Data Export API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Add New user API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "User Management page creation and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-04-28", "DURATION": "4", "TASK": "Analytics", "SUBTASK": "Summary Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Search Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "User Report API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Analytic Data API", "DETAIL": "", "TEAM": "Backend", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "", "DURATION": "", "TASK": "", "SUBTASK": "Analytics page and integration", "DETAIL": "", "TEAM": "UI", "STATUS": "Open", "OWNER": "", "NOTES": ""},
-            {"PHASE": "", "DATE": "2026-05-04", "DURATION": "", "TASK": "", "SUBTASK": "LIVE", "DETAIL": "", "TEAM": "", "STATUS": "Open", "OWNER": "", "NOTES": ""}
-        ];
-
-        let filteredTasks = [...tasks];
-        let currentView = 'cards';
-        let currentFilter = 'all';
-
-        // Calculate Stats
-        function calculateStats() {
-            const totalTasks = tasks.length;
-            const openTasks = tasks.filter(t => t.STATUS === 'Open').length;
-            const phases = [...new Set(tasks.filter(t => t.PHASE).map(t => t.PHASE))].length;
-            const totalDuration = tasks.filter(t => t.DURATION && t.DURATION !== '').reduce((sum, t) => sum + parseInt(t.DURATION || 0), 0);
-
-            document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('openTasks').textContent = openTasks;
-            document.getElementById('phases').textContent = phases;
-            document.getElementById('totalDuration').textContent = totalDuration + ' days';
-        }
-
-        // Get Team Class
-        function getTeamClass(team) {
-            if (team === 'Backend') return 'backend';
-            if (team === 'UI') return 'ui';
-            if (team === 'Both' || (team && team.includes('Backend') && team.includes('UI'))) return 'both';
-            return '';
-        }
-
-        // Render Task Cards
-        function renderCards() {
-            const container = document.getElementById('tasksContainer');
-            if (!container) return;
-
-            if (filteredTasks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <h3>No tasks found</h3>
-                        <p>Try adjusting your filters</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Group tasks by phase first
-            const phaseGroups = {};
-            let currentPhaseKey = '';
-            
-            filteredTasks.forEach((task) => {
-                if (task.PHASE && task.PHASE !== '') {
-                    currentPhaseKey = task.PHASE;
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-                
-                if (!phaseGroups[currentPhaseKey]) {
-                    phaseGroups[currentPhaseKey] = [];
-                }
-                phaseGroups[currentPhaseKey].push(task);
             });
-
-            let html = '';
-
-            // Render each phase
-            Object.keys(phaseGroups).forEach((phaseKey) => {
-                const phaseTasks = phaseGroups[phaseKey];
-                const phaseDuration = phaseTasks.filter(t => t.DURATION && t.DURATION !== '').reduce((sum, t) => sum + parseInt(t.DURATION || 0), 0);
-                const phaseName = phaseKey || 'General Tasks';
-                
-                html += `
-                    <div class="phase-section">
-                        <div class="phase-header-card">
-                            <div class="phase-title">${phaseName}</div>
-                            <div class="phase-meta">
-                                <div class="phase-meta-item">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span>${phaseTasks.length} tasks</span>
-                                </div>
-                                <div class="phase-meta-item">
-                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span>${phaseDuration} days</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tasks-grid" id="phase-${phaseName.replace(/\s+/g, '-').toLowerCase()}">
-                `;
-
-                // Render tasks in this phase
-                phaseTasks.forEach((task) => {
-                    const taskName = task.TASK || task.SUBTASK || 'Untitled Task';
-                    const subtask = task.SUBTASK && task.TASK ? task.SUBTASK : '';
-                    const detail = task.DETAIL || '';
-                    const team = task.TEAM || '';
-                    const status = task.STATUS || '';
-                    const date = task.DATE || '';
-                    const duration = task.DURATION || '';
-                    const notes = task.NOTES || '';
-
-                    const teamClass = getTeamClass(team);
-                    const teamBadge = team ? `<span class="badge badge-team-${team.toLowerCase()}">${team}</span>` : '';
-                    const statusBadge = status === 'Open' ? '<span class="badge badge-status-open">Open</span>' : '';
-                    const durationBadge = duration ? `<span class="badge badge-duration">${duration} day${duration !== '1' ? 's' : ''}</span>` : '';
-
-                    html += `
-                        <div class="task-card ${teamClass}" data-phase="${task.PHASE || phaseName}" data-team="${team.toLowerCase()}" data-status="${status.toLowerCase()}">
-                            <div class="task-header">
-                                <div class="task-title">${taskName}</div>
-                                <div class="task-badges">
-                                    ${teamBadge}
-                                    ${statusBadge}
-                                    ${durationBadge}
-                                </div>
-                            </div>
-                            ${subtask && task.TASK ? `<div class="task-subtask">${subtask}</div>` : ''}
-                            ${detail ? `<div class="task-detail">${detail.replace(/\n/g, '<br>')}</div>` : ''}
-                            ${notes ? `<div class="task-notes">📝 ${notes}</div>` : ''}
-                            <div class="task-footer">
-                                ${date ? `<div class="task-date">
-                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    ${date}
-                                </div>` : '<div></div>'}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                html += `</div></div>`;
-            });
-
-            container.innerHTML = html;
-        }
-
-        // Render Timeline View
-        function renderTimeline() {
-            const container = document.getElementById('timelineContainer');
-            if (!container) return;
-
-            if (filteredTasks.length === 0) {
-                container.innerHTML = '<div class="empty-state"><h3>No tasks found</h3></div>';
-                return;
-            }
-
-            let html = '<div class="timeline">';
-            let currentPhase = '';
-
-            filteredTasks.forEach((task) => {
-                if (task.PHASE && task.PHASE !== currentPhase) {
-                    currentPhase = task.PHASE;
-                }
-
-                const taskName = task.TASK || task.SUBTASK || 'Untitled Task';
-                const subtask = task.SUBTASK && task.TASK ? task.SUBTASK : '';
-                const detail = task.DETAIL || '';
-                const team = task.TEAM || '';
-                const date = task.DATE || '';
-                const duration = task.DURATION || '';
-
-                html += `
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="task-header">
-                                <div class="task-title">${taskName}</div>
-                                <div class="task-badges">
-                                    ${team ? `<span class="badge badge-team-${team.toLowerCase()}">${team}</span>` : ''}
-                                    ${duration ? `<span class="badge badge-duration">${duration} day${duration !== '1' ? 's' : ''}</span>` : ''}
-                                </div>
-                            </div>
-                            ${subtask && task.TASK ? `<div class="task-subtask">${subtask}</div>` : ''}
-                            ${detail ? `<div class="task-detail">${detail.replace(/\n/g, '<br>')}</div>` : ''}
-                            ${date ? `<div class="task-date">📅 ${date}</div>` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        // Filter Tasks
-        function filterTasks() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const teamFilter = currentFilter;
-
-            filteredTasks = tasks.filter(task => {
-                const matchesSearch = !searchTerm || 
-                    (task.TASK && task.TASK.toLowerCase().includes(searchTerm)) ||
-                    (task.SUBTASK && task.SUBTASK.toLowerCase().includes(searchTerm)) ||
-                    (task.DETAIL && task.DETAIL.toLowerCase().includes(searchTerm)) ||
-                    (task.PHASE && task.PHASE.toLowerCase().includes(searchTerm));
-
-                const matchesTeam = teamFilter === 'all' || 
-                    (teamFilter === 'backend' && task.TEAM === 'Backend') ||
-                    (teamFilter === 'ui' && task.TEAM === 'UI') ||
-                    (teamFilter === 'both' && (task.TEAM === 'Backend' || task.TEAM === 'UI'));
-
-                return matchesSearch && matchesTeam;
-            });
-
-            if (currentView === 'cards') {
-                renderCards();
-            } else {
-                renderTimeline();
-            }
-
-            // Update stats
-            document.getElementById('filteredCount').textContent = filteredTasks.length;
-        }
-
-        // Switch View
-        function switchView(view) {
-            currentView = view;
-            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            document.getElementById('cardsView').classList.toggle('active', view === 'cards');
-            document.getElementById('timelineView').classList.toggle('active', view === 'timeline');
-
-            if (view === 'cards') {
-                renderCards();
-            } else {
-                renderTimeline();
-            }
-        }
-
-        // Set Filter
-        function setFilter(filter) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            filterTasks();
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            calculateStats();
-            renderCards();
-            
-            // Search input
-            document.getElementById('searchInput').addEventListener('input', filterTasks);
         });
     </script>
-</head>
-<body>
-    <div class="header">
-        <h1>Development Task List</h1>
-        <p>BHC Connect - Enhanced Visual Roadmap</p>
-    </div>
-
-    <nav class="nav">
-        <a href="../../index.html">🏠 Hub</a>
-        <a href="../ARCHITECTURE_PLAN.html">Architecture Plan</a>
-        <a href="../ARCHITECTURE_COMPARISON.html">Comparison</a>
-        <a href="../JAVA_QUARKUS_PLAN.html">Java/Quarkus</a>
-        <a href="../NODEJS_PLAN.html">Node.js</a>
-        <a href="../ASSUMPTIONS.html">Assumptions</a>
-        <a href="TASK_LIST.html">📊 Table View</a>
-    </nav>
-
-    <div class="container">
-        <!-- Stats Dashboard -->
-        <div class="stats-dashboard">
-            <div class="stat-card">
-                <div class="stat-number" id="totalTasks">0</div>
-                <div class="stat-label">Total Tasks</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="openTasks">0</div>
-                <div class="stat-label">Open Tasks</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="phases">0</div>
-                <div class="stat-label">Development Phases</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalDuration">0</div>
-                <div class="stat-label">Total Duration</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="filteredCount">0</div>
-                <div class="stat-label">Filtered Results</div>
-            </div>
-        </div>
-
-        <!-- Filters and Search -->
-        <div class="filters">
-            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search tasks, subtasks, or details...">
-            
-            <div class="filter-group">
-                <span style="font-weight: 600; color: var(--gray-700);">Filter:</span>
-                <button class="filter-btn active" onclick="setFilter('all')">All</button>
-                <button class="filter-btn" onclick="setFilter('backend')">Backend</button>
-                <button class="filter-btn" onclick="setFilter('ui')">UI</button>
-            </div>
-
-            <div class="filter-group">
-                <span style="font-weight: 600; color: var(--gray-700);">View:</span>
-                <button class="view-btn active" onclick="switchView('cards')">📋 Cards</button>
-                <button class="view-btn" onclick="switchView('timeline')">📅 Timeline</button>
-            </div>
-        </div>
-
-        <!-- Cards View -->
-        <div id="cardsView" class="active">
-            <div id="tasksContainer">
-                <!-- Tasks will be rendered here -->
-            </div>
-        </div>
-
-        <!-- Timeline View -->
-        <div id="timelineView" class="timeline-view">
-            <div id="timelineContainer">
-                <!-- Timeline will be rendered here -->
-            </div>
-        </div>
-    </div>
-
-    <footer style="background: var(--gray-800); color: white; padding: 2rem; text-align: center; margin-top: 4rem;">
-        <p><strong>BehavioralHealth Connect</strong> - Enhanced Development Task List</p>
-        <p style="opacity: 0.8; margin-top: 0.5rem;">Visual roadmap with interactive filtering and timeline view</p>
-    </footer>
 </body>
 </html>
