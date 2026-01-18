@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC Project - AI-Assisted Development Estimate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: linear-gradient(to bottom, #f9fafb, #ffffff);
+            padding: 0;
+            margin: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: white;
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #059669;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #10b981;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #d4f4dd 0%, #c2e9cf 100%);
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #059669;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #065f46;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-sublabel {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        th.center {
+            text-align: center;
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        td.center {
+            text-align: center;
+        }
+
+        .role-header {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .total-row {
+            background-color: #d4f4dd;
+            font-weight: 700;
+            color: #065f46;
+        }
+
+        .total-row td {
+            padding: 1.25rem 1rem;
+            border-top: 2px solid #10b981;
+        }
+
+        .cost-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: #0c4a6e;
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+            border-top: 2px solid #0284c7;
+        }
+
+        .cost-label {
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .cost-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #d4f4dd 0%, #c2e9cf 100%);
+            border-left: 4px solid #10b981;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .highlight-box h3 {
+            color: #065f46;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box .big-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #059669;
+            margin: 1rem 0;
+        }
+
+        .highlight-box p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .assumptions {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .assumptions h3 {
+            color: #0c4a6e;
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .assumptions ul {
+            margin-left: 1.5rem;
+            color: #374151;
+        }
+
+        .assumptions li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BehavioralHealth Connect</h1>
+        <p>AI-Accelerated Development Estimate</p>
+    </header>
+
+    <div class="container">
+        <!-- Main Highlight -->
+        <div class="highlight-box">
+            <h3>Total Project Investment</h3>
+            <div class="big-number">$50,209</div>
+            <p>838 hours • 6-8 month timeline • AI-powered development</p>
+        </div>
+
+        <!-- Executive Summary -->
+        <section class="section">
+            <h2>📊 Project Overview</h2>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span class="stat-value">838</span>
+                    <span class="stat-label">Total Hours</span>
+                    <div class="stat-sublabel">AI-accelerated delivery</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">729</span>
+                    <span class="stat-label">Development</span>
+                    <div class="stat-sublabel">Full-stack features</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">57</span>
+                    <span class="stat-label">DevOps</span>
+                    <div class="stat-sublabel">Infrastructure & CI/CD</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">52</span>
+                    <span class="stat-label">QA Testing</span>
+                    <div class="stat-sublabel">Comprehensive quality</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Labor Cost Breakdown -->
+        <section class="section">
+            <h2>👥 Team & Labor Cost</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th class="center">Hours</th>
+                        <th class="center">Rate</th>
+                        <th>Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role-header">Full-Stack Developer</td>
+                        <td class="center">729</td>
+                        <td class="center">$55/hr</td>
+                        <td>$40,095</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">DevOps Engineer</td>
+                        <td class="center">57</td>
+                        <td class="center">$55/hr</td>
+                        <td>$3,135</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">QA Engineer</td>
+                        <td class="center">52</td>
+                        <td class="center">$40/hr</td>
+                        <td>$2,080</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total Labor Cost</td>
+                        <td class="center">838</td>
+                        <td class="center">—</td>
+                        <td>$45,310</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Development Phases -->
+        <section class="section">
+            <h2>📋 Development Phases</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th class="center">Hours</th>
+                        <th>Estimated Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role-header">Phase 1: Project Setup</td>
+                        <td class="center">15</td>
+                        <td>$825</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 2: Authentication & User Management</td>
+                        <td class="center">78</td>
+                        <td>$4,290</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 3: Provider Experience</td>
+                        <td class="center">204</td>
+                        <td>$11,220</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 4: Clinician Experience</td>
+                        <td class="center">228</td>
+                        <td>$12,540</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 5: Admin Experience</td>
+                        <td class="center">204</td>
+                        <td>$11,220</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">DevOps & Infrastructure</td>
+                        <td class="center">57</td>
+                        <td>$3,135</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Quality Assurance & Testing</td>
+                        <td class="center">52</td>
+                        <td>$2,080</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total Development</td>
+                        <td class="center">838</td>
+                        <td>$45,310</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Additional Costs -->
+        <section class="section">
+            <h2>💰 Additional Project Costs</h2>
+
+            <div class="cost-box">
+                <div class="cost-item">
+                    <span class="cost-label">Development Labor (838 hours)</span>
+                    <span class="cost-value">$45,310</span>
+                </div>
+                <div class="cost-item">
+                    <span class="cost-label">AWS Infrastructure (6 months average)</span>
+                    <span class="cost-value">$2,370</span>
+                </div>
+                <div class="cost-item">
+                    <span class="cost-label">Third-Party Services (Clerk, Algolia, Mapbox, etc.)</span>
+                    <span class="cost-value">$1,557</span>
+                </div>
+                <div class="cost-item">
+                    <span class="cost-label">AI Development Tools (GitHub Copilot, Claude API)</span>
+                    <span class="cost-value">$972</span>
+                </div>
+                <div class="cost-item">
+                    <span class="cost-label">Total Project Investment</span>
+                    <span class="cost-value">$50,209</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Infrastructure Details -->
+        <section class="section">
+            <h2>☁️ Infrastructure & Services</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Monthly Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role-header">AWS RDS PostgreSQL (Multi-AZ)</td>
+                        <td>$120 - $180</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">AWS ECS Fargate (2 tasks)</td>
+                        <td>$90 - $120</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">AWS CloudFront + ALB</td>
+                        <td>$30 - $50</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">AWS ElastiCache Redis</td>
+                        <td>$50 - $70</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">AWS S3 & CloudWatch</td>
+                        <td>$30 - $50</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total AWS Infrastructure</td>
+                        <td>$320 - $470/month</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 2rem; color: #374151; font-size: 1.1rem;">Third-Party Services</h3>
+            <table style="margin-top: 1rem;">
+                <tbody>
+                    <tr>
+                        <td class="role-header">Clerk Authentication</td>
+                        <td>$25/month</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Algolia Search</td>
+                        <td>$0 - $199/month</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Mapbox Maps</td>
+                        <td>$0 - $50/month</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Twilio SMS + SendGrid Email</td>
+                        <td>$40 - $180/month</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- AI Tools -->
+        <section class="section">
+            <h2>🤖 AI Development Tools</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tool</th>
+                        <th>Purpose</th>
+                        <th>Monthly Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role-header">GitHub Copilot Business</td>
+                        <td>AI-powered code completion and generation</td>
+                        <td>$57 (3 developers)</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Claude API</td>
+                        <td>Complex problem solving and architecture</td>
+                        <td>$50 - $100</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">JetBrains AI Assistant</td>
+                        <td>Refactoring and code optimization</td>
+                        <td>$30 (3 developers)</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total AI Tooling</td>
+                        <td>—</td>
+                        <td>$137 - $187/month</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 1rem; color: #6b7280; font-size: 0.9rem;">
+                <strong>ROI:</strong> AI tools deliver 25% faster development, saving 280 hours ($15,130 in labor costs) for a 6-month investment of $972.
+            </p>
+        </section>
+
+        <!-- Assumptions & Notes -->
+        <div class="assumptions">
+            <h3>📝 Project Details & Assumptions</h3>
+            <ul>
+                <li><strong>Timeline:</strong> 6-8 months with 3-4 person development team</li>
+                <li><strong>Team Composition:</strong> 3-4 Full-Stack Developers + 1 DevOps Engineer (part-time) + 1 QA Engineer (part-time)</li>
+                <li><strong>Technology Stack:</strong> Java + Quarkus backend, React + TypeScript frontend, PostgreSQL + PostGIS database</li>
+                <li><strong>AI Acceleration:</strong> 25% productivity improvement using GitHub Copilot, Claude API, and JetBrains AI Assistant</li>
+                <li><strong>Development Scope:</strong> Full MVP including Provider Portal, Clinician Portal, Admin Portal, Magic Link System, and Hybrid Search</li>
+                <li><strong>Quality Assurance:</strong> Comprehensive testing including unit, integration, API, UI, E2E, performance, and security testing</li>
+                <li><strong>Infrastructure:</strong> Fully managed AWS cloud infrastructure with high availability and automatic scaling</li>
+                <li><strong>Exclusions:</strong> Project management overhead, post-launch support, ongoing maintenance, feature enhancements beyond MVP</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

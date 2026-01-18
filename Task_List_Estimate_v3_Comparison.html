@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHC Project - Development Estimate (Comparison)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: linear-gradient(to bottom, #f9fafb, #ffffff);
+            padding: 0;
+            margin: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: white;
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #0066CC;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #0066CC;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            border-left: 4px solid #0066CC;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card.highlight {
+            background: linear-gradient(135deg, #d4f4dd 0%, #c2e9cf 100%);
+            border-left-color: #10b981;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0066CC;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card.highlight .stat-value {
+            color: #059669;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-sublabel {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        th.center {
+            text-align: center;
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        td.center {
+            text-align: center;
+        }
+
+        .role-header {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .total-row {
+            background-color: #f3f4f6;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .total-row td {
+            padding: 1.25rem 1rem;
+            border-top: 2px solid #d1d5db;
+        }
+
+        .savings {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .percentage {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .assumptions {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .assumptions h3 {
+            color: #0c4a6e;
+            margin-top: 0;
+        }
+
+        .assumptions ul {
+            margin-left: 1.5rem;
+            color: #374151;
+        }
+
+        .assumptions li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BehavioralHealth Connect</h1>
+        <p>Project Implementation Estimate - Traditional vs AI-Assisted Comparison</p>
+    </header>
+
+    <div class="container">
+        <!-- Executive Summary -->
+        <section class="section">
+            <h2>📊 Executive Summary</h2>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span class="stat-value">1,118</span>
+                    <span class="stat-label">Traditional Hours</span>
+                    <div class="stat-sublabel">Dev: 972h • DevOps: 76h • QA: 70h</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">838</span>
+                    <span class="stat-label">AI-Assisted Hours</span>
+                    <div class="stat-sublabel">Dev: 729h • DevOps: 57h • QA: 52h</div>
+                </div>
+                <div class="stat-card highlight">
+                    <span class="stat-value">280</span>
+                    <span class="stat-label">Hours Saved</span>
+                    <div class="stat-sublabel">25% reduction with AI tools</div>
+                </div>
+                <div class="stat-card highlight">
+                    <span class="stat-value">$15,130</span>
+                    <span class="stat-label">Cost Savings</span>
+                    <div class="stat-sublabel">Labor cost reduction (25%)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Effort Breakdown by Role -->
+        <section class="section">
+            <h2>👥 Effort Breakdown by Role</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th class="center">Rate</th>
+                        <th class="center">Traditional Hours</th>
+                        <th class="center">AI-Assisted Hours</th>
+                        <th class="center">Hours Saved</th>
+                        <th>Traditional Cost</th>
+                        <th>AI-Assisted Cost</th>
+                        <th>Savings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role-header">Developer</td>
+                        <td class="center">$55/hr</td>
+                        <td class="center">972</td>
+                        <td class="center">729</td>
+                        <td class="center savings">243</td>
+                        <td>$53,460</td>
+                        <td>$40,095</td>
+                        <td class="savings">$13,365 <span class="percentage">(25%)</span></td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">DevOps Engineer</td>
+                        <td class="center">$55/hr</td>
+                        <td class="center">76</td>
+                        <td class="center">57</td>
+                        <td class="center savings">19</td>
+                        <td>$4,180</td>
+                        <td>$3,135</td>
+                        <td class="savings">$1,045 <span class="percentage">(25%)</span></td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">QA Engineer</td>
+                        <td class="center">$40/hr</td>
+                        <td class="center">70</td>
+                        <td class="center">52</td>
+                        <td class="center savings">18</td>
+                        <td>$2,800</td>
+                        <td>$2,080</td>
+                        <td class="savings">$720 <span class="percentage">(26%)</span></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total Labor</td>
+                        <td class="center">—</td>
+                        <td class="center">1,118</td>
+                        <td class="center">838</td>
+                        <td class="center savings">280</td>
+                        <td>$60,440</td>
+                        <td>$45,310</td>
+                        <td class="savings">$15,130 <span class="percentage">(25%)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Phase Summary -->
+        <section class="section">
+            <h2>📋 Development Phases Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th class="center">Traditional Hours</th>
+                        <th class="center">AI-Assisted Hours</th>
+                        <th class="center">Hours Saved</th>
+                        <th>Traditional Cost</th>
+                        <th>AI-Assisted Cost</th>
+                        <th>Savings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role-header">Phase 1: Project Setup</td>
+                        <td class="center">20</td>
+                        <td class="center">15</td>
+                        <td class="center savings">5</td>
+                        <td>$1,100</td>
+                        <td>$825</td>
+                        <td class="savings">$275</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 2: Authentication & User Management</td>
+                        <td class="center">104</td>
+                        <td class="center">78</td>
+                        <td class="center savings">26</td>
+                        <td>$5,720</td>
+                        <td>$4,290</td>
+                        <td class="savings">$1,430</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 3: Provider Experience</td>
+                        <td class="center">272</td>
+                        <td class="center">204</td>
+                        <td class="center savings">68</td>
+                        <td>$14,960</td>
+                        <td>$11,220</td>
+                        <td class="savings">$3,740</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 4: Clinician Experience</td>
+                        <td class="center">304</td>
+                        <td class="center">228</td>
+                        <td class="center savings">76</td>
+                        <td>$16,720</td>
+                        <td>$12,540</td>
+                        <td class="savings">$4,180</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Phase 5: Admin Experience</td>
+                        <td class="center">272</td>
+                        <td class="center">204</td>
+                        <td class="center savings">68</td>
+                        <td>$14,960</td>
+                        <td>$11,220</td>
+                        <td class="savings">$3,740</td>
+                    </tr>
+                    <tr style="background: #fef3c7;">
+                        <td class="role-header">DevOps & Infrastructure</td>
+                        <td class="center">76</td>
+                        <td class="center">57</td>
+                        <td class="center savings">19</td>
+                        <td>$4,180</td>
+                        <td>$3,135</td>
+                        <td class="savings">$1,045</td>
+                    </tr>
+                    <tr style="background: #fef3c7;">
+                        <td class="role-header">Quality Assurance & Testing</td>
+                        <td class="center">70</td>
+                        <td class="center">52</td>
+                        <td class="center savings">18</td>
+                        <td>$2,800</td>
+                        <td>$2,080</td>
+                        <td class="savings">$720</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total Project</td>
+                        <td class="center">1,118</td>
+                        <td class="center">838</td>
+                        <td class="center savings">280</td>
+                        <td>$60,440</td>
+                        <td>$45,310</td>
+                        <td class="savings">$15,130 <span class="percentage">(25%)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Complete Cost Summary -->
+        <section class="section">
+            <h2>💵 Complete Cost Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cost Category</th>
+                        <th>Traditional Approach</th>
+                        <th>AI-Assisted Approach</th>
+                        <th>Difference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role-header">Development Labor</td>
+                        <td>$60,440</td>
+                        <td>$45,310</td>
+                        <td class="savings">-$15,130 (25%)</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">AWS Infrastructure (6 months avg.)</td>
+                        <td>$2,370</td>
+                        <td>$2,370</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">Third-Party Services (6 months avg.)</td>
+                        <td>$1,557</td>
+                        <td>$1,557</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr>
+                        <td class="role-header">AI Development Tools (6 months)</td>
+                        <td>$0</td>
+                        <td>$972</td>
+                        <td class="savings" style="color: #dc2626;">+$972</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total Project Cost</td>
+                        <td>$64,367</td>
+                        <td>$50,209</td>
+                        <td class="savings">-$14,158 (22.0%)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Effort Distribution -->
+        <section class="section">
+            <h2>📊 Effort Distribution by Role</h2>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <span class="stat-value">86.9%</span>
+                    <span class="stat-label">Development</span>
+                    <div class="stat-sublabel">972 hours of 1,118 total</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">6.8%</span>
+                    <span class="stat-label">DevOps</span>
+                    <div class="stat-sublabel">76 hours of 1,118 total</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">6.3%</span>
+                    <span class="stat-label">QA</span>
+                    <div class="stat-sublabel">70 hours of 1,118 total</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assumptions & Notes -->
+        <div class="assumptions">
+            <h3>📝 Assumptions & Notes</h3>
+            <ul>
+                <li><strong>AI Development Assumptions:</strong> 25% productivity improvement with GitHub Copilot, Claude API, and JetBrains AI Assistant for code generation, debugging, and test writing</li>
+                <li><strong>Team Composition:</strong> 3-4 developers + 1 DevOps engineer (part-time) + 1 QA engineer (part-time)</li>
+                <li><strong>Development Effort Source:</strong> TaskList3.xlsx - 972 hours of comprehensive development work across all features</li>
+                <li><strong>DevOps Scope:</strong> CI/CD pipeline, AWS infrastructure configuration, deployment automation (76 hours)</li>
+                <li><strong>QA Scope:</strong> Comprehensive testing including unit/integration, API, UI, E2E, performance, and security (70 hours)</li>
+                <li><strong>Pricing Rates:</strong> Developer @ $55/hr, DevOps Engineer @ $55/hr, QA Engineer @ $40/hr</li>
+                <li><strong>Infrastructure Costs:</strong> AWS ECS, RDS, CloudFront, ElastiCache - estimated $395/month average</li>
+                <li><strong>Third-Party Services:</strong> Clerk, Algolia, Mapbox, Twilio, SendGrid - estimated $260/month average</li>
+                <li><strong>Project Timeline:</strong> Estimated 6-8 months with 3-4 person development team</li>
+                <li><strong>Exclusions:</strong> Project management overhead, post-launch maintenance, feature enhancements beyond MVP</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
