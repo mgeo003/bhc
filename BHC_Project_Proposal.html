@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BehavioralHealth Connect - Project Proposal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066CC;
+            --primary-dark: #004999;
+            --accent: #10b981;
+            --accent-light: #d1fae5;
+            --dark: #0f172a;
+            --gray-900: #111827;
+            --gray-700: #374151;
+            --gray-500: #6b7280;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, #001a33 100%);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-size: 2.75rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-number {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Value Proposition Cards */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            border: 1px solid var(--gray-100);
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+
+        .value-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .value-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .value-card p {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Investment Section */
+        .investment-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 6rem 2rem;
+            margin: 0;
+            max-width: none;
+        }
+
+        .investment-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .investment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .investment-highlight {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+        }
+
+        .investment-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-500);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .investment-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+
+        .investment-note {
+            color: var(--gray-500);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .savings-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-light);
+            color: #065f46;
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .investment-breakdown {
+            list-style: none;
+        }
+
+        .investment-breakdown li {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .investment-breakdown li:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: var(--gray-900);
+            font-size: 1.1rem;
+            padding-top: 1.5rem;
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--primary);
+        }
+
+        /* Effort Breakdown */
+        .effort-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .effort-table thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+        }
+
+        .effort-table th {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .effort-table td {
+            padding: 1.25rem 1.5rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .effort-table tbody tr:hover td {
+            background: var(--gray-100);
+        }
+
+        .effort-table .phase-name {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .effort-table .hours {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .effort-table .savings-cell {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .effort-table tfoot td {
+            background: var(--gray-100);
+            font-weight: 700;
+            color: var(--gray-900);
+            border-top: 2px solid var(--primary);
+        }
+
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .phase-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .phase-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .phase-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-info p {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        .phase-hours {
+            text-align: right;
+        }
+
+        .phase-hours-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .phase-hours-label {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid var(--gray-100);
+        }
+
+        .team-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .team-role {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .team-hours {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .team-percentage {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: var(--gray-900);
+            color: var(--white);
+            padding: 6rem 2rem;
+            margin: 0;
+            max-width: none;
+        }
+
+        .timeline-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-header p {
+            opacity: 0.7;
+            font-size: 1.125rem;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            flex: 1;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--white);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-item:last-child .timeline-dot {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .timeline-week {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-phase {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* Infrastructure Costs */
+        .costs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .cost-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .cost-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .cost-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 0.95rem;
+        }
+
+        .cost-line:last-child {
+            border-bottom: none;
+        }
+
+        .cost-line span:first-child {
+            color: var(--gray-600);
+        }
+
+        .cost-line span:last-child {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .cost-total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .cost-total span:last-child {
+            color: var(--primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 6rem 2rem;
+            text-align: center;
+            margin: 0;
+            max-width: none;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .cta-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .cta-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--gray-900);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.6;
+            font-size: 0.875rem;
+        }
+
+        /* Assumptions */
+        .assumptions-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .assumptions-card h3 {
+            color: #92400e;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .assumptions-card ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .assumptions-card li {
+            color: #78350f;
+            font-size: 0.95rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .assumptions-card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .value-grid, .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .investment-grid {
+                grid-template-columns: 1fr;
+            }
+            .costs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .value-grid, .team-grid {
+                grid-template-columns: 1fr;
+            }
+            .phase-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .phase-hours {
+                text-align: center;
+            }
+            .timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .timeline::before {
+                display: none;
+            }
+            .cta-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .assumptions-card ul {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .hero {
+                min-height: auto;
+                padding: 3rem 2rem;
+            }
+            section {
+                padding: 3rem 2rem;
+            }
+            .scroll-indicator {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">Project Proposal</span>
+            <h1>BehavioralHealth <span>Connect</span></h1>
+            <p class="hero-subtitle">
+                A comprehensive platform connecting clinicians with behavioral health treatment facilities. 
+                Real-time bed availability, intelligent search, and streamlined care coordination.
+            </p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">517</span>
+                    <span class="hero-stat-label">Total Hours</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">$27.6K</span>
+                    <span class="hero-stat-label">Investment</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">4-6</span>
+                    <span class="hero-stat-label">Months</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">25%</span>
+                    <span class="hero-stat-label">AI Savings</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">1</span>
+            <h2 class="section-title">What We're Building</h2>
+            <p class="section-subtitle">Three integrated portals designed to transform behavioral health care coordination</p>
+        </div>
+        
+        <div class="value-grid">
+            <div class="value-card">
+                <div class="value-icon">🏥</div>
+                <h3>Provider Portal</h3>
+                <p>Treatment facilities manage their profiles, update bed availability in real-time via magic links, and track performance analytics. Streamlined operations for better patient intake.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">👨‍⚕️</div>
+                <h3>Clinician Portal</h3>
+                <p>Healthcare professionals search facilities by location, insurance, and specialties. Save favorites, log contacts, and submit reviews. Find the right care faster.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">⚙️</div>
+                <h3>Admin Portal</h3>
+                <p>Platform administrators verify providers, manage users, moderate content, and analyze platform metrics. Complete oversight and control.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Section -->
+    <section class="investment-section">
+        <div class="investment-content">
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2 class="section-title">Your Investment</h2>
+                <p class="section-subtitle">Transparent pricing with AI-powered development efficiency</p>
+            </div>
+            
+            <div class="investment-grid">
+                <div class="investment-highlight">
+                    <span class="investment-label">Total Project Investment</span>
+                    <span class="investment-value">$27,655</span>
+                    <span class="investment-note">AI-Assisted Development (517 hours)</span>
+                    <span class="savings-badge">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        Save $9,245 (25%) with AI assistance
+                    </span>
+                </div>
+                <div>
+                    <ul class="investment-breakdown">
+                        <li>
+                            <span>Development (408 hours @ $55/hr)</span>
+                            <span>$22,440</span>
+                        </li>
+                        <li>
+                            <span>DevOps & Infrastructure (57 hours @ $55/hr)</span>
+                            <span>$3,135</span>
+                        </li>
+                        <li>
+                            <span>Quality Assurance (52 hours @ $40/hr)</span>
+                            <span>$2,080</span>
+                        </li>
+                        <li>
+                            <span>Total Investment</span>
+                            <span>$27,655</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Development Phases -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">3</span>
+            <h2 class="section-title">Development Phases</h2>
+            <p class="section-subtitle">A structured approach delivering value at every milestone</p>
+        </div>
+
+        <div class="phase-grid">
+            <div class="phase-card">
+                <div class="phase-number">1</div>
+                <div class="phase-info">
+                    <h3>Project Setup</h3>
+                    <p>Backend & frontend initialization, project configuration, development environment</p>
+                </div>
+                <div class="phase-hours">
+                    <span class="phase-hours-value">12h</span>
+                    <span class="phase-hours-label">AI-Assisted</span>
+                </div>
+            </div>
+            <div class="phase-card">
+                <div class="phase-number">2</div>
+                <div class="phase-info">
+                    <h3>Authentication & User Management</h3>
+                    <p>JWT security, login flows, clinician & provider registration, email verification</p>
+                </div>
+                <div class="phase-hours">
+                    <span class="phase-hours-value">48h</span>
+                    <span class="phase-hours-label">AI-Assisted</span>
+                </div>
+            </div>
+            <div class="phase-card">
+                <div class="phase-number">3</div>
+                <div class="phase-info">
+                    <h3>Provider Experience</h3>
+                    <p>Dashboard, bed availability management, magic links, profile management, settings</p>
+                </div>
+                <div class="phase-hours">
+                    <span class="phase-hours-value">120h</span>
+                    <span class="phase-hours-label">AI-Assisted</span>
+                </div>
+            </div>
+            <div class="phase-card">
+                <div class="phase-number">4</div>
+                <div class="phase-info">
+                    <h3>Clinician Experience</h3>
+                    <p>Search & filtering, map integration, saved facilities, contact logs, reviews</p>
+                </div>
+                <div class="phase-hours">
+                    <span class="phase-hours-value">120h</span>
+                    <span class="phase-hours-label">AI-Assisted</span>
+                </div>
+            </div>
+            <div class="phase-card">
+                <div class="phase-number">5</div>
+                <div class="phase-info">
+                    <h3>Admin Experience</h3>
+                    <p>Platform dashboard, provider & user management, analytics, moderation tools</p>
+                </div>
+                <div class="phase-hours">
+                    <span class="phase-hours-value">108h</span>
+                    <span class="phase-hours-label">AI-Assisted</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-section">
+        <div class="timeline-content">
+            <div class="timeline-header">
+                <h2>Project Timeline</h2>
+                <p>Estimated 4-6 months with a 2-3 person development team</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-top: 3rem;">
+                <!-- Phase 1 -->
+                <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="background: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 800; font-size: 1.25rem;">1</div>
+                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; margin-bottom: 0.5rem;">Week 1-2</div>
+                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem;">Foundation</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8; line-height: 1.5;">
+                        Project Setup<br>
+                        Authentication<br>
+                        User Management
+                    </div>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-weight: 600; color: #60a5fa;">60 hours</div>
+                </div>
+                
+                <!-- Phase 2 -->
+                <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="background: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 800; font-size: 1.25rem;">2</div>
+                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; margin-bottom: 0.5rem;">Week 3-8</div>
+                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem;">Provider Portal</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8; line-height: 1.5;">
+                        Dashboard<br>
+                        Bed Management<br>
+                        Magic Links<br>
+                        Profile & Settings
+                    </div>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-weight: 600; color: #60a5fa;">120 hours</div>
+                </div>
+                
+                <!-- Phase 3 -->
+                <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="background: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 800; font-size: 1.25rem;">3</div>
+                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; margin-bottom: 0.5rem;">Week 9-14</div>
+                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem;">Clinician Portal</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8; line-height: 1.5;">
+                        Search & Filters<br>
+                        Map Integration<br>
+                        Saved Facilities<br>
+                        Contact Logs
+                    </div>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-weight: 600; color: #60a5fa;">120 hours</div>
+                </div>
+                
+                <!-- Phase 4 -->
+                <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="background: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 800; font-size: 1.25rem;">4</div>
+                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; margin-bottom: 0.5rem;">Week 15-20</div>
+                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem;">Admin Portal</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8; line-height: 1.5;">
+                        Admin Dashboard<br>
+                        User Management<br>
+                        Analytics<br>
+                        Moderation
+                    </div>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-weight: 600; color: #60a5fa;">108 hours</div>
+                </div>
+                
+                <!-- Phase 5 - Launch -->
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 16px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.3);">
+                    <div style="background: white; color: #059669; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 800; font-size: 1.25rem;">5</div>
+                    <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 0.5rem;">Week 21-24</div>
+                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem;">Launch Ready</div>
+                    <div style="font-size: 0.8rem; opacity: 0.9; line-height: 1.5;">
+                        QA Testing<br>
+                        DevOps Setup<br>
+                        Deployment<br>
+                        Go Live!
+                    </div>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3); font-weight: 600; color: white;">109 hours</div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div style="margin-top: 3rem; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span style="font-weight: 600;">Project Progress</span>
+                    <span style="opacity: 0.8;">24 Weeks Total</span>
+                </div>
+                <div style="height: 12px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden;">
+                    <div style="display: flex; height: 100%;">
+                        <div style="width: 8%; background: #3b82f6;" title="Setup"></div>
+                        <div style="width: 25%; background: #6366f1;" title="Provider"></div>
+                        <div style="width: 25%; background: #8b5cf6;" title="Clinician"></div>
+                        <div style="width: 25%; background: #a855f7;" title="Admin"></div>
+                        <div style="width: 17%; background: #10b981;" title="Launch"></div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                    <span>Start</span>
+                    <span>Month 2</span>
+                    <span>Month 4</span>
+                    <span>Month 6</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Composition -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">4</span>
+            <h2 class="section-title">Team Composition</h2>
+            <p class="section-subtitle">Expert resources allocated for optimal delivery</p>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-icon">💻</div>
+                <span class="team-role">Developer</span>
+                <span class="team-hours">408h</span>
+                <span class="team-percentage">78.9% of effort</span>
+            </div>
+            <div class="team-card">
+                <div class="team-icon">⚙️</div>
+                <span class="team-role">DevOps Engineer</span>
+                <span class="team-hours">57h</span>
+                <span class="team-percentage">11.0% of effort</span>
+            </div>
+            <div class="team-card">
+                <div class="team-icon">🧪</div>
+                <span class="team-role">QA Engineer</span>
+                <span class="team-hours">52h</span>
+                <span class="team-percentage">10.1% of effort</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Infrastructure Costs -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">5</span>
+            <h2 class="section-title">Ongoing Costs</h2>
+            <p class="section-subtitle">Monthly infrastructure and third-party service estimates</p>
+        </div>
+
+        <div class="costs-grid">
+            <div class="cost-card">
+                <h3>AWS Infrastructure</h3>
+                <div class="cost-line">
+                    <span>RDS PostgreSQL (Multi-AZ)</span>
+                    <span>$120 - $180/mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>ECS Fargate (2 tasks)</span>
+                    <span>$90 - $120/mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>ElastiCache Redis</span>
+                    <span>$50 - $70/mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>ALB + CloudFront</span>
+                    <span>$30 - $50/mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>S3 Storage + CloudWatch</span>
+                    <span>$30 - $50/mo</span>
+                </div>
+                <div class="cost-line cost-total">
+                    <span>Total AWS</span>
+                    <span>$320 - $470/mo</span>
+                </div>
+            </div>
+            <div class="cost-card">
+                <h3>Third-Party Services</h3>
+                <div class="cost-line">
+                    <span>Clerk Authentication</span>
+                    <span>$25+ /mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>Algolia Search</span>
+                    <span>$0 - $199/mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>Mapbox Maps</span>
+                    <span>$0 - $50/mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>Twilio SMS</span>
+                    <span>$20 - $100/mo</span>
+                </div>
+                <div class="cost-line">
+                    <span>SendGrid Email</span>
+                    <span>$20 - $80/mo</span>
+                </div>
+                <div class="cost-line cost-total">
+                    <span>Total Third-Party</span>
+                    <span>$65 - $454/mo</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="assumptions-card">
+            <h3>Key Assumptions & Notes</h3>
+            <ul>
+                <li><strong>AI-Assisted Development:</strong> 25% productivity boost with Cursor, Copilot, and Claude</li>
+                <li><strong>Team:</strong> 2-3 developers + part-time DevOps + part-time QA</li>
+                <li><strong>Rates:</strong> Developer @ $55/hr, DevOps @ $55/hr, QA @ $40/hr</li>
+                <li><strong>Timeline:</strong> 4-6 months with parallel workstreams</li>
+                <li><strong>Scope:</strong> MVP features as defined in requirements</li>
+                <li><strong>Excludes:</strong> Project management overhead, post-launch maintenance</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Effort Summary Table -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">6</span>
+            <h2 class="section-title">Complete Effort Summary</h2>
+            <p class="section-subtitle">Detailed breakdown of traditional vs AI-assisted hours</p>
+        </div>
+
+        <table class="effort-table">
+            <thead>
+                <tr>
+                    <th>Role / Phase</th>
+                    <th style="text-align: center;">Traditional Hours</th>
+                    <th style="text-align: center;">AI-Assisted Hours</th>
+                    <th style="text-align: center;">Hours Saved</th>
+                    <th style="text-align: right;">Cost (AI)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="phase-name">Developer</td>
+                    <td style="text-align: center;">544</td>
+                    <td style="text-align: center;" class="hours">408</td>
+                    <td style="text-align: center;" class="savings-cell">136 (25%)</td>
+                    <td style="text-align: right;">$22,440</td>
+                </tr>
+                <tr>
+                    <td class="phase-name">DevOps Engineer</td>
+                    <td style="text-align: center;">76</td>
+                    <td style="text-align: center;" class="hours">57</td>
+                    <td style="text-align: center;" class="savings-cell">19 (25%)</td>
+                    <td style="text-align: right;">$3,135</td>
+                </tr>
+                <tr>
+                    <td class="phase-name">QA Engineer</td>
+                    <td style="text-align: center;">70</td>
+                    <td style="text-align: center;" class="hours">52</td>
+                    <td style="text-align: center;" class="savings-cell">18 (26%)</td>
+                    <td style="text-align: right;">$2,080</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td style="text-align: center;">690</td>
+                    <td style="text-align: center;">517</td>
+                    <td style="text-align: center;" class="savings-cell">173 (25%)</td>
+                    <td style="text-align: right;">$27,655</td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Behavioral Health Care?</h2>
+            <p>Let's build BehavioralHealth Connect together and make a real difference in patient care coordination.</p>
+            <div class="cta-stats">
+                <div>
+                    <span class="cta-stat-value">517 hrs</span>
+                    <span class="cta-stat-label">Total Development</span>
+                </div>
+                <div>
+                    <span class="cta-stat-value">$27.6K</span>
+                    <span class="cta-stat-label">Total Investment</span>
+                </div>
+                <div>
+                    <span class="cta-stat-value">4-6 mo</span>
+                    <span class="cta-stat-label">Time to Launch</span>
+                </div>
+                <div>
+                    <span class="cta-stat-value">$9.2K</span>
+                    <span class="cta-stat-label">AI Savings</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>BehavioralHealth Connect Project Proposal | Prepared with care | Developer: Sonu Kurien</p>
+    </footer>
+</body>
+</html>
